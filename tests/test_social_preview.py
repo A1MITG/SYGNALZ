@@ -20,7 +20,8 @@ CARD = ROOT / 'public' / 'img' / 'signal-og.png'
 PRODUCTION = 'https://news-letter-cxo.vercel.app/'
 TITLE = 'SIGNAL — Know What Matters'
 DESCRIPTION = 'Signals from everywhere. Multiple lenses. One intelligent brief.'
-IMAGE = PRODUCTION + 'img/signal-og.png'
+# ?v=N makes LinkedIn and X fetch a changed card instead of their cached copy.
+IMAGE = PRODUCTION + 'img/signal-og.png?v=2'
 
 
 class _Head(HTMLParser):
@@ -79,7 +80,14 @@ class TestSocialPreview(unittest.TestCase):
         self.assertLess(self.published.index('property="og:title"'), first_script)
         for value in list(self.head.meta.values()) + [self.head.canonical]:
             self.assertNotRegex(value or '', r'localhost|127\.0\.0\.1|http://')
-        self.assertEqual(len(re.findall(r'property="og:', head)), 11)
+        self.assertEqual(len(re.findall(r'property="og:', head)), 12)
+
+    def test_author_and_publication_date(self):
+        """LinkedIn's Post Inspector reads name="author" and og:publish_date."""
+        m = self.head.meta
+        self.assertEqual((m['author'], m['article:author']), ('Amit Gupta', 'Amit Gupta'))
+        self.assertEqual(m['og:publish_date'], '2026-09-27T09:00:00+05:30')   # 9:00 IST
+        self.assertEqual(m['article:published_time'], '2026-09-27T09:00:00+05:30')
 
     def test_the_card_is_a_1200_by_627_png(self):
         data = CARD.read_bytes()
