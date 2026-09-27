@@ -151,7 +151,10 @@ class TestRenderedBrief(unittest.TestCase):
 
     def test_is_text_only(self):
         self.assertNotIn('<img', self.page)
-        self.assertNotIn('<script', self.page)
+        # Text only: the one script allowed is Vercel's anonymous page-view counter.
+        scripts = re.findall(r'<script[^>]*>.*?</script>', self.page, re.S)
+        self.assertEqual(len(scripts), 2)
+        self.assertTrue(all('window.va' in s or '/_vercel/insights/script.js' in s for s in scripts))
         self.assertNotIn('url(', self.page)
 
     def test_headlines_link_to_the_reporting(self):
