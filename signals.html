@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGNAL — Know What Matters</title>
+    <link rel="stylesheet" href="./signal.css">
+</head>
+<body>
+    <header class="topbar">
+        <svg class="tb-mark" viewBox="0 0 120 120" aria-hidden="true">
+            <path d="M 82 42 A 22 22 0 1 0 60 64" fill="none"
+                  stroke="#f5a623" stroke-width="13"/>
+            <path d="M 60 56 A 22 22 0 1 1 38 78" fill="none"
+                  stroke="#f5a623" stroke-width="13"/>
+            <rect x="54" y="54" width="12" height="12" fill="#4da3ff"/>
+        </svg>
+        <span class="tb-word">SIGNAL</span>
+        <span class="tb-page" id="tb-page">SIX SIGNALS</span>
+    </header>
+
+    <div class="utility">
+        <span id="last-updated"></span>
+    </div>
+
+    <main id="signals-content">
+        <p class="loading">TUNING THE SIGNALS&hellip;</p>
+    </main>
+
+    <footer>Confidential &middot; For Executive Leadership Only</footer>
+
+    <script>
+        function sourceOf(url) {
+            try {
+                return new URL(url).hostname.replace(/^www\./, '').split('.')[0];
+            } catch (e) {
+                return '';
+            }
+        }
+
+        function renderSignals(data) {
+            const content = document.getElementById('signals-content');
+            document.getElementById('tb-page').textContent =
+                'SIX SIGNALS // ' + (data.date || '').toUpperCase();
+            document.getElementById('last-updated').textContent =
+                'UPDATED ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            let html = '';
+            let hasContent = false;
+
+            (data.signals || []).forEach(signal => {
+                const items = (signal.articles || []).filter(a => a.url);
+                if (items.length === 0) return;
+                hasContent = true;
+                html += `<section class="sec">
+                    <div class="sec-head">
+                        <span class="sec-name">${signal.name}</span>
+                        <span class="sec-aud">${signal.audience}</span>
+                    </div>
+                    <p class="sec-purpose">${signal.purpose}</p>
+                    ${items.map((a, i) => `
+                        <article class="row">
+                            <span class="idx">${String(i + 1).padStart(2, '0')}</span>
+                            <div>
+                                <h3><a href="${a.url}" target="_blank" rel="noopener">${a.title}</a></h3>
+                                <div class="meta">${sourceOf(a.url)}${a.score ? ' &middot; SCORE ' + a.score : ''}</div>
+                            </div>
+                        </article>`).join('')}
+                </section>`;
+            });
+
+            if (!hasContent) {
+                html = '<p class="quiet">No signals in the last 24 hours.</p>';
+            }
+
+            content.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('./signals.json')
+                .then(response => response.json())
+                .then(renderSignals)
+                .catch(error => {
+                    console.error('Error fetching signals:', error);
+                    document.getElementById('signals-content').innerHTML =
+                        '<p class="error">THE SIGNALS COULD NOT BE LOADED.</p>';
+                });
+        });
+    </script>
+</body>
+</html>

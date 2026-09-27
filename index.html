@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGNAL — Executive Intelligence Platform</title>
+<meta name="description" content="Signals from everywhere. Multiple lenses. One intelligent brief.">
+<link rel="canonical" href="https://news-letter-cxo.vercel.app/">
+<!-- Social preview (LinkedIn, X, Slack, WhatsApp). Static in the page on
+     purpose: link crawlers read the first HTML response and run no scripts.
+     The card is public/img/signal-og.png (2400 x 1254: 1.91:1 at twice
+     LinkedIn's 1200 x 627, so it is only ever scaled down), which the Build Signals
+     workflow publishes to /img/ with the rest of public/img. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SIGNAL">
+<meta property="og:title" content="SIGNAL — Know What Matters">
+<meta property="og:description" content="Signals from everywhere. Multiple lenses. One intelligent brief.">
+<meta property="og:url" content="https://news-letter-cxo.vercel.app/">
+<meta property="og:image" content="https://news-letter-cxo.vercel.app/img/signal-og.png?v=3">
+<meta property="og:image:secure_url" content="https://news-letter-cxo.vercel.app/img/signal-og.png?v=3">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1254">
+<meta property="og:image:alt" content="SIGNAL — Know What Matters. Information is everywhere. Attention isn’t.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SIGNAL — Know What Matters">
+<meta name="twitter:description" content="Signals from everywhere. Multiple lenses. One intelligent brief.">
+<meta name="twitter:image" content="https://news-letter-cxo.vercel.app/img/signal-og.png?v=3">
+<meta name="twitter:image:alt" content="SIGNAL — Know What Matters. Information is everywhere. Attention isn’t.">
+<!-- Author and first publication (27 Sep 2026, 9:00 IST): LinkedIn reads
+     name="author" and og:publish_date; article:* for everyone else. The
+     card URL carries ?v=N so a new card is fetched past caches: bump N
+     whenever signal-og.png changes. -->
+<meta name="author" content="Amit Gupta">
+<meta property="article:author" content="Amit Gupta">
+<meta name="publish_date" property="og:publish_date" content="2026-09-27T09:00:00+05:30">
+<meta property="article:published_time" content="2026-09-27T09:00:00+05:30">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --navy: #0b1524; --navy-2: #14243a; --ink: #0a0a0a;
+    --slate: #5a6472; --slate-light: #8a94a2; --slate-100: #eef0f2; --slate-50: #f7f8f9;
+    --paper: #ffffff;
+    --blue: #2f6fed; --blue-soft: rgba(47,111,237,.14);
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: Consolas, "SF Mono", monospace;
+}
+@media (prefers-reduced-motion: reduce) { *,*::before,*::after{ animation-duration:.001ms!important; transition-duration:.001ms!important; } }
+
+body { font-family: var(--sans); background: var(--paper); color: var(--ink); overflow-x: hidden; }
+
+/* ---------- Thick, high-visibility page scrollbar (motor/mouse-accessibility aid) ---------- */
+html { scrollbar-width: auto; scrollbar-color: var(--navy) var(--slate-100); }
+html::-webkit-scrollbar { width: 26px; }
+html::-webkit-scrollbar-track { background: var(--slate-100); }
+html::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 13px; border: 6px solid var(--slate-100); }
+html::-webkit-scrollbar-thumb:hover { background: var(--blue); }
+html::-webkit-scrollbar-button { display: none; }
+.wrap { max-width: 1560px; margin: 0 auto; padding-left: 44px; padding-right: 44px; }
+.fade-up { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+.fade-up.in { opacity: 1; transform: translateY(0); }
+.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--slate); }
+.eyebrow.dark { color: rgba(255,255,255,.55); }
+.band-head { display: flex; align-items: flex-end; gap: 14px; padding: 30px 0 16px; }
+.band-head .sub { font-size: 12px; color: var(--slate-light); margin-left: auto; }
+a { color: inherit; }
+
+/* ---------- Sticky nav: top bar + Fox-style scrolling engine ticker ---------- */
+.nav-wrap { position: sticky; top: 0; z-index: 50; background: var(--navy); border-bottom: 3px solid #e11d2e; transition: box-shadow .2s ease; }
+.nav-wrap.scrolled { box-shadow: 0 4px 14px -6px rgba(0,0,0,.35); }
+.nav { display: flex; align-items: center; height: 56px; padding: 0 20px; gap: 20px; }
+.nav-left { display: flex; align-items: center; gap: 10px; flex: none; }
+.nav-center { flex: 1; min-width: 0; }
+.nav-right { display: flex; align-items: center; gap: 18px; flex: none; }
+.nav svg { width: 26px; height: 26px; }
+.nav .word { font-weight: 800; letter-spacing: .18em; font-size: 14px; color: #fff; }
+.nav a.link { font-size: 12.5px; color: rgba(255,255,255,.65); text-decoration: none; }
+.nav a.link:hover { color: #fff; }
+.nav .icon-btn { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.65); font-size: 13px; cursor: pointer; }
+.nav .icon-btn:hover { color: #fff; }
+
+/* ---------- Fox-style scrolling engine ticker (replaces the old static dropdown menubar) ---------- */
+.ticker-bar { background: transparent; position: relative; height: 56px; display: flex; align-items: center; }
+.ticker-viewport { overflow: hidden; white-space: nowrap; width: 100%; }
+.ticker-track { display: inline-flex; align-items: center; animation: ticker-scroll 52s linear infinite; }
+.ticker-track.paused { animation-play-state: paused; }
+@keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.ticker-item { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; font-size: 11.5px; font-weight: 700; letter-spacing: .03em; color: rgba(255,255,255,.65); cursor: pointer; white-space: nowrap; background: none; border: none; font-family: var(--sans); }
+.ticker-item.soon-item { color: rgba(255,255,255,.35); }
+.ticker-item .ic { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; flex: none; transition: transform .25s cubic-bezier(.2,.8,.3,1); }
+.ticker-item .ic svg { width: 100%; height: 100%; overflow: visible; }
+.ticker-item .lbl-text { transition: color .25s ease; }
+.ticker-item::after { content: ''; position: absolute; left: 18px; right: 18px; bottom: 6px; height: 1.5px; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
+.ticker-item:hover .ic, .ticker-item.pulse-awake .ic { transform: scale(1.18); }
+.ticker-item:hover .lbl-text, .ticker-item.pulse-awake .lbl-text { color: #fff; }
+.ticker-item:hover::after { transform: scaleX(1); }
+.ticker-hint { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 9.5px; color: var(--slate-light); background: #fff; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--slate-100); pointer-events: none; }
+
+/* shared flyout: positioned fixed via JS so it escapes the ticker viewport's overflow:hidden */
+.flyout { position: fixed; min-width: 320px; max-width: 380px; background: #fff; border: 1px solid var(--slate-100); border-radius: 0 0 8px 8px; box-shadow: 0 20px 40px -16px rgba(11,21,36,.22); padding: 6px 0; z-index: 90; display: none; }
+.flyout.open { display: block; }
+.flyout a { display: block; padding: 9px 18px; font-size: 12.5px; color: var(--ink); text-decoration: none; line-height: 1.4; border-bottom: 1px solid var(--slate-50); }
+.flyout a:last-child { border-bottom: none; }
+.flyout a:hover { background: var(--slate-50); color: var(--blue); }
+.flyout .dd-empty { padding: 12px 18px; font-size: 12px; color: var(--slate-light); font-style: italic; }
+
+/* ---------- World-time line: four cities' local time, then the last refresh ----------
+   One thin full-width line between the sticky nav and the hero, in the
+   slate-50 and hairline the page uses for quiet bands. Filled by WorldTime in the script. */
+.wc-line { background: var(--slate-50); border-bottom: 1px solid var(--slate-100); }
+.wc-line-inner { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+                 max-width: 1560px; margin: 0 auto; padding: 0 44px; }   /* the .wrap gutter */
+.wc-item { display: flex; align-items: center; justify-content: center; gap: 10px;
+           padding: 7px 12px; white-space: nowrap; }
+.wc-item + .wc-item { border-left: 1px solid #e3e7ec; }
+.wc-country { display: inline-flex; align-items: center; gap: 7px; font-size: 10.5px; font-weight: 700;
+              letter-spacing: .16em; text-transform: uppercase; color: var(--slate); }
+.wc-country .short { display: none; }
+/* 22px wide, the ticker's icon box (.ticker-item .ic), at a flag's 3:2. The
+   hairline keeps Japan's white field visible on the slate band. */
+.wc-flag { width: 22px; height: 14.67px; flex: none; display: block; border-radius: 2px;
+           box-shadow: 0 0 0 1px rgba(11,21,36,.14); }
+.wc-dt { display: inline-flex; align-items: baseline; gap: 5px; font-variant-numeric: tabular-nums; }
+.wc-dow, .wc-date { font-size: 12px; color: var(--slate-light); }
+.wc-time { font-size: 12.5px; font-weight: 700; color: var(--navy); margin-left: 3px; }
+/* The last refresh: a status, not a fifth clock. Green on schedule, amber
+   when a scheduled refresh is late. */
+.wc-upd { display: flex; align-items: baseline; gap: 7px; padding: 7px 0 7px 18px; white-space: nowrap;
+          border-left: 1px solid #e3e7ec; font-variant-numeric: tabular-nums; }
+.wc-upd[hidden] { display: none; }
+.wc-upd::before { content: ''; align-self: center; width: 6px; height: 6px; border-radius: 50%; background: #16a34a; }
+.wc-upd.delayed::before { background: #d97706; }
+.wc-upd-label { font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--slate); }
+.wc-upd-time { font-size: 12.5px; font-weight: 700; color: var(--navy); }
+.wc-upd-next { font-size: 12px; color: var(--slate-light); }
+.wc-upd-next::before { content: '\00b7  '; }   /* two spaces: the escape eats the first */
+.wc-upd.delayed .wc-upd-next { color: #b45309; }
+/* Too narrow for five cells: the refresh drops to its own hairline row. */
+@media (max-width: 1380px) {
+    .wc-upd { grid-column: 1 / -1; justify-content: center; padding: 5px 0; border-left: 0; border-top: 1px solid #e3e7ec; }
+}
+/* Narrower: each city above its date and time. */
+@media (max-width: 1120px) {
+    .wc-item { flex-direction: column; align-items: center; gap: 1px; padding: 6px 6px; }
+}
+@media (max-width: 640px) {
+    .wc-line-inner { padding: 0 8px; }
+    .wc-country { gap: 5px; font-size: 9.5px; letter-spacing: .08em; }
+    .wc-country .long, .wc-dow { display: none; }
+    .wc-country .short { display: inline; }
+    .wc-date { font-size: 11px; }
+    .wc-time { font-size: 11.5px; margin-left: 1px; }
+}
+
+/* ---------- Engine panel (top-5 with POV) ---------- */
+.panel-backdrop { position: fixed; inset: 0; background: rgba(11,21,36,.55); z-index: 100; display: none; align-items: flex-start; justify-content: center; padding: 60px 24px; overflow-y: auto; }
+.panel-backdrop.open { display: flex; }
+.panel-box { background: #fff; border-radius: 12px; max-width: 720px; width: 100%; padding: 30px 32px 26px; max-height: 82vh; overflow-y: auto; }
+.panel-head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.panel-head .picon { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.panel-head .picon svg { width: 100%; height: 100%; overflow: visible; }
+.panel-head h3 { font-family: var(--serif); font-weight: 400; font-size: 22px; color: var(--navy); }
+.panel-close { margin-left: auto; width: 30px; height: 30px; border-radius: 50%; background: var(--slate-50); border: none; font-size: 15px; color: var(--slate); cursor: pointer; }
+.panel-sub { font-size: 12px; color: var(--slate-light); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--slate-100); }
+.panel-item { padding: 16px 0; border-bottom: 1px solid var(--slate-100); }
+.panel-item:last-child { border-bottom: none; }
+.panel-item h4 { font-family: var(--serif); font-weight: 400; font-size: 15.5px; line-height: 1.4; margin-bottom: 8px; }
+.panel-item h4 a { color: var(--navy); text-decoration: none; }
+.panel-item h4 a:hover { color: var(--blue); text-decoration: underline; }
+.panel-empty { padding: 30px 0; text-align: center; color: var(--slate-light); font-style: italic; font-size: 13.5px; }
+
+/* ---------- Band 1: Hero (~30% viewport) ---------- */
+.hero { position: relative; padding: 10px 0 2px; text-align: center; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+.hero-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.hero-wave { position: absolute; left: -10%; right: -10%; top: 30%; height: 160px; opacity: .04; }
+.hero-wave path { stroke: var(--blue); stroke-width: 1.4; fill: none; }
+.hero-node { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: var(--blue); opacity: .26; animation: drift 16s ease-in-out infinite; }
+@keyframes drift { 0%,100%{ transform: translate(0,0);} 50%{ transform: translate(20px,-16px);} }
+.hero-kicker { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 9px; margin-bottom: 6px; }
+.live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--blue); animation: pulse 2.2s ease-in-out infinite; }
+/* The hero kicker carries the tagline now, not a platform descriptor, so it
+   and its pulsing dot are scaled up together. Scoped to .hero-kicker: the
+   same .eyebrow class labels the band headings further down the page, which
+   stay at 11px. */
+.hero-kicker .eyebrow { font-size: 14px; letter-spacing: .18em; }
+.hero-kicker .live-dot { width: 14px; height: 14px; }
+.hero-kicker { gap: 12px; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.hero-stage { position: relative; z-index: 2; max-width: 820px; margin: 0 auto 2px; min-height: 44px; }
+.hero-headline { display:none; font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.18; letter-spacing: -.01em; color: var(--navy); opacity:0; transform: translateY(10px); transition: opacity .8s ease, transform .8s ease; }
+.hero-headline.showing { display: block; }
+.hero-headline.visible { opacity:1; transform: translateY(0); }
+
+/* Per-tile headline cycler — same sequential display-toggle pattern as .hero-headline, scoped to one tile at a time */
+.tile-headline-cycle { min-height: 38px; }
+.tile-headline { display:none; font-family: var(--serif); font-weight: 400; font-size: 14.5px; line-height: 1.3; margin-bottom: 8px; opacity:0; transform: translateY(8px); transition: opacity .6s ease, transform .6s ease; }
+.tile-headline.showing { display: block; }
+.tile-headline.visible { opacity:1; transform: translateY(0); }
+.tile.live .tile-headline, .tile.flat .tile-headline { color: #fff; }
+.hero-sub { position: relative; z-index: 2; font-size: 14.5px; line-height: 1.5; color: var(--slate); max-width: 500px; margin: 0 auto 20px; }
+.hero-cta { position: relative; z-index: 2; display: flex; gap: 12px; justify-content: center; }
+/* Parked, not removed. The two nav links and the hero's CTA pair were
+   spending vertical space above the first row of news without earning it,
+   so the news now starts higher. Nothing behind them changed: the markup,
+   the hrefs, and the /brief and /signals routes are all still live and
+   reachable directly. To bring them back, delete this one rule -- the
+   "parked" class on those three elements then does nothing.
+   The closer section's .hero-cta is deliberately NOT parked: it sits at
+   the foot of the page, where the space costs nothing. */
+/* !important is load-bearing: a responsive rule below re-shows these two
+   nav links under 780px (.nav-right a.link[href="/brief"] and [href="/signals"]
+   at specificity 0,2,1), so a plain .parked would be overridden on narrow
+   screens and the links would reappear there. */
+.parked { display: none !important; }
+.btn { padding: 12px 24px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; border-radius: 3px; display: inline-block; transition: transform .15s ease, box-shadow .15s ease; }
+.btn:hover { transform: translateY(-1px); }
+.btn.pri { background: var(--navy); color: #fff; }
+.btn.pri:hover { box-shadow: 0 8px 20px -8px rgba(11,21,36,.4); }
+.btn.sec { border: 1.5px solid var(--navy); color: var(--navy); }
+
+/* ---------- Animated Intelligence Engine icon system (14 engines) ---------- */
+.icon-widget { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.icon-widget svg { width: 100%; height: 100%; overflow: visible; }
+@keyframes pulse-glow { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+@keyframes spin-cw { to { transform: rotate(360deg); } }
+@keyframes spin-ccw { to { transform: rotate(-360deg); } }
+@keyframes ai-flow { to { stroke-dashoffset: -12; } }
+@keyframes ind-move { 0% { offset-distance: 0%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
+@keyframes gl-radiate { 0% { transform: scale(.4); opacity: .7; } 70%,100% { transform: scale(1.7); opacity: 0; } }
+@keyframes cy-rise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateY(-14px); opacity: 0; } }
+@keyframes orbit-travel { to { offset-distance: 100%; } }
+
+.gl-rot { transform-origin: 16px 16px; animation: spin-cw 13s linear infinite; }
+.gl-orbit { transform-origin: 16px 16px; animation: spin-ccw 7s linear infinite; opacity: .55; }
+.gl-event { animation: pulse-glow 2.6s ease-in-out infinite; }
+.gl-wave { transform-origin: 22px 12px; animation: gl-radiate 5s ease-out infinite; }
+
+.mk-orbit-grp { transform-origin: 0 0; animation: spin-cw 12s linear infinite; }
+.mk-counter-grp { transform-origin: 0 0; animation: spin-ccw 12s linear infinite; }
+.mk-trend { stroke-dasharray: 40; stroke-dashoffset: 40; animation: mk-draw 4s ease-in-out infinite; }
+@keyframes mk-draw { 0% { stroke-dashoffset: 40; } 45%,60% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -40; } }
+.mk-marker { offset-path: path("M4,20 L10,13 L15,17 L21,8 L28,12"); animation: mk-move 4s linear infinite; }
+@keyframes mk-move { 0% { offset-distance: 0%; opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
+
+.ai-node { animation: pulse-glow 3s ease-in-out infinite; }
+.ai-node.n1 { animation-delay: 0s; } .ai-node.n2 { animation-delay: .3s; }
+.ai-node.n3 { animation-delay: .6s; } .ai-node.n4 { animation-delay: .9s; } .ai-node.n5 { animation-delay: 1.2s; }
+.ai-core { animation: ai-core-pulse 2.2s ease-in-out infinite; transform-origin: 16px 16px; }
+@keyframes ai-core-pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: .7; } }
+.ai-link { stroke-dasharray: 3 3; animation: ai-flow 1.4s linear infinite; }
+
+.gcc-link { stroke-dasharray: 3 3; animation: ai-flow 1.2s linear infinite; }
+.gcc-node { animation: gl-radiate 4s ease-out infinite; }
+
+.bf-shield-pulse { stroke-dasharray: 10 64; animation: bf-perimeter 3.5s linear infinite; }
+@keyframes bf-perimeter { to { stroke-dashoffset: -74; } }
+.bf-graph { stroke-dasharray: 20; stroke-dashoffset: 20; animation: bf-graph-draw 3.5s ease-in-out infinite; }
+@keyframes bf-graph-draw { 0% { stroke-dashoffset: 20; } 50%,70% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -20; } }
+.bf-lock { transform-origin: 16.5px 19px; animation: bf-lock-click 3.5s ease-in-out infinite; }
+@keyframes bf-lock-click { 0%,85%,100% { transform: scaleY(1); } 90% { transform: scaleY(.75); } 95% { transform: scaleY(1.05); } }
+
+.bk-col { animation: pulse-glow 3s ease-in-out infinite; }
+.bk-col.c2 { animation-delay: .3s; } .bk-col.c3 { animation-delay: .6s; } .bk-col.c4 { animation-delay: .9s; }
+
+.ind-gear { transform-origin: 0 0; animation: spin-cw 6s linear infinite; }
+.ind-belt { stroke-dasharray: 3 3; animation: ai-flow 1s linear infinite; }
+.ind-arm { transform-origin: 12px 10px; animation: ind-arm-swing 2.6s ease-in-out infinite; }
+@keyframes ind-arm-swing { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(-18deg); } }
+
+.en-ring-pulse { stroke-dasharray: 16 84; animation: en-perimeter 3s linear infinite; }
+@keyframes en-perimeter { to { stroke-dashoffset: -100; } }
+.en-bolt { animation: pulse-glow 2.4s ease-in-out infinite; }
+
+.def-sweep { transform-origin: 0 0; animation: spin-cw 2.4s linear infinite; }
+.def-target { animation: def-lock 4s ease-in-out infinite; }
+@keyframes def-lock { 0%,60%,100% { opacity: 0; } 70%,90% { opacity: 1; } }
+
+.cy-particle { animation: cy-rise 3s linear infinite; }
+.cy-particle.p2 { animation-delay: .7s; } .cy-particle.p3 { animation-delay: 1.4s; } .cy-particle.p4 { animation-delay: 2.1s; }
+.cy-hex-pulse { animation: pulse-glow 2.8s ease-in-out infinite; }
+
+.hc-orbit { transform-origin: 0 0; animation: spin-cw 3s linear infinite; }
+
+.tc-ring { animation: gl-radiate 3s ease-out infinite; }
+.tc-ring.r2 { animation-delay: 1s; } .tc-ring.r3 { animation-delay: 2s; }
+
+.cl-leaf { transform-origin: 16px 16px; animation: cl-grow 3.4s ease-in-out infinite; }
+@keyframes cl-grow { 0%,100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+.cl-wind { animation: ai-flow 1.6s linear infinite; }
+.cl-drop { animation: cl-fall 2.6s ease-in infinite; }
+@keyframes cl-fall { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(6px); opacity: 0; } }
+.cl-sun { animation: cl-rise 4s ease-in-out infinite; }
+@keyframes cl-rise { 0%,20% { opacity: 0; } 50%,80% { opacity: 1; } 100% { opacity: 0; } }
+.cl-co2 { animation: cy-rise 3.6s linear infinite; }
+.cl-co2.b { animation-delay: 1.8s; }
+
+/* Signal Pulse — ticker items briefly "wake up" as the pulse sweeps through */
+.ticker-item.pulse-awake .ic { transform: scale(1.22); }
+.ticker-item.pulse-awake { color: var(--blue); }
+.pulse-origin-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); position: relative; display: inline-block; margin-right: 8px; }
+.pulse-origin-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 1.5px solid var(--blue); opacity: 0; animation: origin-ring 3.4s ease-out infinite; }
+@keyframes origin-ring { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(2.6); opacity: 0; } }
+
+/* ---------- Band 2: Economy, Business & Markets dashboard ---------- */
+.econ-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding-bottom: 40px; }
+.econ-grid.three-col { grid-template-columns: repeat(3, 1fr); }
+.econ-grid.three-col .econ-card { min-height: 340px; }
+.econ-cat { display: flex; align-items: center; gap: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #9fc1ff; margin-bottom: 10px; }
+.econ-card { position: relative; border-radius: 10px; overflow: hidden; min-height: 300px; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; transition: transform .2s ease, box-shadow .2s ease; }
+.econ-card:hover { transform: translateY(-3px); box-shadow: 0 18px 34px -18px rgba(0,0,0,.28); }
+.econ-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.econ-card::after { content:''; position:absolute; inset:0; background: linear-gradient(0deg, rgba(11,21,36,.92) 0%, rgba(11,21,36,.4) 55%, rgba(11,21,36,.05) 100%); }
+.econ-body { position: relative; z-index: 2; padding: 18px; color: #fff; }
+.econ-body h3 { font-family: var(--serif); font-weight: 400; font-size: 16px; line-height: 1.32; margin-bottom: 8px; }
+.econ-impl { font-size: 11.5px; color: rgba(255,255,255,.72); line-height: 1.4; margin-bottom: 10px; }
+.econ-foot { display: flex; align-items: center; gap: 8px; }
+.risk-tag { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 7px; border-radius: 3px; }
+.risk-tag.elevated { background: rgba(245,166,35,.2); color: #f5a623; }
+.risk-tag.opportunity { background: rgba(47,111,237,.22); color: #9fc1ff; }
+.econ-read { margin-left: auto; font-size: 10.5px; font-weight: 700; color: #fff; }
+
+/* ---------- Band 3: Executive Pulse (auto-scroll) ---------- */
+.pulse-note { font-size: 12px; color: var(--slate); margin: -8px 0 16px; max-width: 640px; }
+/* Swipeable as well as self-scrolling. A phone shows one card, so the row
+   must move by hand too; the scrollbar stays hidden, as on the other rows. */
+.pulse-viewport { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; padding-bottom: 40px; }
+.pulse-viewport::-webkit-scrollbar { display: none; }
+.pulse-wrap .row-arrow { top: calc(50% - 20px); }
+/* Like People Movers: the track is the row's width, so few cards grow to fill
+   it, aligned with the rows above; many cards keep their 260px basis and
+   overflow, and startPulseScroller loops them. (width: max-content would size
+   growable cards to their unwrapped headlines instead.) */
+.pulse-track { display: flex; gap: 16px; }
+.pulse-card { flex: 1 0 260px; background: #fff; border: 1px solid var(--slate-100); border-radius: 10px; overflow: hidden; }
+/* The photo deepens as the card widens, so a stretched card shows a portrait
+   rather than a thin strip; the crop favours the upper part, where faces sit. */
+.pulse-photo { aspect-ratio: 16 / 7; min-height: 140px; max-height: 220px; position: relative; }
+.pulse-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.pulse-photo::after { content:''; position:absolute; inset:0; background: linear-gradient(0deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 45%); }
+.pulse-who { position: absolute; left: 14px; bottom: 10px; z-index: 2; color: #fff; }
+.pulse-who .name { font-weight: 700; font-size: 13px; }
+.pulse-who .co { font-size: 10.5px; color: rgba(255,255,255,.75); }
+.pulse-body { padding: 14px; }
+.pulse-view { font-size: 12px; color: var(--ink); line-height: 1.4; margin-bottom: 8px; text-decoration: none; display: block; }
+.pulse-view:hover { text-decoration: underline; }
+.pulse-insight { font-size: 11px; color: var(--slate); font-style: italic; border-left: 2px solid var(--blue); padding-left: 9px; margin-bottom: 8px; }
+.pulse-insight span { font-style: normal; font-weight: 700; color: var(--blue); }
+.pulse-impl { font-size: 10.5px; color: var(--slate-light); margin-bottom: 8px; }
+.pulse-meta { font-family: var(--mono); font-size: 9.5px; color: var(--slate-light); text-transform: uppercase; }
+/* A phone fits one card; the edge of the next one shows there is more. */
+@media (max-width: 640px) { .pulse-card { flex-basis: calc(100% - 48px); } }
+/* On a phone the arrows sit mid-photo, clear of the name along its foot. */
+@media (max-width: 700px) { .pulse-wrap .row-arrow { top: 70px; } }
+
+/* ---------- Band 4: Intelligence Engines + Personalization Bar ---------- */
+/* The pin/hide/drag hint sits on the engines header line, and the note on
+   where a layout is saved is a tooltip, so the tiles are on screen at load. */
+#engines.band-head { padding: 12px 0; flex-wrap: wrap; row-gap: 6px; align-items: center; }
+.engine-tools { display: inline-flex; align-items: center; gap: 12px; font-size: 12px; color: var(--slate); }
+.engine-tools b { color: var(--navy); font-weight: 600; }
+.engine-tools .info { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--slate-light); color: var(--slate); font: 700 11px/16px var(--sans); text-align: center; cursor: help; position: relative; }
+.engine-tools .info .tip { display: none; position: absolute; right: 0; top: 24px; width: 280px; z-index: 20; background: var(--navy); color: #fff; font-weight: 400; font-size: 12px; line-height: 1.45; text-align: left; padding: 10px 12px; border-radius: 6px; box-shadow: 0 10px 24px -10px rgba(0,0,0,.5); }
+.engine-tools .info:hover .tip, .engine-tools .info:focus .tip { display: block; }
+.persona-reset { font-size: 11px; font-weight: 700; color: var(--blue); cursor: pointer; background: none; border: none; }
+@media (max-width: 700px) { .engine-tools { width: 100%; justify-content: space-between; } }
+
+/* No scroll-snap: the row drifts on its own (startRibbonDrift), and snapping
+   would pull every small step back to the nearest tile. */
+.ribbon { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 20px; -webkit-overflow-scrolling: touch; }
+/* Side arrows (.row-arrow) replace the scrollbars on the scrolling rows;
+   swipe, trackpad and keyboard scrolling still work. */
+.ribbon, .people-row { scrollbar-width: none; }
+.ribbon::-webkit-scrollbar, .people-row::-webkit-scrollbar { display: none; }
+.tile { flex: 0 0 250px; scroll-snap-align: start; border-radius: 10px; overflow: hidden; position: relative; min-height: 290px; display: flex; flex-direction: column; justify-content: flex-end; transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease; cursor: grab; }
+.tile.dragging { opacity: .4; }
+.tile:hover { transform: translateY(-3px); box-shadow: 0 18px 34px -18px rgba(0,0,0,.28); }
+.tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tile.live::after { content:''; position:absolute; inset:0; background: linear-gradient(0deg, rgba(11,21,36,.92) 0%, rgba(11,21,36,.35) 55%, rgba(11,21,36,.05) 100%); }
+.tile.live, .tile.flat { background: linear-gradient(155deg, var(--navy) 0%, var(--navy-2) 100%); }
+/* Tile artwork. Each live tile carries its domain's vector as inline markup,
+   so it paints with the page instead of waiting on /api/command-center, and
+   it is what shows whenever the headline currently on screen has no
+   photograph of its own. It is also the landing place for a dead image url:
+   .tile-photo removes itself on error and the vector is simply revealed. */
+.tile-vector { position: absolute; left: 0; right: 0; top: 6px; width: 100%; height: 76%; opacity: .5; }
+.tile-vector .vln { fill: none; stroke: #9fc1ff; stroke-width: 1.1; opacity: .55; }
+.tile-vector .vln2 { fill: none; stroke: #9fc1ff; stroke-width: 1; opacity: .38; }
+.tile-vector .vbar { fill: #9fc1ff; fill-opacity: .15; stroke: #9fc1ff; stroke-width: .9; stroke-opacity: .5; }
+.tile-vector .vdot { fill: #9fc1ff; opacity: .75; }
+.tile-vector .vnode { fill: var(--navy); stroke: #9fc1ff; stroke-width: 1.2; opacity: .85; }
+.tile-vector .vwin { fill: #9fc1ff; opacity: .34; }
+.tile-vector .vtick { fill: none; stroke: #9fc1ff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; opacity: .6; }
+/* One photo per cycling headline that has one, cross-faded on the same
+   600ms curve as .tile-headline so picture and words change together. */
+.tile-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .6s ease; }
+.tile-photo.on { opacity: 1; }
+.tile.soon { background: var(--slate-50); border: 1px dashed var(--slate-100); }
+.tile-body { position: relative; z-index: 2; padding: 16px; text-decoration: none; display: block; }
+.tile-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+.tile-cat { font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 5px; }
+.tcat-ic { width: 15px; height: 15px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.tcat-ic svg { width: 100%; height: 100%; overflow: visible; }
+.tile.live .tile-cat, .tile.flat .tile-cat { color: #9fc1ff; }
+.tile.soon .tile-cat { color: var(--slate); }
+.tile-controls { display: flex; gap: 6px; }
+.tile-ctrl { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,.14); display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; color: #fff; border: none; }
+.tile.soon .tile-ctrl { background: rgba(11,21,36,.08); color: var(--slate); }
+.tile-ctrl.pinned { background: #f5a623; color: #0a0a0a; }
+.tile h4 { font-family: var(--serif); font-weight: 400; font-size: 14.5px; line-height: 1.3; margin-bottom: 8px; }
+.tile.live h4, .tile.flat h4 { color: #fff; }
+.tile.soon h4 { color: var(--navy); }
+.tile-impl { font-size: 10.5px; line-height: 1.4; margin-bottom: 10px; }
+.tile.live .tile-impl, .tile.flat .tile-impl { color: rgba(255,255,255,.7); }
+.tile.soon .tile-impl { color: var(--slate-light); font-style: italic; }
+.tile-foot { display: flex; align-items: center; gap: 8px; }
+.tile-read { margin-left: auto; font-size: 10px; font-weight: 700; color: #fff; }
+/* The nine unbuilt domains get the same vector system as the live tiles, in
+   slate rather than blue: #9fc1ff on the pale --slate-50 card is invisible.
+   Keeping them pale preserves the live/coming-soon distinction the dashed
+   border and the badge are also carrying -- matching the live palette would
+   have meant making these tiles dark, which erases it. The artwork is also
+   shorter and lower than on a live tile, because a live tile has the shade
+   gradient to protect its text and these do not. */
+/* Same geometry as a live tile now the body copy is gone -- nothing is
+   left at the bottom but the category label, so the artwork has room. */
+.tile.soon .tile-vector { opacity: .62; }
+.tile.soon .tile-vector .vln { stroke: var(--slate); stroke-width: 1.15; opacity: .85; }
+.tile.soon .tile-vector .vln2 { stroke: var(--slate); stroke-width: 1; opacity: .62; }
+.tile.soon .tile-vector .vbar { fill: var(--slate); fill-opacity: .16; stroke: var(--slate); stroke-width: .95; stroke-opacity: .72; }
+.tile.soon .tile-vector .vdot { fill: var(--slate); opacity: .9; }
+.tile.soon .tile-vector .vnode { fill: var(--slate-50); stroke: var(--slate); stroke-width: 1.2; opacity: .95; }
+.tile.soon .tile-vector .vtick { stroke: var(--slate); stroke-width: 2.3; opacity: .8; }
+/* Stamped across the artwork rather than tucked under the body text, so
+   "not built yet" reads at a glance instead of on inspection. */
+.soon-badge { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); z-index: 3; font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--slate); border: 1px solid #d8dce2; background: rgba(255,255,255,.92); padding: 6px 14px; border-radius: 20px; white-space: nowrap; }
+.tile.hidden-tile { display: none; }
+
+/* ---------- Featured Analysis ---------- */
+/* Featured Analysis rotates through the pinned story and the day's GCC
+   stories. Text sits on navy beside the picture; on a phone the picture goes
+   on top. The picture is never cropped (a wide strip filled edge to edge cut
+   off the top of every portrait): it sits whole in a 16:9 frame, the shape
+   most share images come in, over a blurred copy of itself. Every card is
+   stacked in one grid cell, so the section keeps its tallest card's height
+   and nothing below it moves as the cards change. */
+.featured-deck { position: relative; margin-bottom: 50px; }
+.featured-deck.cycling { margin-bottom: 0; }
+.featured-stack { display: grid; }
+.featured-stack > .featured { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity .6s ease, visibility 0s linear .6s; }
+.featured-stack > .featured.on { opacity: 1; visibility: visible; transition: opacity .6s ease; }
+.featured { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); background: var(--navy); border-radius: 12px; overflow: hidden; text-decoration: none; }
+.featured-media { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #0b1524; }
+.featured-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.featured-media .featured-fill { inset: -24px; width: calc(100% + 48px); height: calc(100% + 48px); object-fit: cover; filter: blur(20px) brightness(.5); }
+.featured-summary { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.featured-dots { display: flex; justify-content: center; gap: 8px; margin: 14px 0 42px; }
+.featured-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: #c9d0d9; cursor: pointer; }
+.featured-dots button.on { background: var(--navy); width: 22px; border-radius: 4px; }
+.featured-body { position: relative; z-index: 2; align-self: center; padding: 32px 38px; color: #fff; }
+.featured-body h2 { font-family: var(--serif); font-size: 30px; font-weight: 400; line-height: 1.2; margin-bottom: 12px; }
+.featured-summary { font-size: 14px; color: rgba(255,255,255,.82); line-height: 1.55; margin-bottom: 10px; }
+.featured-impl { font-size: 12.5px; color: rgba(255,255,255,.65); margin-bottom: 14px; }
+.featured-impl b { color: #9fc1ff; }
+.featured-read { font-size: 12px; font-weight: 700; letter-spacing: .04em; }
+.featured-pin { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #9fc1ff; margin-bottom: 10px; }
+@media (max-width: 860px) { .featured { grid-template-columns: 1fr; align-content: start; } .featured-media { order: -1; } .featured-body { padding: 22px 22px 26px; } .featured-body h2 { font-size: 24px; } }
+/* On a phone the arrows sit mid-picture (a 16:9 picture the card's width,
+   the page's 44px gutters aside), clear of the headline. */
+@media (max-width: 860px) { .featured-deck .row-arrow { top: calc((100vw - 88px) * .28125); } }
+
+/* ---------- People rows: People Movers, Leaders on Record ----------
+   Cards grow to fill the row when there are few, so each row spans the same
+   width as the rows above it, and keep a minimum width (scrolling) when many. */
+.row-lede { font-size: 12px; color: var(--slate); margin: -8px 0 16px; max-width: 640px; }
+.people-row { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 14px; margin-bottom: 30px; }
+.row-scroller { position: relative; }
+.row-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 5; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--slate-100); background: #fff; color: var(--navy); cursor: pointer; display: grid; place-items: center; box-shadow: 0 6px 18px -6px rgba(11,21,36,.35); transition: background .18s ease, color .18s ease; }
+.row-arrow:hover { background: var(--navy); color: #fff; }
+.row-arrow:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.row-arrow[hidden] { display: none !important; }
+.row-arrow svg { width: 18px; height: 18px; }
+.row-arrow.prev { left: -21px; }
+.row-arrow.next { right: -21px; }
+.ribbon-wrap .row-arrow { top: calc(50% - 10px); }
+.people-wrap .row-arrow { top: calc(50% - 22px); }
+/* A soft fade marks the side where more cards wait (the white rows only;
+   on the dark tiles the arrow already stands out). */
+.people-wrap::before, .people-wrap::after { content: ''; position: absolute; top: 0; bottom: 44px; width: 64px; z-index: 4; pointer-events: none; opacity: 0; transition: opacity .18s ease; }
+.people-wrap::before { left: 0; background: linear-gradient(90deg, var(--paper), rgba(255,255,255,0)); }
+.people-wrap::after { right: 0; background: linear-gradient(270deg, var(--paper), rgba(255,255,255,0)); }
+.people-wrap.more-left::before, .people-wrap.more-right::after { opacity: 1; }
+@media (max-width: 700px) { .row-arrow { width: 34px; height: 34px; } .row-arrow.prev { left: -6px; } .row-arrow.next { right: -6px; } }
+.move-card { flex: 1 0 300px; display: flex; flex-direction: column; gap: 0; background: #fff; border: 1px solid #e3e7ec; border-radius: 10px; padding: 0; overflow: hidden; text-decoration: none; color: inherit; transition: border-color .2s ease, transform .2s ease; }
+.move-card:hover, .quote-card:hover { border-color: var(--blue); transform: translateY(-2px); }
+.move-type { align-self: flex-start; font-family: var(--mono); font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; background: var(--blue-soft); color: var(--blue); }
+.move-type.exit { background: var(--slate-100); color: var(--slate); }
+/* A move card leads with its story's own picture (the publisher's share
+   image). With none, a navy panel with the SIGNAL mark: never a stand-in
+   photo of someone else. */
+.move-photo { aspect-ratio: 16 / 8; max-height: 160px; min-height: 120px; background: var(--navy); position: relative; }
+.move-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; display: block; }
+.move-photo.none { display: grid; place-items: center; background: linear-gradient(135deg, var(--navy), var(--navy-2)); }
+.move-photo.none .mark { display: flex; gap: 6px; }
+.move-photo.none .mark i { width: 12px; height: 12px; border-radius: 3px; display: block; }
+.move-photo.none .src { position: absolute; left: 14px; bottom: 10px; font: 700 9.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.55); }
+.move-body { display: flex; flex-direction: column; gap: 10px; padding: 14px 18px 16px; flex: 1; }
+.move-card h4 { font-family: var(--serif); font-weight: 400; font-size: 16px; line-height: 1.35; color: var(--navy); }
+.row-meta { margin-top: auto; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--slate-light); }
+.quote-card { flex: 1 0 290px; display: flex; flex-direction: column; gap: 14px; background: #fff; border: 1px solid #e3e7ec; border-left: 2px solid var(--blue); border-radius: 4px 10px 10px 4px; padding: 20px 22px; text-decoration: none; color: inherit; transition: border-color .2s ease, transform .2s ease; }
+.quote-card blockquote { font-family: var(--serif); font-size: 16.5px; line-height: 1.45; color: var(--navy); max-width: 62ch; }
+.quote-who { font-size: 12.5px; font-weight: 700; color: var(--navy); }
+.quote-who span { font-weight: 400; color: var(--slate); }
+.row-empty { flex: 1 0 300px; border: 1px dashed #d8dce2; background: var(--slate-50); border-radius: 10px; padding: 20px 24px; font-family: var(--serif); font-size: 16px; color: var(--navy); }
+.listening { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: -14px 0 40px; }
+.listening-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--slate-light); margin-right: 4px; }
+.listening-chip { font-size: 11px; color: var(--navy); background: #fff; border: 1px solid #e3e7ec; border-radius: 20px; padding: 2px 9px; }
+.listening-chip i { font-style: normal; color: var(--slate-light); }
+@media (max-width: 640px) { .move-card, .row-empty { flex-basis: 260px; } .quote-card { flex-basis: 280px; } }
+
+/* ---------- Pipeline ---------- */
+.pipeline { background: var(--navy); color: #fff; padding: 52px 0; }
+.pipeline h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; text-align: center; margin-bottom: 40px; }
+.pipe-row { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.pipe-step { display: flex; flex-direction: column; align-items: center; text-align: center; width: 155px; }
+.pipe-icon { width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; font-size: 19px; margin-bottom: 10px; }
+.pipe-step p { font-size: 11.5px; font-weight: 700; letter-spacing: .03em; }
+.pipe-arrow { color: rgba(255,255,255,.3); font-size: 17px; }
+
+/* ---------- Why Signal ---------- */
+.why { padding: 52px 0; }
+.why h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; text-align: center; margin-bottom: 36px; }
+.why-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; max-width: 760px; margin: 0 auto; }
+.why-col { text-align: center; font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--slate-light); padding-bottom: 14px; }
+.why-col.right { color: var(--blue); }
+.why-item { background: var(--slate-50); border-radius: 6px; padding: 13px 15px; font-size: 13px; color: var(--slate); text-align: center; }
+.why-item.right { background: var(--blue-soft); color: var(--navy); font-weight: 600; }
+.why-arrow { display: flex; align-items: center; justify-content: center; color: var(--slate-light); }
+
+/* ---------- Final CTA ---------- */
+.closer { background: var(--slate-50); padding: 56px 0 66px; text-align: center; }
+.closer h2 { font-family: var(--serif); font-size: 25px; font-weight: 400; margin-bottom: 8px; color: var(--navy); }
+.closer p { color: var(--slate); font-size: 13.5px; margin-bottom: 24px; }
+.closer .hero-cta { justify-content: center; }
+
+@media (max-width: 1100px) { .econ-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 780px) {
+    .econ-grid { grid-template-columns: 1fr; }
+    .why-row { grid-template-columns: 1fr; }
+    .why-arrow { transform: rotate(90deg); padding: 4px 0; }
+    .hero-headline { font-size: 24px; }
+    .nav-right a.link { display: none; }
+    .nav-right a.link[href="/brief"],
+    .nav-right a.link[href="/signals"] { display: inline; }
+}
+
+.econ-card.no-img { background: var(--navy); }
+.econ-card.no-img .econ-body { position: relative; }
+
+/* ---------- The Builder's Manifesto ----------
+   A title band over the generated background, then numbered chapters on
+   navy. Same column as About the Builder below it (980px), so the two
+   navy sections read as one chapter of the page. */
+.manifesto { background: var(--navy); color: #fff; }
+.manifesto .wrap { max-width: 980px; position: relative; z-index: 2; }
+.mf-hero { position: relative; overflow: hidden; min-height: 540px; display: flex; align-items: center; }
+.manifesto-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 68% 50%; }
+/* Legibility from the left, and a fade into the navy the chapters sit on. */
+.mf-hero::before { content: ''; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(180deg, rgba(11,21,36,0) 55%, var(--navy) 100%),
+                linear-gradient(90deg, rgba(11,21,36,.86) 0%, rgba(11,21,36,.5) 40%, rgba(11,21,36,0) 68%); }
+.mf-hero .wrap { width: 100%; padding-top: 96px; padding-bottom: 96px; }
+.mf-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+              color: #9fc1ff; margin: 0 0 26px; }
+.mf-title { font-family: var(--serif); font-weight: 400; font-size: 56px; line-height: 1.06; letter-spacing: -.015em; margin: 0; }
+.mf-title .away { color: rgba(255,255,255,.38); }      /* the years away from the keyboard */
+
+.mf-body { padding-bottom: 104px; }
+.mf-chapter { display: grid; grid-template-columns: 190px 1fr; gap: 40px; padding: 46px 0;
+              border-top: 1px solid rgba(255,255,255,.09); }
+.mf-num { font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase;
+          color: rgba(255,255,255,.5); }
+.mf-num b { display: block; font-family: var(--serif); font-weight: 400; font-size: 44px; letter-spacing: 0;
+            line-height: 1; color: #9fc1ff; margin-bottom: 12px; }
+/* Body lines first; the classed lines below are scoped to .mf-text too, so
+   they outrank it. */
+.mf-text p { font-size: 17px; line-height: 1.65; color: #c9d4e3; margin: 0 0 12px; max-width: 36em; }
+.mf-text p.mf-strong { color: #fff; font-weight: 700; }
+.mf-text .mf-lead { font-family: var(--serif); font-size: 31px; line-height: 1.2; letter-spacing: -.01em;
+                    color: #fff; margin: 0 0 22px; }
+.mf-text .mf-quote { font-family: var(--serif); font-style: italic; font-size: 25px; line-height: 1.35; color: #fff;
+                     border-left: 2px solid var(--blue); padding: 2px 0 2px 18px; margin: 6px 0 22px; }
+/* Each arrow belongs to the step after it, so a wrapped line never ends on one. */
+.mf-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; list-style: none; padding: 0; margin: 6px 0 20px; }
+.mf-flow li { display: flex; align-items: center; gap: 8px; }
+.mf-flow .to { color: var(--blue); font-size: 14px; }
+.mf-flow .step { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+                 color: #dfe9ff; border: 1px solid rgba(159,193,255,.32); border-radius: 3px; padding: 7px 11px; }
+.mf-flow li:last-child .step { background: var(--blue); border-color: var(--blue); color: #fff; }
+.mf-text .mf-words { font-family: var(--serif); font-size: 27px; line-height: 1.35; color: #fff; margin: 0 0 20px; }
+.mf-words span { color: #9fc1ff; }
+.mf-plain { list-style: none; padding: 0; margin: 18px 0 0; font-size: 17px; line-height: 1.7; color: #c9d4e3; }
+.mf-plain li:last-child { color: #fff; font-weight: 700; }
+.mf-close { padding-top: 60px; border-top: 1px solid rgba(255,255,255,.09); }
+.mf-mantra { font-family: var(--serif); font-size: 50px; line-height: 1.08; letter-spacing: -.015em; margin: 0 0 14px; }
+.mf-sign { font-family: var(--serif); font-style: italic; font-size: 21px; color: #9fc1ff; margin: 0; }
+
+/* Narrow screens: the words would cover the whole image, so the image gets
+   its own band at the top, fading into navy, and the title sits below it;
+   chapters stack. */
+@media (max-width: 860px) {
+    .manifesto .wrap { padding-left: 20px; padding-right: 20px; }
+    .mf-hero { display: block; min-height: 0; }
+    .mf-hero .wrap { padding-top: 240px; padding-bottom: 36px; }
+    .manifesto-bg { height: 300px; object-position: 70% 50%; }
+    .mf-hero::before { background: linear-gradient(180deg, rgba(11,21,36,0) 0, rgba(11,21,36,0) 150px, var(--navy) 300px); }
+    .mf-title { font-size: 38px; }
+    .mf-chapter { grid-template-columns: 1fr; gap: 14px; padding: 34px 0; }
+    .mf-num b { display: inline; font-size: 30px; margin: 0 12px 0 0; vertical-align: -4px; }
+    .mf-text .mf-lead { font-size: 25px; }
+    .mf-text .mf-quote { font-size: 21px; }
+    .mf-text .mf-words { font-size: 22px; }
+    .mf-mantra { font-size: 36px; }
+    .mf-body { padding-bottom: 76px; }
+}
+
+/* ---------- About the Builder ---------- */
+.founder { background: var(--navy); color: #fff; padding: 88px 0; }
+.founder .wrap { max-width: 980px; }
+.founder-eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--blue); margin: 0 0 28px;
+}
+.founder-grid {
+    display: grid; grid-template-columns: 340px 1fr; gap: 64px; align-items: center;
+}
+.founder-portrait {
+    position: relative; border-radius: 4px; overflow: hidden;
+    /* The source photo is shot on a black backdrop, so it blends into the
+       navy panel rather than sitting on it. A hairline edge gives it a form. */
+    box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 24px 60px rgba(0,0,0,.5);
+}
+.founder-portrait img {
+    display: block; width: 100%; height: auto;
+    aspect-ratio: 802 / 1200; object-fit: cover;
+}
+.founder-name {
+    font-family: var(--serif); font-size: 40px; line-height: 1.12;
+    margin: 0 0 14px; letter-spacing: -.01em;
+}
+.founder-roles {
+    font-family: var(--serif); font-style: italic; font-size: 18px;
+    line-height: 1.5; color: #c6d0de; margin: 0 0 26px; text-wrap: balance;
+}
+.founder-rule { width: 52px; height: 2px; background: var(--blue); margin: 0 0 26px; border: 0; }
+.founder-statement {
+    font-size: 20px; line-height: 1.6; color: #e8edf4; margin: 0;
+    max-width: min(54ch, 100%);
+}
+
+@media (max-width: 860px) {
+    .founder { padding: 64px 0; }
+    /* .wrap keeps a fixed 44px gutter at every width; on a narrow phone that
+       leaves too little measure. Scoped so the rest of the page is untouched. */
+    .founder .wrap { padding-left: 20px; padding-right: 20px; }
+    .founder-grid { grid-template-columns: 1fr; gap: 32px; justify-items: start; }
+    .founder-portrait { max-width: 260px; }
+    .founder-body { width: 100%; }
+    .founder-name { font-size: 32px; }
+    .founder-roles { font-size: 17px; }
+    .founder-statement { font-size: 17px; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="nav-wrap" id="navWrap">
+    <nav class="nav">
+        <div class="nav-left">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+                <path d="M 82 42 A 22 22 0 1 0 60 64" fill="none" stroke="#f5a623" stroke-width="13"/>
+                <path d="M 60 56 A 22 22 0 1 1 38 78" fill="none" stroke="#f5a623" stroke-width="13"/>
+                <rect x="54" y="54" width="12" height="12" fill="#2f6fed"/>
+            </svg>
+            <span class="pulse-origin-dot" aria-hidden="true" title="Signal Pulse — scans all engines periodically"></span>
+            <span class="word">SIGNAL</span>
+        </div>
+        <div class="nav-center">
+            <div class="ticker-bar">
+                <div class="ticker-viewport"><div class="ticker-track" id="ticker"><!-- populated by JS from ENGINE_DATA + ENGINE_ICONS --></div></div>
+                <span class="ticker-hint">hover to pause →</span>
+            </div>
+        </div>
+        <div class="nav-right">
+            <a class="link parked" href="/brief">Today's Brief</a>
+            <a class="link parked" href="/signals">Signals</a>
+            <span class="icon-btn" title="Search (not yet wired up)">&#128269;</span>
+            <a class="link" href="#manifesto">Manifesto</a>
+            <a class="link" href="#founder">About the Builder</a>
+        </div>
+    </nav>
+</div>
+<!-- World-time line: Tokyo, New Delhi, Dubai, New York, then the last refresh. Filled by WorldTime. -->
+<div class="wc-line" id="worldTime" role="group" aria-label="World time and last refresh"></div>
+<div class="flyout" id="flyout"></div>
+
+<div class="wrap">
+    <!-- ===== Band 1: Hero (~30% viewport) ===== -->
+    <section class="hero">
+        <div class="hero-bg">
+            <svg class="hero-wave" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0,100 C150,40 300,160 450,100 C600,40 750,160 900,100 C1050,40 1150,90 1200,100"/>
+            </svg>
+            <div class="hero-node" style="left:12%;top:25%"></div>
+            <div class="hero-node" style="left:82%;top:35%"></div>
+            <div class="hero-node" style="left:28%;top:72%"></div>
+            <div class="hero-node" style="left:68%;top:60%"></div>
+        </div>
+        <div class="hero-kicker"><span class="live-dot"></span><span class="eyebrow">Know What Matters</span></div>
+        <div class="hero-stage">
+            <h1 class="hero-headline">One World</h1>
+            <h1 class="hero-headline">Multiple Lenses</h1>
+            <h1 class="hero-headline">Deeper Perspective</h1>
+        </div>
+        <p class="hero-sub parked">SIGNAL continuously monitors trusted global sources and transforms them into decision-grade executive intelligence.</p>
+        <div class="hero-cta parked">
+            <a class="btn pri" href="#featured">Explore Today's Intelligence</a>
+            <a class="btn sec" href="https://news-letter-cxo.vercel.app" target="_blank" rel="noopener">Explore Signals</a>
+        </div>
+    </section>
+
+    <!-- ===== Band 2: Explore Intelligence Engines + Personalization Bar =====
+         First after the hero so the engine tiles are on screen at load.
+         They used to open at ~1330px on a 800px-tall viewport, which meant
+         the page's primary navigation was two scrolls down. All 14 tiles sit
+         in one row that drifts on its own (startRibbonDrift). ===== -->
+    <div id="engines" class="band-head">
+        <span class="eyebrow" style="font-size:13px;">Explore Intelligence Engines</span>
+        <span class="sub" id="engineCount">&nbsp;</span>
+        <span class="engine-tools">
+            <span>⭐ <b>Pin</b> · 👁 <b>Hide</b> · drag to reorder</span>
+            <span class="info" tabindex="0" role="note" aria-label="Your layout is saved in this browser only">i<span class="tip">Your pins, hides and order are saved in this browser only. Signing in and syncing across devices is not built yet.</span></span>
+            <button class="persona-reset" id="personaReset">Reset layout</button>
+        </span>
+    </div>
+    <div class="row-scroller ribbon-wrap">
+        <div class="ribbon" id="ribbon">
+        <div class="tile live fade-up" data-id="global" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('global')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><circle cx="120" cy="108" r="58" class="vln"/><ellipse cx="120" cy="108" rx="22" ry="58" class="vln"/><ellipse cx="120" cy="108" rx="44" ry="58" class="vln"/><path d="M62 108H178M68 80H172M68 136H172" class="vln"/><path d="M97 82 L146 128" class="vln2"/><circle cx="97" cy="82" r="3.2" class="vdot"/><circle cx="146" cy="128" r="3.2" class="vdot"/><circle cx="120" cy="50" r="2.6" class="vdot"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="global"></span>Global Affairs</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="ai" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('ai')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><g class="vln2"><path d="M62 70 L120 50 M62 70 L120 108 M62 146 L120 108 M62 146 L120 166 M120 50 L178 70 M120 108 L178 70 M120 108 L178 146 M120 166 L178 146 M120 50 L120 108 M120 108 L120 166"/></g><circle cx="62" cy="70" r="6" class="vnode"/><circle cx="62" cy="146" r="6" class="vnode"/><circle cx="120" cy="50" r="6" class="vnode"/><circle cx="120" cy="108" r="8" class="vnode"/><circle cx="120" cy="166" r="6" class="vnode"/><circle cx="178" cy="70" r="6" class="vnode"/><circle cx="178" cy="146" r="6" class="vnode"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="ai"></span>AI &amp; Frontier Technology</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="gcc" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('gcc')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M40 178H200" class="vln"/><rect x="56" y="104" width="34" height="74" class="vbar"/><rect x="98" y="66" width="38" height="112" class="vbar"/><rect x="144" y="90" width="32" height="88" class="vbar"/><g class="vwin"><circle cx="65" cy="118" r="2"/><circle cx="65" cy="134" r="2"/><circle cx="65" cy="150" r="2"/><circle cx="74" cy="118" r="2"/><circle cx="74" cy="134" r="2"/><circle cx="74" cy="150" r="2"/><circle cx="83" cy="118" r="2"/><circle cx="83" cy="134" r="2"/><circle cx="83" cy="150" r="2"/><circle cx="108" cy="82" r="2"/><circle cx="108" cy="100" r="2"/><circle cx="108" cy="118" r="2"/><circle cx="108" cy="136" r="2"/><circle cx="117" cy="82" r="2"/><circle cx="117" cy="100" r="2"/><circle cx="117" cy="118" r="2"/><circle cx="117" cy="136" r="2"/><circle cx="126" cy="82" r="2"/><circle cx="126" cy="100" r="2"/><circle cx="126" cy="118" r="2"/><circle cx="126" cy="136" r="2"/><circle cx="153" cy="106" r="2"/><circle cx="153" cy="124" r="2"/><circle cx="153" cy="142" r="2"/><circle cx="162" cy="106" r="2"/><circle cx="162" cy="124" r="2"/><circle cx="162" cy="142" r="2"/></g></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="gcc"></span>GCC &amp; Enterprise Tech</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="insurance" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('insurance')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M120 42 L176 66 V116 C176 148 152 168 120 178 C88 168 64 148 64 116 V66 Z" class="vln"/><path d="M120 58 L162 76 V116 C162 140 143 156 120 164 C97 156 78 140 78 116 V76 Z" class="vln2"/><path d="M98 112 L114 130 L146 92" class="vtick"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="insurance"></span>Insurance &amp; Financial Services</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="economy" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('economy')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M46 178H200" class="vln"/><path d="M46 46V178" class="vln"/><rect x="64" y="126" width="16" height="52" class="vbar"/><rect x="92" y="104" width="16" height="74" class="vbar"/><rect x="120" y="136" width="16" height="42" class="vbar"/><rect x="148" y="82" width="16" height="96" class="vbar"/><rect x="176" y="62" width="16" height="116" class="vbar"/><path d="M72 116 L100 96 L128 124 L156 72 L184 54" class="vln2"/><circle cx="184" cy="54" r="4" class="vdot"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="economy"></span>Economy, Business &amp; Markets</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="banking" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('banking')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M54 92 L120 58 L186 92" class="vln"/><path d="M50 92 H190" class="vln"/><rect x="64" y="100" width="13" height="70" class="vbar"/><rect x="94" y="100" width="13" height="70" class="vbar"/><rect x="124" y="100" width="13" height="70" class="vbar"/><rect x="154" y="100" width="13" height="70" class="vbar"/><path d="M46 176 H194 M52 170 H188" class="vln"/><circle cx="120" cy="76" r="3" class="vdot"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="banking"></span>Banking</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="manufacturing" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('manufacturing')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><circle cx="96" cy="92" r="32" class="vln"/><circle cx="96" cy="92" r="16" class="vln2"/><path d="M128.0 92.0 L137.0 92.0" class="vln"/><path d="M121.9 110.8 L129.2 116.1" class="vln"/><path d="M105.9 122.4 L108.7 131.0" class="vln"/><path d="M86.1 122.4 L83.3 131.0" class="vln"/><path d="M70.1 110.8 L62.8 116.1" class="vln"/><path d="M64.0 92.0 L55.0 92.0" class="vln"/><path d="M70.1 73.2 L62.8 67.9" class="vln"/><path d="M86.1 61.6 L83.3 53.0" class="vln"/><path d="M105.9 61.6 L108.7 53.0" class="vln"/><path d="M121.9 73.2 L129.2 67.9" class="vln"/><circle cx="156" cy="128" r="20" class="vln"/><circle cx="156" cy="128" r="10" class="vln2"/><path d="M176.0 128.0 L185.0 128.0" class="vln"/><path d="M170.1 142.1 L176.5 148.5" class="vln"/><path d="M156.0 148.0 L156.0 157.0" class="vln"/><path d="M141.9 142.1 L135.5 148.5" class="vln"/><path d="M136.0 128.0 L127.0 128.0" class="vln"/><path d="M141.9 113.9 L135.5 107.5" class="vln"/><path d="M156.0 108.0 L156.0 99.0" class="vln"/><path d="M170.1 113.9 L176.5 107.5" class="vln"/><path d="M44 176 H196" class="vln"/><circle cx="62" cy="170" r="5" class="vln2"/><circle cx="90" cy="170" r="5" class="vln2"/><circle cx="118" cy="170" r="5" class="vln2"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="manufacturing"></span>Manufacturing</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="energy" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('energy')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M84 176 V96" class="vln"/><circle cx="84" cy="94" r="5" class="vnode"/><path d="M84 94 L84 46 M84 94 L126 118 M84 94 L42 118" class="vln"/><path d="M150 176 L160 74 L170 176" class="vln"/><path d="M144 118 H176 M147 96 H173" class="vln2"/><path d="M152 148 L168 148" class="vln2"/><path d="M40 176 H200" class="vln"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="energy"></span>Energy</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="defence" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('defence')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><circle cx="120" cy="112" r="64" class="vln"/><circle cx="120" cy="112" r="43" class="vln2"/><circle cx="120" cy="112" r="22" class="vln2"/><path d="M120 112 L172 74" class="vln"/><path d="M56 112 H184 M120 48 V176" class="vln2"/><circle cx="152" cy="86" r="4.5" class="vdot"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="defence"></span>Defence</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="cyber" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('cyber')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M92 104 V86 a28 28 0 0 1 56 0 V104" class="vln"/><rect x="80" y="104" width="80" height="62" rx="7" class="vbar"/><circle cx="120" cy="128" r="7" class="vln"/><path d="M120 135 V148" class="vln"/><path d="M80 122 H48 M80 148 H48 M160 122 H192 M160 148 H192" class="vln2"/><circle cx="46" cy="122" r="3" class="vdot"/><circle cx="46" cy="148" r="3" class="vdot"/><circle cx="194" cy="122" r="3" class="vdot"/><circle cx="194" cy="148" r="3" class="vdot"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="cyber"></span>Cyber Intelligence</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="supplychain" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('supplychain')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><rect x="52" y="120" width="42" height="30" class="vbar"/><rect x="100" y="120" width="42" height="30" class="vbar"/><rect x="76" y="86" width="42" height="30" class="vbar"/><path d="M60 120 V150 M68 120 V150 M108 120 V150 M116 120 V150 M84 86 V116 M92 86 V116" class="vln2"/><path d="M44 168 H196" class="vln"/><path d="M150 134 H186" class="vln"/><path d="M178 126 L188 134 L178 142" class="vln"/><circle cx="150" cy="134" r="4" class="vdot"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="supplychain"></span>Supply Chain</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="healthcare" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('healthcare')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M143 56 H161 V77 H182 V95 H161 V116 H143 V95 H122 V77 H143 Z" class="vln2"/><path d="M40 132 H80 L92 104 L108 160 L124 118 L138 132 H200" class="vtick"/><circle cx="92" cy="104" r="3.5" class="vdot"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="healthcare"></span>Healthcare</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="telecom" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('telecom')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M98 176 L120 56 L142 176" class="vln"/><path d="M104 142 H136 M108 118 H132 M112 96 H128" class="vln2"/><circle cx="120" cy="52" r="4" class="vdot"/><path d="M92 66 a40 40 0 0 0 0 44" class="vln"/><path d="M76 56 a58 58 0 0 0 0 64" class="vln2"/><path d="M148 66 a40 40 0 0 1 0 44" class="vln"/><path d="M164 56 a58 58 0 0 1 0 64" class="vln2"/><path d="M40 176 H200" class="vln"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="telecom"></span>Telecom &amp; Digital Infra</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+        <div class="tile live fade-up" data-id="climate" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('climate')">
+            <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M92 142 C92 92 128 62 172 60 C174 106 146 142 92 142 Z" class="vln"/><path d="M172 60 C140 78 112 106 96 138" class="vln2"/><path d="M128 84 L140 92 M116 104 L130 110 M106 122 L120 126" class="vln2"/><path d="M48 176 H196" class="vln"/><path d="M56 168 L86 156 L112 162 L150 150 L188 132" class="vln2"/><circle cx="188" cy="132" r="4" class="vdot"/></svg>
+            <div class="tile-body">
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="climate"></span>Climate &amp; Sustainability</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-headline-cycle" data-cycle>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                    <h4 class="tile-headline"></h4>
+                </div>
+                <div class="tile-foot"><span class="tile-read">Explore Signals →</span></div>
+            </div>
+        </div>
+    </div>
+        <button type="button" class="row-arrow prev" aria-label="Scroll the engine tiles left" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button type="button" class="row-arrow next" aria-label="Scroll the engine tiles right" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+
+    <!-- The Global Affairs / Economy / AI card row that sat here repeated
+         three engines already in the tile row above, and was removed. Each
+         row below answers one question, and a person appears in only one of
+         them: People Movers > Leaders on Record > Executive Pulse. -->
+
+    <!-- ===== Band 3: Featured Analysis — GCC, then Insurance, else the top global story ===== -->
+    <div id="featured" class="band-head">
+        <span class="eyebrow" style="font-size:13px;">Featured Analysis</span>
+    </div>
+    <div id="featuredSlot"><!-- populated from _featured --></div>
+
+    <!-- ===== Band 4: People Movers — who moved ===== -->
+    <div id="movers" class="band-head">
+        <span class="eyebrow" style="font-size:13px;">People Movers</span>
+        <span class="sub" id="moversCount"></span>
+    </div>
+    <p class="row-lede">Recent appointments and exits.</p>
+    <div class="row-scroller people-wrap">
+        <div class="people-row" id="moversRow"><!-- populated from _movers --></div>
+        <button type="button" class="row-arrow prev" aria-label="Scroll People Movers left" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button type="button" class="row-arrow next" aria-label="Scroll People Movers right" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+
+    <!-- ===== Band 5: Executive Pulse — business leaders making news (auto-scroll) ===== -->
+    <div id="pulseSection">
+    <div class="band-head">
+        <span class="icon-widget" aria-hidden="true" style="font-size:24px;">👥</span>
+        <span class="eyebrow" style="font-size:13px;">Executive Pulse</span>
+    </div>
+    <p class="pulse-note">Business leaders making news today. A leader appears only when a named executive is the subject of a real story — never a fabricated quote, never a raw social feed. Most days only a few qualify.</p>
+    <div class="row-scroller pulse-wrap">
+        <div class="pulse-viewport" id="pulseViewport">
+            <div class="pulse-track" id="pulseTrack"><!-- populated from _pulse --></div>
+        </div>
+        <button type="button" class="row-arrow prev" aria-label="Scroll Executive Pulse left" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button type="button" class="row-arrow next" aria-label="Scroll Executive Pulse right" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    </div>
+
+    <!-- ===== Band 6: Leaders on Record — in their own words ===== -->
+    <div id="leaders" class="band-head">
+        <span class="eyebrow" style="font-size:13px;">Leaders on Record</span>
+        <span class="sub" id="recordCount"></span>
+    </div>
+    <p class="row-lede">AI and frontier-tech leaders in their own words, quoted verbatim by a company newsroom or the technology press.</p>
+    <div class="row-scroller people-wrap">
+        <div class="people-row" id="recordRow"><!-- populated from _record --></div>
+        <button type="button" class="row-arrow prev" aria-label="Scroll Leaders on Record left" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button type="button" class="row-arrow next" aria-label="Scroll Leaders on Record right" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <!-- The "Listening to" watchlist strip is parked (hidden) since 2026-09-24.
+         renderRecord still fills it; remove "parked" to bring it back. -->
+    <div class="listening parked" id="recordListening"></div>
+</div>
+
+<section class="pipeline">
+    <div class="wrap">
+        <h2>The Real Intelligence Engine</h2>
+        <div class="pipe-row">
+            <div class="pipe-step"><div class="pipe-icon">📡</div><p>Trusted Sources</p></div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step"><div class="pipe-icon">⚖️</div><p>Weighted Evidence Scoring</p></div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step"><div class="pipe-icon">🗂️</div><p>Signal Classification</p></div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step"><div class="pipe-icon">📝</div><p>Executive Synthesis</p></div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step"><div class="pipe-icon">🎯</div><p>Decision Intelligence</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="why">
+    <div class="wrap">
+        <h2>Why SIGNAL</h2>
+        <div class="why-row">
+            <div class="why-col">Traditional Information</div>
+            <div></div>
+            <div class="why-col right">Executive Intelligence</div>
+            <div class="why-item">Thousands of Articles</div>
+            <div class="why-arrow">→</div>
+            <div class="why-item right">Curated Signals</div>
+            <div class="why-item">Breaking News</div>
+            <div class="why-arrow">→</div>
+            <div class="why-item right">Business Context</div>
+            <div class="why-item">Events</div>
+            <div class="why-arrow">→</div>
+            <div class="why-item right">Connected Insights</div>
+            <div class="why-item">Information</div>
+            <div class="why-arrow">→</div>
+            <div class="why-item right">Decision Intelligence</div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== The Builder's Manifesto (nav: Manifesto) ===== -->
+<section class="manifesto" id="manifesto">
+    <div class="mf-hero">
+        <img class="manifesto-bg" src="./img/manifesto-bg.jpg" alt="" loading="lazy" decoding="async">
+        <div class="wrap">
+            <p class="mf-eyebrow">The Builder&rsquo;s Manifesto</p>
+            <h2 class="mf-title">Hands-on.<br><span class="away">Hands-off.</span><br>Hands-on again.</h2>
+        </div>
+    </div>
+    <div class="wrap mf-body">
+        <article class="mf-chapter">
+            <div class="mf-num"><b>01</b>Who I am</div>
+            <div class="mf-text">
+                <p class="mf-lead">The itch to build never went away.</p>
+                <p>I started as a developer, solving problems in code.</p>
+                <p>Then I led people: bigger teams, bigger problems, outcomes at scale. Every step took me further from the keyboard and closer to strategy and execution.</p>
+                <p>That was the job.</p>
+                <p>But I wasn&rsquo;t going to spend my weekends writing Excel macros and VBA. &#128516;</p>
+                <p>Then came AI. Then came Claude. And suddenly I could build again, without becoming a full-time developer again.</p>
+                <p class="mf-strong">So I&rsquo;m back.</p>
+            </div>
+        </article>
+        <article class="mf-chapter">
+            <div class="mf-num"><b>02</b>What I&rsquo;m building</div>
+            <div class="mf-text">
+                <p class="mf-lead">Signal is my first experiment.</p>
+                <p>It started with one question:</p>
+                <p class="mf-quote">What do I actually want to read?</p>
+                <p>Today, Signal gathers news from many sources and shows it through different lenses. <strong>That&rsquo;s Phase One.</strong></p>
+                <p>The goal is to turn that information, step by step, into intelligence:</p>
+                <ul class="mf-flow" aria-label="What happened to Why it matters to Who it affects to What to watch to What to do"><li><span class="step">What happened</span></li><li><span class="to" aria-hidden="true">&rarr;</span><span class="step">Why it matters</span></li><li><span class="to" aria-hidden="true">&rarr;</span><span class="step">Who it affects</span></li><li><span class="to" aria-hidden="true">&rarr;</span><span class="step">What to watch</span></li><li><span class="to" aria-hidden="true">&rarr;</span><span class="step">What to do</span></li></ul>
+                <p>Read, above all, for what it means for India, Indians and Indian businesses.</p>
+            </div>
+        </article>
+        <article class="mf-chapter">
+            <div class="mf-num"><b>03</b>Where I am</div>
+            <div class="mf-text">
+                <p class="mf-lead">Laying the foundations. Deliberately unfinished.</p>
+                <p class="mf-words">Sources<span>.</span> Signals<span>.</span> Themes<span>.</span> Lenses<span>.</span> AI<span>.</span> Code<span>.</span></p>
+                <p>Testing ideas, breaking things, fixing them, and learning by building.</p>
+                <ul class="mf-plain">
+                    <li>No grand business plan.</li>
+                    <li>No startup pitch.</li>
+                    <li>Just a builder, building.</li>
+                </ul>
+            </div>
+        </article>
+        <article class="mf-chapter">
+            <div class="mf-num"><b>04</b>What&rsquo;s next</div>
+            <div class="mf-text">
+                <p class="mf-lead">You decide what matters to you. Signal finds the signals.</p>
+                <p>The next version moves beyond aggregation:</p>
+                <ul class="mf-flow" aria-label="News to Context to Intelligence to Action"><li><span class="step">News</span></li><li><span class="to" aria-hidden="true">&rarr;</span><span class="step">Context</span></li><li><span class="to" aria-hidden="true">&rarr;</span><span class="step">Intelligence</span></li><li><span class="to" aria-hidden="true">&rarr;</span><span class="step">Action</span></li></ul>
+                <p>And Signal won&rsquo;t be the last experiment.</p>
+            </div>
+        </article>
+        <div class="mf-close">
+            <p class="mf-mantra">Build. Learn. Iterate. Repeat.</p>
+            <p class="mf-sign">Let&rsquo;s see where it goes.</p>
+        </div>
+    </div>
+</section>
+
+<section class="founder" id="founder">
+    <div class="wrap">
+        <p class="founder-eyebrow">About the Builder</p>
+        <div class="founder-grid">
+            <figure class="founder-portrait">
+                <img src="./img/founder.jpg"
+                     alt="Portrait of the founder of SIGNAL"
+                     width="802" height="1200" loading="lazy" decoding="async">
+            </figure>
+            <div class="founder-body">
+                <h2 class="founder-name">Amit Gupta</h2>
+                <p class="founder-roles">Builder &middot; Husband &middot; Father &middot; Dog Lover &middot; Corporate Survivor</p>
+                <hr class="founder-rule">
+                <p class="founder-statement">Restarting my journey of building things &mdash; one idea, a&nbsp;couple of weekends, and a&nbsp;million tokens at a time!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="closer">
+    <div class="wrap">
+        <h2>Built for leaders who don't need more information.</h2>
+        <p>They need better intelligence.</p>
+        <div class="hero-cta">
+            <a class="btn pri" href="/brief">Read Today's Brief</a>
+        </div>
+    </div>
+</section>
+
+<div class="panel-backdrop" id="panelBackdrop" onclick="if(event.target===this) closeEnginePanel()">
+    <div class="panel-box">
+        <div class="panel-head">
+            <span class="picon" id="panelIcon"></span>
+            <h3 id="panelTitle"></h3>
+            <button class="panel-close" onclick="closeEnginePanel()">✕</button>
+        </div>
+        <p class="panel-sub">Top real, scored articles for this engine today — each with SIGNAL's own point of view, not a fabricated quote.</p>
+        <div id="panelBody"></div>
+    </div>
+</div>
+
+<script>
+    // Real per-engine data: top scored articles + SIGNAL's own point-of-view per
+    // article. Every URL here was verified live (200 status + content match)
+    // before this page was published. Scores are used only to rank internally —
+    // never shown as a number, since a raw score means nothing to a reader.
+    let ENGINE_DATA = {};
+    let CC_META = null;
+
+    // ---------- Animated Intelligence Engine icons (id -> inline SVG) ----------
+    const ENGINE_ICONS = {
+        global: `<svg viewBox="0 0 32 32">
+            <circle cx="16" cy="16" r="12" fill="none" stroke="var(--blue)" stroke-width="1.3"/>
+            <g class="gl-rot">
+                <ellipse cx="16" cy="16" rx="5.2" ry="12" fill="none" stroke="var(--blue)" stroke-width="1"/>
+                <ellipse cx="16" cy="16" rx="9" ry="12" fill="none" stroke="var(--blue)" stroke-width="1" opacity=".55"/>
+                <line x1="4" y1="16" x2="28" y2="16" stroke="var(--blue)" stroke-width=".8" opacity=".5"/>
+            </g>
+            <ellipse class="gl-orbit" cx="16" cy="16" rx="15" ry="4.5" fill="none" stroke="var(--blue-bright)" stroke-width="1" opacity=".5"/>
+            <circle class="gl-wave" cx="22" cy="12" r="3" fill="none" stroke="var(--amber)" stroke-width="1"/>
+            <circle class="gl-event" cx="22" cy="12" r="1.6" fill="var(--amber)"/>
+        </svg>`,
+        economy: `<svg viewBox="0 0 32 32">
+            <path class="mk-trend" d="M4,20 L10,13 L15,17 L21,8 L28,12" fill="none" stroke="var(--slate-light)" stroke-width="1.1"/>
+            <circle class="mk-marker" r="1.8" fill="var(--blue)"/>
+            <circle cx="16" cy="16" r="2" fill="var(--blue)" opacity=".25"/>
+            <g transform="translate(16,16)">
+                <g class="mk-orbit-grp"><g transform="translate(0,-10)"><g class="mk-counter-grp">
+                    <circle r="4.2" fill="#fff" stroke="var(--slate-100)" stroke-width=".6"/>
+                    <text y="1.8" font-size="6" font-weight="800" fill="var(--blue)" text-anchor="middle">$</text>
+                </g></g></g>
+                <g class="mk-orbit-grp"><g transform="rotate(120) translate(0,-10)"><g class="mk-counter-grp">
+                    <circle r="4.2" fill="#fff" stroke="var(--slate-100)" stroke-width=".6"/>
+                    <text y="1.8" font-size="6" font-weight="800" fill="var(--blue)" text-anchor="middle">&#8364;</text>
+                </g></g></g>
+                <g class="mk-orbit-grp"><g transform="rotate(240) translate(0,-10)"><g class="mk-counter-grp">
+                    <circle r="4.2" fill="#fff" stroke="var(--slate-100)" stroke-width=".6"/>
+                    <text y="1.8" font-size="6" font-weight="800" fill="var(--blue)" text-anchor="middle">&#165;</text>
+                </g></g></g>
+            </g>
+        </svg>`,
+        ai: `<svg viewBox="0 0 32 32">
+            <g stroke="var(--blue)" stroke-width="1" opacity=".55">
+                <line class="ai-link" x1="16" y1="16" x2="7" y2="9"/>
+                <line class="ai-link" x1="16" y1="16" x2="25" y2="9"/>
+                <line class="ai-link" x1="16" y1="16" x2="7" y2="23"/>
+                <line class="ai-link" x1="16" y1="16" x2="25" y2="23"/>
+                <line class="ai-link" x1="16" y1="16" x2="16" y2="5"/>
+            </g>
+            <circle class="ai-node n1" cx="7" cy="9" r="2" fill="var(--blue)"/>
+            <circle class="ai-node n2" cx="25" cy="9" r="2" fill="var(--blue)"/>
+            <circle class="ai-node n3" cx="7" cy="23" r="2" fill="var(--blue)"/>
+            <circle class="ai-node n4" cx="25" cy="23" r="2" fill="var(--blue)"/>
+            <circle class="ai-node n5" cx="16" cy="5" r="2" fill="var(--blue)"/>
+            <circle class="ai-core" cx="16" cy="16" r="3" fill="var(--blue)"/>
+        </svg>`,
+        gcc: `<svg viewBox="0 0 32 32">
+            <rect x="4" y="16" width="5" height="12" fill="none" stroke="var(--slate-light)" stroke-width="1.1"/>
+            <rect x="11" y="10" width="5" height="18" fill="none" stroke="var(--slate-light)" stroke-width="1.1"/>
+            <rect x="18" y="14" width="5" height="14" fill="none" stroke="var(--slate-light)" stroke-width="1.1"/>
+            <rect x="25" y="8" width="4" height="20" fill="none" stroke="var(--slate-light)" stroke-width="1.1"/>
+            <g stroke="var(--blue)" stroke-width=".9" opacity=".6">
+                <line class="gcc-link" x1="6.5" y1="16" x2="13.5" y2="10"/>
+                <line class="gcc-link" x1="13.5" y1="10" x2="20.5" y2="14"/>
+                <line class="gcc-link" x1="20.5" y1="14" x2="27" y2="8"/>
+            </g>
+            <circle class="gcc-packet" r="1.3" fill="var(--amber)" style="offset-path: path('M6.5,16 L13.5,10 L20.5,14 L27,8'); animation: ind-move 3.4s linear infinite;"/>
+            <circle class="gcc-packet" r="1.3" fill="var(--amber)" style="offset-path: path('M27,8 L20.5,14 L13.5,10 L6.5,16'); animation: ind-move 3.4s linear infinite; animation-delay: 1.7s;"/>
+            <circle class="gcc-node" cx="13.5" cy="10" r="3.4" fill="none" stroke="var(--blue-bright)" stroke-width="1" style="transform-origin:13.5px 10px;"/>
+        </svg>`,
+        insurance: `<svg viewBox="0 0 32 32">
+            <path d="M16 4 L26 8 V16 C26 23 21.5 27.5 16 29 C10.5 27.5 6 23 6 16 V8 Z" fill="none" stroke="var(--slate-100)" stroke-width="1.4" pathLength="74"/>
+            <path class="bf-shield-pulse" d="M16 4 L26 8 V16 C26 23 21.5 27.5 16 29 C10.5 27.5 6 23 6 16 V8 Z" fill="none" stroke="var(--blue-bright)" stroke-width="1.6" pathLength="74"/>
+            <path class="bf-graph" d="M10 20 L13.5 17 L16.5 19 L21 13" fill="none" stroke="var(--blue)" stroke-width="1.3" stroke-linecap="round" pathLength="20"/>
+            <g class="bf-lock">
+                <rect x="14.3" y="18.5" width="4.4" height="3.6" rx=".6" fill="var(--navy)"/>
+                <path d="M15.1 18.5 V17.2 a1.4 1.4 0 0 1 2.8 0 V18.5" fill="none" stroke="var(--navy)" stroke-width="1"/>
+            </g>
+        </svg>`,
+        banking: `<svg viewBox="0 0 32 32">
+            <line x1="6" y1="26" x2="26" y2="26" stroke="var(--blue)" stroke-width="1.3"/>
+            <path d="M16 5 L26 11 H6 Z" fill="none" stroke="var(--blue)" stroke-width="1.3"/>
+            <line class="bk-col c1" x1="9" y1="12" x2="9" y2="25" stroke="var(--blue)" stroke-width="1.1"/>
+            <line class="bk-col c2" x1="14.3" y1="12" x2="14.3" y2="25" stroke="var(--blue)" stroke-width="1.1"/>
+            <line class="bk-col c3" x1="17.7" y1="12" x2="17.7" y2="25" stroke="var(--blue)" stroke-width="1.1"/>
+            <line class="bk-col c4" x1="23" y1="12" x2="23" y2="25" stroke="var(--blue)" stroke-width="1.1"/>
+            <circle class="bk-coin" r="1.6" fill="var(--amber)" style="offset-path: path('M7,26 H25'); animation: ind-move 2.4s linear infinite;"/>
+        </svg>`,
+        manufacturing: `<svg viewBox="0 0 32 32">
+            <path d="M4 25 L4 15 L11 15 L14 10 H22 L25 15 H28 V25 Z" fill="none" stroke="var(--slate-light)" stroke-width="1.2"/>
+            <line x1="18" y1="10" x2="18" y2="5" stroke="var(--blue)" stroke-width="1.2"/>
+            <g class="ind-arm"><line x1="12" y1="10" x2="12" y2="16" stroke="var(--blue)" stroke-width="1.4"/><circle cx="12" cy="16" r="1.4" fill="var(--blue)"/></g>
+            <line class="ind-belt" x1="5" y1="25" x2="21" y2="25" stroke="var(--blue)" stroke-width="1.3"/>
+            <rect width="2.6" height="2.6" fill="var(--amber)" style="offset-path: path('M5,25 H21'); animation: ind-move 2.2s linear infinite;"/>
+            <g transform="translate(24,21)"><g class="ind-gear">
+                <circle r="2.6" fill="none" stroke="var(--blue)" stroke-width="1"/>
+                <circle r="0.9" fill="var(--blue)"/>
+                <rect x="-0.7" y="-4" width="1.4" height="1.8" fill="var(--blue)"/>
+                <rect x="-0.7" y="2.2" width="1.4" height="1.8" fill="var(--blue)"/>
+                <rect x="-4" y="-0.7" width="1.8" height="1.4" fill="var(--blue)"/>
+                <rect x="2.2" y="-0.7" width="1.8" height="1.4" fill="var(--blue)"/>
+            </g></g>
+        </svg>`,
+        energy: `<svg viewBox="0 0 32 32">
+            <circle cx="16" cy="15" r="10" fill="none" stroke="var(--slate-100)" stroke-width="1.4" pathLength="100"/>
+            <circle class="en-ring-pulse" cx="16" cy="15" r="10" fill="none" stroke="var(--blue-bright)" stroke-width="1.6" pathLength="100"/>
+            <path class="en-bolt" d="M17.5 6 L11 17 H15.5 L14 24 L21 12.5 H16.5 Z" fill="var(--amber)"/>
+        </svg>`,
+        defence: `<svg viewBox="0 0 32 32">
+            <path d="M16 4 L25 8 V15 C25 22 21 26.5 16 28.5 C11 26.5 7 22 7 15 V8 Z" fill="none" stroke="var(--blue)" stroke-width="1.4"/>
+            <g transform="translate(16,15)"><line class="def-sweep" x1="0" y1="0" x2="0" y2="-9" stroke="var(--blue-bright)" stroke-width="1.1" opacity=".8"/></g>
+            <circle class="def-target" cx="16" cy="15" r="2.6" fill="none" stroke="var(--amber)" stroke-width="1" opacity="0"/>
+            <path class="def-target" d="M16 11.4 V13 M16 17 V18.6 M12.4 15 H14 M18 15 H19.6" stroke="var(--amber)" stroke-width="1" opacity="0"/>
+            <circle class="def-sat" r="1.1" fill="var(--slate)" style="offset-path: path('M4,15 A12,9 0 1 1 3.9,15'); animation: orbit-travel 6s linear infinite;"/>
+        </svg>`,
+        cyber: `<svg viewBox="0 0 32 32">
+            <polygon class="cy-hex-pulse" points="16,4 26,10 26,22 16,28 6,22 6,10" fill="none" stroke="var(--blue)" stroke-width="1.4"/>
+            <path d="M13 15.5 L15.3 18 L20 12" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect class="cy-particle p1" x="10" y="22" width="1.6" height="1.6" fill="var(--blue-bright)"/>
+            <rect class="cy-particle p2" x="15" y="23" width="1.6" height="1.6" fill="var(--blue-bright)"/>
+            <rect class="cy-particle p3" x="20" y="22" width="1.6" height="1.6" fill="var(--blue-bright)"/>
+            <rect class="cy-particle p4" x="17.5" y="24" width="1.6" height="1.6" fill="var(--blue-bright)"/>
+        </svg>`,
+        supplychain: `<svg viewBox="0 0 32 32">
+            <path d="M3,24 Q9,24 9,18 Q9,12 16,12 Q23,12 23,20 Q23,26 29,26" fill="none" stroke="var(--slate-light)" stroke-width="1.1" stroke-dasharray="2 2.4"/>
+            <rect x="1.5" y="21" width="3" height="3" fill="none" stroke="var(--slate)" stroke-width="1"/>
+            <rect x="7" y="9" width="4" height="3.4" fill="none" stroke="var(--slate)" stroke-width="1"/>
+            <path d="M20.5 17.5 H25.5 V22.5 H20.5 Z M20.5 17.5 L23 15 L25.5 17.5" fill="none" stroke="var(--slate)" stroke-width=".9"/>
+            <rect x="27" y="23.5" width="3.4" height="3.4" fill="none" stroke="var(--slate)" stroke-width="1"/>
+            <rect width="2.4" height="2.4" fill="var(--amber)" style="offset-path: path('M3,24 Q9,24 9,18 Q9,12 16,12 Q23,12 23,20 Q23,26 29,26'); animation: ind-move 5s linear infinite;"/>
+        </svg>`,
+        healthcare: `<svg viewBox="0 0 32 32">
+            <path d="M16 6 V26 M6 16 H26" stroke="var(--blue)" stroke-width="2.6" stroke-linecap="round" opacity=".18"/>
+            <path d="M2,16 H9 L11,10 L14,22 L16,16 H30" fill="none" stroke="var(--blue)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle r="1.6" fill="var(--amber)" style="offset-path: path('M2,16 H9 L11,10 L14,22 L16,16 H30'); animation: ind-move 2.6s linear infinite;"/>
+            <g transform="translate(24,9)"><g class="hc-orbit">
+                <circle cx="0" cy="-2.6" r="1" fill="var(--blue-bright)"/>
+                <circle cx="0" cy="2.6" r="1" fill="var(--blue)"/>
+            </g></g>
+        </svg>`,
+        telecom: `<svg viewBox="0 0 32 32">
+            <path d="M16 28 L13 14 H19 Z" fill="none" stroke="var(--slate)" stroke-width="1.1"/>
+            <line x1="16" y1="14" x2="16" y2="6" stroke="var(--slate)" stroke-width="1.1"/>
+            <circle class="tc-ring r1" cx="16" cy="6" r="3" fill="none" stroke="var(--blue)" stroke-width="1" style="transform-origin:16px 6px;"/>
+            <circle class="tc-ring r2" cx="16" cy="6" r="3" fill="none" stroke="var(--blue)" stroke-width="1" style="transform-origin:16px 6px;"/>
+            <circle class="tc-ring r3" cx="16" cy="6" r="3" fill="none" stroke="var(--blue)" stroke-width="1" style="transform-origin:16px 6px;"/>
+            <circle r="1.2" fill="var(--slate-light)" style="offset-path: path('M2,10 Q16,-4 30,10'); animation: orbit-travel 5s linear infinite;"/>
+            <rect width="1.8" height="1.8" fill="var(--amber)" style="offset-path: path('M16,6 L16,26'); animation: ind-move 1.8s linear infinite;"/>
+        </svg>`,
+        climate: `<svg viewBox="0 0 32 32">
+            <circle cx="16" cy="16" r="11" fill="none" stroke="var(--slate-100)" stroke-width="1.2"/>
+            <path class="cl-leaf" d="M16 24 C10 22 9 15 14 9 C19 15 20 21 16 24 Z M16 24 V13" fill="none" stroke="var(--blue)" stroke-width="1.2"/>
+            <path class="cl-wind" d="M3 12 H10 M4 16 H9" stroke="var(--slate-light)" stroke-width="1" stroke-linecap="round" stroke-dasharray="2 2"/>
+            <circle class="cl-drop" cx="23" cy="9" r="1.3" fill="var(--blue-bright)"/>
+            <path class="cl-sun" d="M25 22 A5 5 0 0 1 21 26" stroke="var(--amber)" stroke-width="1.2" fill="none" opacity="0"/>
+            <circle class="cl-co2 a" cx="10" cy="25" r="1" fill="var(--slate-light)"/>
+            <circle class="cl-co2 b" cx="21" cy="26" r="1" fill="var(--slate-light)"/>
+        </svg>`
+    };
+    const ENGINE_ORDER = ['global','economy','ai','gcc','insurance','banking','manufacturing','energy','defence','cyber','supplychain','healthcare','telecom','climate'];
+
+    // ---------- Populate tile + hero-card icons from the same ENGINE_ICONS source ----------
+    document.querySelectorAll('.tcat-ic[data-icon], .icon-widget[data-icon]').forEach(el => {
+        el.innerHTML = ENGINE_ICONS[el.dataset.icon] || '';
+    });
+
+    // ---------- World-time line: four cities' local time, then the last refresh ----------
+    // Local time comes from the browser's clock and time-zone database (Intl),
+    // so the clocks need no data, and New York's daylight saving is the zone's
+    // own. Flags are inline SVG because Windows renders flag emoji as letters.
+    // The last cell reads _meta.built_at and _meta.refresh_slots_ist (written by
+    // scripts/build_command_center_data.py; the Flask API sends built_at only)
+    // and stays hidden without built_at rather than guess.
+    const WorldTime = (() => {
+        const ZONES = [
+            // short: the phone label, where a quarter of the screen is ~80px.
+            { label: 'Tokyo',     short: 'Tokyo', tz: 'Asia/Tokyo',       flag: 'jp' },
+            { label: 'New Delhi', short: 'Delhi', tz: 'Asia/Kolkata',     flag: 'in' },
+            { label: 'Dubai',     short: 'Dubai', tz: 'Asia/Dubai',       flag: 'ae' },
+            { label: 'New York',  short: 'NYC',   tz: 'America/New_York', flag: 'us' },
+        ];
+        const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const IST = 330;                   // minutes east of UTC; India has no daylight saving
+        const LATE_AFTER = 90 * 60000;     // a scheduled refresh this late is called delayed
+        const pad = n => String(n).padStart(2, '0');
+
+        // Flags on a 30x20 grid (3:2), simplified for 22px: India's chakra is
+        // a ring, the US canton a field of dots rather than fifty stars.
+        function usFlag() {
+            const h = 20 / 13;
+            let s = '<rect width="30" height="20" fill="#b22234"/>';
+            for (let i = 1; i < 13; i += 2) s += `<rect y="${(i * h).toFixed(2)}" width="30" height="${h.toFixed(2)}" fill="#fff"/>`;
+            s += `<rect width="12" height="${(7 * h).toFixed(2)}" fill="#3c3b6e"/>`;
+            for (let r = 0; r < 4; r++) for (let c = 0; c < 5; c++) s += `<circle cx="${1.6 + c * 2.2}" cy="${1.5 + r * 2.3}" r=".55" fill="#fff"/>`;
+            return s;
+        }
+        const FLAGS = {
+            jp: '<rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#bc002d"/>',
+            in: '<rect width="30" height="20" fill="#fff"/><rect width="30" height="6.67" fill="#ff9933"/>' +
+                '<rect y="13.33" width="30" height="6.67" fill="#138808"/>' +
+                '<circle cx="15" cy="10" r="2.6" fill="none" stroke="#000080" stroke-width=".8"/><circle cx="15" cy="10" r=".7" fill="#000080"/>',
+            ae: '<rect width="30" height="20" fill="#fff"/><rect width="30" height="6.67" fill="#00732f"/>' +
+                '<rect y="13.33" width="30" height="6.67" fill="#000"/><rect width="7.5" height="20" fill="#ff0000"/>',
+            us: usFlag(),
+        };
+
+        // Numeric parts rather than a formatted string, so the output is the
+        // same in every browser (en-GB alone writes September as "Sept" in some).
+        const formatters = {};
+        function localTime(tz, ms) {
+            const f = formatters[tz] || (formatters[tz] = new Intl.DateTimeFormat('en-US', {
+                timeZone: tz, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric',
+                hour: 'numeric', minute: 'numeric',
+            }));
+            const p = {};
+            for (const part of f.formatToParts(new Date(ms))) p[part.type] = part.value;
+            const t = { y: +p.year, mo: +p.month, d: +p.day, h: +p.hour % 24, mi: +p.minute };
+            t.dow = new Date(Date.UTC(t.y, t.mo - 1, t.d)).getUTCDay();
+            return t;
+        }
+
+        // Every scheduled refresh from yesterday to tomorrow, as epoch ms.
+        function slotTimes(slots, now) {
+            const t = localTime('Asia/Kolkata', now), out = [];
+            for (const dayShift of [-1, 0, 1]) {
+                for (const hm of slots) {
+                    const [h, m] = hm.split(':').map(Number);
+                    out.push(Date.UTC(t.y, t.mo - 1, t.d + dayShift, h, m) - IST * 60000);
+                }
+            }
+            return out.sort((a, b) => a - b);
+        }
+
+        // "09:04 IST" today, "Wed 19:02 IST" otherwise.
+        function istLabel(ms, now) {
+            const t = localTime('Asia/Kolkata', ms), today = localTime('Asia/Kolkata', now);
+            const day = t.d === today.d && t.mo === today.mo ? '' : DAYS[t.dow] + ' ';
+            return `${day}${pad(t.h)}:${pad(t.mi)} IST`;
+        }
+
+        function mount(el) {
+            el.innerHTML = '<div class="wc-line-inner">' + ZONES.map(z => `
+                <span class="wc-item">
+                    <span class="wc-country"><svg class="wc-flag" viewBox="0 0 30 20" aria-hidden="true">${FLAGS[z.flag]}</svg><span class="long">${z.label}</span><span class="short">${z.short}</span></span>
+                    <span class="wc-dt"><span class="wc-dow"></span><span class="wc-date"></span><span class="wc-time"></span></span>
+                </span>`).join('') + `
+                <span class="wc-upd" hidden>
+                    <span class="wc-upd-label">Updated</span>
+                    <span class="wc-upd-time"></span>
+                    <span class="wc-upd-next"></span>
+                </span></div>`;
+            const items = el.querySelectorAll('.wc-item'), cell = el.querySelector('.wc-upd');
+            let meta = null;
+
+            function renderRefresh(now) {
+                const built = Date.parse(meta.built_at);
+                const slots = Array.isArray(meta.refresh_slots_ist) ? meta.refresh_slots_ist : [];
+                const times = slotTimes(slots, now);
+                const last = times.filter(s => s <= now).pop(), next = times.find(s => s > now);
+                const delayed = last !== undefined && built < last && now - last > LATE_AFTER;
+                cell.classList.toggle('delayed', delayed);
+                cell.querySelector('.wc-upd-time').textContent = istLabel(built, now);
+                const nextEl = cell.querySelector('.wc-upd-next');
+                nextEl.textContent = delayed ? `${istLabel(last, now).replace(' IST', '')} update delayed`
+                    : next !== undefined ? `Next ${istLabel(next, now)}` : '';
+                nextEl.hidden = !nextEl.textContent;
+                const ago = Math.max(0, Math.round((now - built) / 60000));
+                const title = [`Last refreshed ${ago < 60 ? `${ago} min` : `${Math.round(ago / 60)} h`} ago.`];
+                if (slots.length) title.push(`Refreshed each day at ${slots.join(' and ')} IST.`);
+                if (meta.stale_excluded) title.push(`${meta.stale_excluded} articles excluded as stale or undated.`);
+                cell.title = title.join(' ');
+            }
+
+            function tick() {
+                const now = Date.now();
+                ZONES.forEach((z, i) => {
+                    const t = localTime(z.tz, now);
+                    items[i].querySelector('.wc-dow').textContent = DAYS[t.dow];
+                    items[i].querySelector('.wc-date').textContent = `${t.d} ${MONTHS[t.mo - 1]}`;
+                    items[i].querySelector('.wc-time').textContent = `${pad(t.h)}:${pad(t.mi)}`;
+                });
+                if (meta) renderRefresh(now);
+                setTimeout(tick, 1000 - (Date.now() % 1000) + 5);   // just after each second, so minutes turn on time
+            }
+            tick();
+
+            return {
+                setMeta(m) {
+                    meta = m && m.built_at && !isNaN(Date.parse(m.built_at)) ? m : null;
+                    cell.hidden = !meta;
+                    if (meta) renderRefresh(Date.now());
+                },
+            };
+        }
+        return { mount };
+    })();
+    const worldTime = WorldTime.mount(document.getElementById('worldTime'));
+
+    // ---------- Live data load: fetch real classified articles, then build the ticker + tile headlines ----------
+    const flyout = document.getElementById('flyout');
+    // Data source: the live API when served by Flask, the prebuilt snapshot on a
+    // static deploy. window.CC_DATA_URL is set by the Flask template; a static
+    // build leaves it undefined and falls back to the committed JSON.
+    const CC_DATA_URL = window.CC_DATA_URL || './command_center_data.json';
+    fetch(CC_DATA_URL)
+        .then(r => {
+            if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+            return r.json();
+        })
+        .then(data => {
+            // The _-prefixed keys are page furniture, not tiles — keep them
+            // out of ENGINE_DATA so nothing iterates over them as an engine.
+            const { _meta, _featured, _features, _movers, _pulse, _record, ...engines } = data;
+            ENGINE_DATA = engines;
+            CC_META = _meta || null;
+            renderFeatured(_features || (_featured ? [_featured] : []));
+            renderMovers(_movers || []);
+            renderPulseCards(_pulse || []);
+            renderRecord(_record || { quotes: [], leaders: [] });
+            updateEngineCount();
+            worldTime.setMeta(CC_META);
+            initTileHeadlines();
+            initTicker();
+        })
+        .catch(err => {
+            console.error('Failed to load live Command Center data:', err);
+            document.querySelectorAll('.tile[data-id] .tile-headline-cycle').forEach(c => {
+                c.innerHTML = '<h4 class="tile-headline showing visible">Live data unavailable</h4>';
+            });
+        });
+
+    function esc(v) {
+        return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+    }
+
+    function plural(n, one, many) { return `${n} ${n === 1 ? one : many}`; }
+
+    // People Movers: headline-stated appointments and exits. An empty day says
+    // so in a slim panel rather than hiding the row.
+    function renderMovers(moves) {
+        const row = document.getElementById('moversRow');
+        if (!row) return;
+        // Pins (config/pinned_moves.yaml) are older reports kept on purpose;
+        // they are counted apart from the week's recent moves.
+        const pinned = moves.filter(m => m.pinned).length;
+        document.getElementById('moversCount').textContent =
+            plural(moves.length - pinned, 'recent move', 'recent moves') + (pinned ? ` · ${pinned} pinned` : '');
+        row.innerHTML = moves.length ? moves.map(m => `
+            <a class="move-card" href="${esc(m.url)}" target="_blank" rel="noopener">
+                ${m.image
+                    ? `<div class="move-photo"><img src="${esc(m.image)}" alt="" loading="lazy" onerror="this.parentNode.className='move-photo none';this.remove()"></div>`
+                    : `<div class="move-photo none"><span class="mark"><i style="background:#c9971c"></i><i style="background:#2f6fed"></i><i style="background:#c0392b"></i></span><span class="src">${esc(m.source)}</span></div>`}
+                <div class="move-body">
+                    <span class="move-type${m.kind === 'exit' ? ' exit' : ''}">${esc(m.type)}</span>
+                    <h4>${esc(m.title)}</h4>
+                    <span class="row-meta">${esc(m.source)}${m.date ? ' &middot; ' + esc(m.date) : ''}${m.pinned ? ' &middot; Pinned' : ''}</span>
+                </div>
+            </a>`).join('')
+            : `<div class="row-empty">No recent appointments or exits.</div>`;
+    }
+
+    // Leaders on Record: verbatim quotes, each linked to where it was
+    // published. The "Listening to" watchlist beneath is still filled but
+    // parked (hidden) in the markup.
+    function renderRecord(record) {
+        const row = document.getElementById('recordRow');
+        if (!row) return;
+        const quotes = record.quotes || [];
+        document.getElementById('recordCount').textContent =
+            plural(quotes.length, 'quote', 'quotes') + ` · last ${record.window_days || 14} days`;
+        row.innerHTML = quotes.length ? quotes.map(q => `
+            <a class="quote-card" href="${esc(q.url)}" target="_blank" rel="noopener">
+                <blockquote>&ldquo;${esc(q.quote)}&rdquo;</blockquote>
+                <div class="quote-who">${esc(q.leader)} <span>&middot; ${esc(q.company)}</span></div>
+                <span class="row-meta">${esc(q.source)}${q.date ? ' &middot; ' + esc(q.date) : ''} &middot; read source &rarr;</span>
+            </a>`).join('')
+            : `<div class="row-empty">No verbatim quotes in the last ${record.window_days || 14} days.</div>`;
+        const leaders = record.leaders || [];
+        document.getElementById('recordListening').innerHTML = leaders.length
+            ? '<span class="listening-label">Listening to</span>' + leaders.map(l =>
+                `<span class="listening-chip">${esc(l.name)} <i>${esc(l.company)}</i></span>`).join('')
+            : '';
+    }
+
+    function renderPulseCards(cards) {
+        const track = document.getElementById('pulseTrack');
+        const section = document.getElementById('pulseSection');
+        if (!track) return;
+        if (!cards.length) {
+            // The section's own note promises only genuine coverage, so an
+            // empty day hides the row rather than padding it.
+            if (section) section.hidden = true;
+            return;
+        }
+        if (section) section.hidden = false;
+        track.innerHTML = cards.map(c => `
+            <div class="pulse-card">
+                <div class="pulse-photo">
+                    <img src="${esc(c.image)}" alt="" loading="lazy" decoding="async">
+                    <div class="pulse-who">
+                        <div class="name">${esc(c.name)}</div>
+                        ${c.role ? `<div class="co">${esc(c.role)}</div>` : ''}
+                    </div>
+                </div>
+                <div class="pulse-body">
+                    <a class="pulse-view" href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title)}</a>
+                    <div class="pulse-meta">${esc(c.source)} &middot; today</div>
+                </div>
+            </div>`).join('');
+        startPulseScroller();
+    }
+
+    // Featured Analysis: the pinned story first, then the day's GCC stories,
+    // one card at a time. It moves on every 7 seconds, like the tiles' headlines,
+    // and holds while the reader points at it, focuses it or touches it; its
+    // arrows and dots move by hand. Reduced motion: no automatic change.
+    let featuredTimer = 0;
+    function renderFeatured(list) {
+        const slot = document.getElementById('featuredSlot');
+        if (!slot) return;
+        clearInterval(featuredTimer);
+        if (!list.length) { slot.innerHTML = ''; return; }
+        const many = list.length > 1;
+        const arrow = (dir, path) => `<button type="button" class="row-arrow ${dir}" aria-label="${dir === 'prev' ? 'Previous' : 'Next'} featured story"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg></button>`;
+        slot.innerHTML = `
+        <div class="featured-deck${many ? ' cycling' : ''}">
+            <div class="featured-stack">${list.map((f, i) => `
+                <a class="featured${i ? '' : ' on'}" href="${esc(f.url)}" target="_blank" rel="noopener"${i ? ' aria-hidden="true" tabindex="-1"' : ''}>
+                    <div class="featured-body">
+                        <div class="featured-pin">${f.pinned ? 'Pinned &middot; ' : ''}${esc(f.source || '')}${f.date ? ` &middot; ${esc(f.date)}` : ''}</div>
+                        <h2>${esc(f.title)}</h2>
+                        ${f.summary ? `<p class="featured-summary">${esc(f.summary)}</p>` : ''}
+                        <div class="featured-read">Read Full Brief &rarr;</div>
+                    </div>
+                    <div class="featured-media">
+                        <img class="featured-fill" src="${esc(f.image)}" alt="" aria-hidden="true" decoding="async">
+                        <img src="${esc(f.image)}" alt="" decoding="async">
+                    </div>
+                </a>`).join('')}
+            </div>
+            ${many ? arrow('prev', 'M15 5l-7 7 7 7') + arrow('next', 'M9 5l7 7-7 7') : ''}
+        </div>
+        ${many ? `<div class="featured-dots">${list.map((f, i) => `<button type="button" aria-label="Featured story ${i + 1} of ${list.length}"${i ? '' : ' class="on"'}></button>`).join('')}</div>` : ''}`;
+        if (!many) return;
+
+        const deck = slot.querySelector('.featured-deck');
+        const cards = [...slot.querySelectorAll('.featured')];
+        const dots = [...slot.querySelectorAll('.featured-dots button')];
+        const still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let at = 0, held = false, touchTimer = 0;
+        const show = i => {
+            at = (i + cards.length) % cards.length;
+            cards.forEach((c, k) => {
+                c.classList.toggle('on', k === at);
+                if (k === at) { c.removeAttribute('aria-hidden'); c.removeAttribute('tabindex'); }
+                else { c.setAttribute('aria-hidden', 'true'); c.tabIndex = -1; }
+            });
+            dots.forEach((d, k) => d.classList.toggle('on', k === at));
+        };
+        const restart = () => {
+            clearInterval(featuredTimer);
+            if (!still) featuredTimer = setInterval(() => { if (!held && !document.hidden) show(at + 1); }, 7000);
+        };
+        deck.addEventListener('mouseenter', () => { held = true; });
+        deck.addEventListener('mouseleave', () => { held = false; });
+        deck.addEventListener('focusin', () => { held = true; });
+        deck.addEventListener('focusout', () => { held = false; });
+        deck.addEventListener('touchstart', () => {
+            held = true; clearTimeout(touchTimer);
+            touchTimer = setTimeout(() => { held = false; }, 6000);
+        }, { passive: true });
+        deck.querySelector('.row-arrow.prev').addEventListener('click', () => { show(at - 1); restart(); });
+        deck.querySelector('.row-arrow.next').addEventListener('click', () => { show(at + 1); restart(); });
+        dots.forEach((d, k) => d.addEventListener('click', () => { show(k); restart(); }));
+        restart();
+    }
+
+    function updateEngineCount() {
+        const el = document.getElementById('engineCount');
+        if (!el) return;
+        const all = Object.values(ENGINE_DATA);
+        const live = all.filter(e => !e.comingSoon).length;
+        el.textContent = `${live} live today · ${all.length - live} expanding source coverage`;
+    }
+
+    function initTileHeadlines() {
+        document.querySelectorAll('.tile[data-id]').forEach(tile => {
+            const cycle = tile.querySelector('.tile-headline-cycle');
+            if (!cycle) return; // coming-soon tiles carry no headlines, only their vector
+            const eng = ENGINE_DATA[tile.dataset.id];
+            const articles = (eng && eng.articles) ? eng.articles.slice(0, 5) : [];
+            const slots = Array.from(cycle.querySelectorAll('.tile-headline'));
+            slots.forEach((el, i) => {
+                if (articles[i]) {
+                    el.textContent = articles[i].title;
+                } else {
+                    el.remove(); // no filler slots beyond the genuine article count
+                }
+            });
+            const headlines = Array.from(cycle.querySelectorAll('.tile-headline'));
+            if (!headlines.length) {
+                cycle.innerHTML = '<h4 class="tile-headline showing visible">No qualifying story today</h4>';
+                return;
+            }
+            startTileHeadlineCycler(headlines, buildTilePhotos(tile, articles));
+        });
+    }
+
+    function buildTilePhotos(tile, articles) {
+        // One <img> per article that carries a photo, stacked under the shade
+        // gradient and indexed to its headline. Articles without one get no
+        // element, so their slide shows the tile's vector instead. The tile
+        // used to hold a single baked-in photo that sat under all five
+        // headlines, which is what this replaces.
+        const body = tile.querySelector('.tile-body');
+        if (!body) return [];
+        const photos = [];
+        articles.forEach((article, i) => {
+            if (!article.image) return;
+            const img = document.createElement('img');
+            img.className = 'tile-photo';
+            img.alt = '';
+            img.dataset.i = i;
+            // A dead or hotlink-blocked url must never leave a broken frame:
+            // drop the element and that slide falls back to the vector.
+            img.addEventListener('error', () => img.remove());
+            img.src = article.image;
+            tile.insertBefore(img, body);
+            photos.push(img);
+        });
+        return photos;
+    }
+
+    function startTileHeadlineCycler(headlines, photos) {
+        let current = 0;
+        const show = (i) => {
+            headlines[i].classList.add('showing');
+            requestAnimationFrame(() => headlines[i].classList.add('visible'));
+            // Picture follows the headline. toggle() rather than a add/remove
+            // pair so a slide with no photo of its own clears the previous
+            // one instead of leaving the wrong story's image on screen.
+            (photos || []).forEach(p => p.classList.toggle('on', Number(p.dataset.i) === i));
+        };
+        show(current);
+        if (headlines.length < 2) return; // only one real article — nothing to cycle to
+        setInterval(() => {
+            const old = headlines[current];
+            old.classList.remove('visible');
+            setTimeout(() => {
+                old.classList.remove('showing');
+                current = (current + 1) % headlines.length;
+                show(current);
+            }, 600);
+        }, 4800);
+    }
+
+    function initTicker() {
+        const track = document.getElementById('ticker');
+        function buildItems() {
+            return ENGINE_ORDER.map(id => {
+                const eng = ENGINE_DATA[id];
+                if (!eng) return '';
+                return `<button class="ticker-item${eng.comingSoon ? ' soon-item' : ''}" data-id="${id}"><span class="ic">${ENGINE_ICONS[id]}</span><span class="lbl-text">${eng.name}</span></button>`;
+            }).join('');
+        }
+        track.innerHTML = buildItems() + buildItems(); // duplicated once for a seamless loop
+
+        const bar = track.closest('.ticker-bar');
+        bar.addEventListener('mouseenter', () => track.classList.add('paused'));
+        bar.addEventListener('mouseleave', () => { track.classList.remove('paused'); flyout.classList.remove('open'); });
+
+        track.addEventListener('click', (e) => {
+            const item = e.target.closest('.ticker-item');
+            if (item) openEnginePanel(item.dataset.id);
+        });
+
+        let flyoutTimer;
+        track.addEventListener('mouseover', (e) => {
+            const item = e.target.closest('.ticker-item');
+            if (!item) return;
+            clearTimeout(flyoutTimer);
+            const eng = ENGINE_DATA[item.dataset.id];
+            flyout.innerHTML = eng.comingSoon
+                ? `<div class="dd-empty">Coming soon — no dedicated feed yet</div>`
+                : eng.articles.map(a => `<a href="${a.url}" target="_blank" rel="noopener">${a.title}</a>`).join('');
+            const rect = item.getBoundingClientRect();
+            flyout.style.left = rect.left + 'px';
+            flyout.style.top = rect.bottom + 'px';
+            flyout.classList.add('open');
+        });
+        track.addEventListener('mouseout', (e) => {
+            if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.ticker-item')) return;
+            flyoutTimer = setTimeout(() => flyout.classList.remove('open'), 250);
+        });
+        flyout.addEventListener('mouseenter', () => clearTimeout(flyoutTimer));
+        flyout.addEventListener('mouseleave', () => flyout.classList.remove('open'));
+
+        // ---------- Signal Pulse: sweeps through all 14 engines, then pauses before repeating ----------
+        let pulseIdx = 0;
+        function runPulse() {
+            track.querySelectorAll('.ticker-item.pulse-awake').forEach(el => el.classList.remove('pulse-awake'));
+            const id = ENGINE_ORDER[pulseIdx];
+            track.querySelectorAll(`.ticker-item[data-id="${id}"]`).forEach(el => el.classList.add('pulse-awake'));
+            pulseIdx++;
+            if (pulseIdx < ENGINE_ORDER.length) {
+                setTimeout(runPulse, 200);
+            } else {
+                setTimeout(() => {
+                    track.querySelectorAll('.ticker-item.pulse-awake').forEach(el => el.classList.remove('pulse-awake'));
+                    pulseIdx = 0;
+                    setTimeout(runPulse, 9000);
+                }, 200);
+            }
+        }
+        setTimeout(runPulse, 1500);
+    }
+
+    // ---------- Engine panel: top-5 real articles, per engine ----------
+    function openEnginePanel(id) {
+        const eng = ENGINE_DATA[id];
+        if (!eng) return;
+        document.getElementById('panelIcon').innerHTML = ENGINE_ICONS[id] || '';
+        document.getElementById('panelTitle').textContent = eng.name;
+        const body = document.getElementById('panelBody');
+        if (eng.comingSoon) {
+            body.innerHTML = `<div class="panel-empty">${eng.note}</div>`;
+        } else if (!eng.articles || !eng.articles.length) {
+            body.innerHTML = `<div class="panel-empty">No qualifying story today.</div>`;
+        } else {
+            body.innerHTML = eng.articles.map(a => `
+                <div class="panel-item">
+                    <h4><a href="${a.url}" target="_blank" rel="noopener">${a.title}</a></h4>
+                </div>`).join('');
+        }
+        document.getElementById('panelBackdrop').classList.add('open');
+    }
+    function closeEnginePanel() {
+        document.getElementById('panelBackdrop').classList.remove('open');
+    }
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeEnginePanel(); });
+
+    // Headline cycler
+    (function() {
+        const headlines = document.querySelectorAll('.hero-headline');
+        let current = 0;
+        headlines[current].classList.add('showing');
+        requestAnimationFrame(() => headlines[current].classList.add('visible'));
+        setInterval(() => {
+            const old = headlines[current];
+            old.classList.remove('visible');
+            setTimeout(() => {
+                old.classList.remove('showing');
+                current = (current + 1) % headlines.length;
+                const next = headlines[current];
+                next.classList.add('showing');
+                requestAnimationFrame(() => next.classList.add('visible'));
+            }, 600);
+        }, 4800);
+    })();
+
+    // Scroll-in fade
+    (function() {
+        const els = document.querySelectorAll('.fade-up');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        els.forEach(el => io.observe(el));
+    })();
+
+    // Sticky nav shadow
+    (function() {
+        const nav = document.getElementById('navWrap');
+        window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 8));
+    })();
+
+    // Executive Pulse: seamless auto-scroll, pausing on hover/touch/drag.
+    // The card set is cloned once so the loop reset is invisible — scrollLeft
+    // wraps back to 0 exactly where the clone set is visually identical to
+    // the original, instead of jumping.
+    // Started by renderPulseCards once the cards exist: the track is empty
+    // until the fetch resolves, and cloning an empty track scrolls nothing.
+    //
+    // Cloning is what makes the loop seamless, but when the cards fit the
+    // duplicate sits in plain view and reads as a bug, so the loop runs only
+    // when the cards genuinely overflow. That is decided from the cards'
+    // natural width (flex-basis + gaps), not scrollWidth: cards grow to fill
+    // the track whenever they fit, and at fractional pixel ratios rounded
+    // widths can disagree by a pixel or two. It is re-decided on resize from
+    // the original cards, so a window that widens never keeps duplicates.
+    //
+    // The row also moves by hand (swipe, trackpad, its side arrows). A swipe
+    // or an arrow holds the loop for a few seconds, then it carries on from
+    // wherever the reader left the row.
+    const pulseLoop = { raf: 0, paused: false, resumeAt: 0, period: 0, original: '', bound: false };
+    function startPulseScroller() {
+        const viewport = document.getElementById('pulseViewport');
+        const track = document.getElementById('pulseTrack');
+        if (!viewport || !track || !track.children.length) return;
+        pulseLoop.original = track.innerHTML;
+        if (!pulseLoop.bound) {
+            pulseLoop.bound = true;
+            const hold = () => { pulseLoop.paused = true; };
+            const release = ms => () => { pulseLoop.paused = false; pulseLoop.resumeAt = performance.now() + ms; };
+            ['mouseenter', 'mousedown'].forEach(evt => viewport.addEventListener(evt, hold));
+            viewport.addEventListener('touchstart', hold, { passive: true });
+            ['mouseleave', 'mouseup'].forEach(evt => viewport.addEventListener(evt, release(0)));
+            // A swiped row coasts on after the finger lifts.
+            viewport.addEventListener('touchend', release(5000), { passive: true });
+            viewport.addEventListener('signal:pause', release(6000)); // its side arrows
+            let resizeTimer = 0;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => layoutPulseLoop(viewport, track), 200);
+            });
+        }
+        layoutPulseLoop(viewport, track);
+    }
+
+    function layoutPulseLoop(viewport, track) {
+        cancelAnimationFrame(pulseLoop.raf);
+        pulseLoop.raf = 0;
+        track.innerHTML = pulseLoop.original;
+        viewport.scrollLeft = 0;
+        const cards = Array.from(track.children);
+        if (!cards.length) return;
+        // Not laid out yet (a hidden or not-yet-sized tab reports width 0):
+        // at 0 everything "overflows", so decide nothing and let the resize
+        // that follows when the page gets its width do it.
+        if (!viewport.clientWidth) return;
+        const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+        const basis = parseFloat(getComputedStyle(cards[0]).flexBasis) || cards[0].getBoundingClientRect().width;
+        if (cards.length * basis + (cards.length - 1) * gap <= viewport.clientWidth) return;
+        // One full set plus the gap before its clone, so the wrap is seamless.
+        pulseLoop.period = track.scrollWidth + gap;
+        track.innerHTML = pulseLoop.original + pulseLoop.original;
+        // The position is kept here, not read back from scrollLeft: Safari
+        // holds scrollLeft to whole pixels, so adding 0.6px to it each frame
+        // never moved the row on an iPhone.
+        let pos = 0;
+        const step = now => {
+            if (!pulseLoop.paused && now >= pulseLoop.resumeAt) {
+                // A swipe or an arrow moved the row: carry on from there.
+                if (Math.abs(viewport.scrollLeft - pos) > 2) pos = viewport.scrollLeft;
+                pos += 0.6;
+                if (pos >= pulseLoop.period) pos -= pulseLoop.period;
+                viewport.scrollLeft = pos;
+            }
+            pulseLoop.raf = requestAnimationFrame(step);
+        };
+        pulseLoop.raf = requestAnimationFrame(step);
+    }
+
+    // Engine tiles: the row drifts slowly back and forth so every domain passes
+    // by, and yields to the reader — it stops while hovered, focused or being
+    // dragged (pin/hide/reorder still work) and pauses after touch or wheel.
+    // Ping-pong rather than a cloned loop: clones would duplicate data-ids the
+    // personalization code relies on.
+    function startRibbonDrift() {
+        const rib = document.getElementById('ribbon');
+        if (!rib || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+        const SPEED = 22; // px per second
+        let dir = 1, pos = rib.scrollLeft, applied = pos, held = 0, last = 0, onScreen = true;
+        let pauseUntil = performance.now() + 1500;
+        const hold = () => { held++; };
+        const release = () => { held = Math.max(0, held - 1); pauseUntil = performance.now() + 1500; };
+        const nudge = ms => () => { pauseUntil = performance.now() + ms; };
+        rib.addEventListener('mouseenter', hold); rib.addEventListener('mouseleave', release);
+        rib.addEventListener('focusin', hold); rib.addEventListener('focusout', release);
+        rib.addEventListener('dragstart', hold); rib.addEventListener('dragend', release);
+        rib.addEventListener('touchstart', nudge(6000), { passive: true });
+        rib.addEventListener('wheel', nudge(4000), { passive: true });
+        rib.addEventListener('signal:pause', nudge(6000)); // its side arrows
+        if (window.IntersectionObserver) {
+            new IntersectionObserver(es => { onScreen = es[0].isIntersecting; }).observe(rib);
+        }
+        function step(now) {
+            const dt = last ? Math.min(now - last, 50) : 16;
+            last = now;
+            if (!held && onScreen && !document.hidden && now > pauseUntil) {
+                const max = rib.scrollWidth - rib.clientWidth;
+                // The browser rounds scrollLeft, so compare with what it last
+                // applied, not our fractional position, to spot a reader's scroll.
+                if (Math.abs(rib.scrollLeft - applied) > 1) pos = rib.scrollLeft;
+                pos += dir * SPEED * dt / 1000;
+                if (pos >= max) { pos = max; dir = -1; pauseUntil = now + 1800; }
+                if (pos <= 0) { pos = 0; dir = 1; pauseUntil = now + 1800; }
+                rib.scrollLeft = pos;
+                applied = rib.scrollLeft;
+            }
+            requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    }
+    startRibbonDrift();
+
+    // Side arrows on the scrolling rows: each click pages one screenful of
+    // whole cards, and an arrow shows only when there is more that way.
+    function initRowArrows() {
+        const smooth = !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+        document.querySelectorAll('.row-scroller').forEach(wrap => {
+            const row = wrap.querySelector('.ribbon, .people-row, .pulse-viewport');
+            const prev = wrap.querySelector('.row-arrow.prev');
+            const next = wrap.querySelector('.row-arrow.next');
+            if (!row || !prev || !next) return;
+            const sync = () => {
+                const max = row.scrollWidth - row.clientWidth;
+                prev.hidden = row.scrollLeft <= 2;
+                next.hidden = row.scrollLeft >= max - 2;
+                wrap.classList.toggle('more-left', !prev.hidden);
+                wrap.classList.toggle('more-right', !next.hidden);
+            };
+            const step = () => {
+                // The first card still shown: a tile the reader hid has no width.
+                const card = [...row.children].find(c => c.offsetWidth);
+                if (!card) return row.clientWidth * 0.85;
+                const unit = card.getBoundingClientRect().width + (parseFloat(getComputedStyle(row).columnGap) || 14);
+                return Math.max(unit, Math.floor(row.clientWidth / unit) * unit);
+            };
+            const go = dir => {
+                row.dispatchEvent(new Event('signal:pause'));
+                row.scrollBy({ left: dir * step(), behavior: smooth ? 'smooth' : 'auto' });
+                setTimeout(sync, 450);
+            };
+            prev.addEventListener('click', () => go(-1));
+            next.addEventListener('click', () => go(1));
+            row.addEventListener('scroll', sync, { passive: true });
+            window.addEventListener('resize', sync);
+            new MutationObserver(sync).observe(row, { childList: true, attributes: true, subtree: true, attributeFilter: ['class', 'style'] });
+            sync();
+        });
+    }
+    initRowArrows();
+
+    // Personalizable Intelligence Bar: pin / hide / drag-reorder, persisted to localStorage
+    (function() {
+        const ribbon = document.getElementById('ribbon');
+        const STORAGE_KEY = 'signal_ribbon_prefs_v1';
+
+        function loadPrefs() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+            catch (e) { return {}; }
+        }
+        function savePrefs(prefs) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
+        }
+
+        function currentOrderIds() {
+            return Array.from(ribbon.querySelectorAll('.tile')).map(t => t.dataset.id);
+        }
+
+        function applyPrefs() {
+            const prefs = loadPrefs();
+            if (prefs.order && prefs.order.length) {
+                prefs.order.forEach(id => {
+                    const el = ribbon.querySelector(`.tile[data-id="${id}"]`);
+                    if (el) ribbon.appendChild(el);
+                });
+            }
+            ribbon.querySelectorAll('.tile').forEach(tile => {
+                const id = tile.dataset.id;
+                const pinBtn = tile.querySelector('.pin-btn');
+                const hideBtn = tile.querySelector('.hide-btn');
+                if (prefs.pinned && prefs.pinned.includes(id)) pinBtn.classList.add('pinned');
+                if (prefs.hidden && prefs.hidden.includes(id)) tile.classList.add('hidden-tile');
+            });
+            if (prefs.pinned && prefs.pinned.length) {
+                prefs.pinned.slice().reverse().forEach(id => {
+                    const el = ribbon.querySelector(`.tile[data-id="${id}"]`);
+                    if (el) ribbon.prepend(el);
+                });
+            }
+        }
+
+        function persist() {
+            const prefs = loadPrefs();
+            prefs.order = currentOrderIds();
+            savePrefs(prefs);
+        }
+
+        ribbon.addEventListener('click', (e) => {
+            const pinBtn = e.target.closest('.pin-btn');
+            const hideBtn = e.target.closest('.hide-btn');
+            if (pinBtn) {
+                e.preventDefault();
+                const tile = pinBtn.closest('.tile');
+                const id = tile.dataset.id;
+                const prefs = loadPrefs();
+                prefs.pinned = prefs.pinned || [];
+                if (prefs.pinned.includes(id)) {
+                    prefs.pinned = prefs.pinned.filter(x => x !== id);
+                    pinBtn.classList.remove('pinned');
+                } else {
+                    prefs.pinned.push(id);
+                    pinBtn.classList.add('pinned');
+                    ribbon.prepend(tile);
+                }
+                savePrefs(prefs);
+                persist();
+            }
+            if (hideBtn) {
+                e.preventDefault();
+                const tile = hideBtn.closest('.tile');
+                const id = tile.dataset.id;
+                tile.classList.add('hidden-tile');
+                const prefs = loadPrefs();
+                prefs.hidden = prefs.hidden || [];
+                if (!prefs.hidden.includes(id)) prefs.hidden.push(id);
+                savePrefs(prefs);
+            }
+        });
+
+        // HTML5 drag-and-drop reordering
+        let dragEl = null;
+        ribbon.addEventListener('dragstart', (e) => {
+            dragEl = e.target.closest('.tile');
+            if (dragEl) dragEl.classList.add('dragging');
+        });
+        ribbon.addEventListener('dragend', () => {
+            if (dragEl) dragEl.classList.remove('dragging');
+            dragEl = null;
+            persist();
+        });
+        ribbon.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const target = e.target.closest('.tile');
+            if (!target || target === dragEl || !dragEl) return;
+            const rect = target.getBoundingClientRect();
+            const before = (e.clientX - rect.left) < rect.width / 2;
+            ribbon.insertBefore(dragEl, before ? target : target.nextSibling);
+        });
+
+        document.getElementById('personaReset').addEventListener('click', () => {
+            localStorage.removeItem(STORAGE_KEY);
+            location.reload();
+        });
+
+        applyPrefs();
+    })();
+</script>
+</body>
+</html>
