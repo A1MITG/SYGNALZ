@@ -4,7 +4,7 @@ A breakpoint (BP) is a commit you can safely return to. This register lists ever
 one, what it changed, how far it has travelled (local → committed → pushed →
 live), and the exact command to roll it back.
 
-*Last updated: 2026-09-27 (BP-25 to BP-30, BP-32 and BP-33 live; BP-34 to BP-36 live; BP-31 pushed; BP-37 to BP-45 live; BP-46 pushed) · working branch `final` (GitHub default) · repo `A1MITG/NewsLetter-CXO`
+*Last updated: 2026-09-27 (BP-25 to BP-30, BP-32 and BP-33 live; BP-34 to BP-36 live; BP-31 pushed; BP-37 to BP-45 live; BP-46 and BP-47 pushed) · working branch `final` (GitHub default) · repo `A1MITG/NewsLetter-CXO`
 (GitHub now redirects it to `A1MITG/SYGNALZ`).*
 
 ---
@@ -27,6 +27,7 @@ label in their commit message. BP-07 and BP-08 are assigned here.
 
 | BP | Commit | Date (IST) | Stage | Change | What it did | Roll back with |
 |---|---|---|---|---|---|---|
+| BP-47 | `77773a0` | 2026-09-27 11:10 | Pushed | WebAnalytics | Vercel Web Analytics loader in the main page's `<head>` (anonymous page views, referrers, countries, devices; no cookies; no visible change). Records once Analytics is enabled in the Vercel project. `/brief` stays script-free by design. | `git revert 77773a0`, then rebuild and republish |
 | BP-46 | `dbd2666` | 2026-09-27 10:05 | Pushed | SharpCard | The social card published at 2400x1254 (same design, 1.91:1 at twice LinkedIn's 1200x627) so LinkedIn's 1280x800 rescale only ever shrinks it; og:image:width/height 2400/1254; card URL `?v=3`. Tests: `tests/test_social_preview.py`. | `git revert dbd2666`, then rebuild and republish |
 | BP-45 | `65d8c99` | 2026-09-27 09:12 | Pushed | SocialAuthor | For LinkedIn's Post Inspector, which found no author or publication date: `<meta name="author" content="Amit Gupta">` and `article:author`; `og:publish_date` (with name="publish_date") and `article:published_time`, both 2026-09-27T09:00:00+05:30. The card gains the builder's mark "@a1mit" at the bottom right, and its URL becomes `.../img/signal-og.png?v=2` so LinkedIn and X fetch it instead of the cached BP-44 card (bump `v` when the card changes). Tests: `tests/test_social_preview.py`. First committed on top of `a572f1e`, rebased onto the 08:59 IST rebuild `89a55d9`. | `git revert 65d8c99`, then rebuild and republish |
 | BP-44 | `00000078be` | 2026-09-27 08:39 | **Live** | SocialPreview | LinkedIn/X link preview: the page's static `<head>` gains Open Graph tags (og:type website, og:site_name, og:title "SIGNAL — Know What Matters", og:description "Signals from everywhere. Multiple lenses. One intelligent brief.", og:url, og:image with its size, type and alt), the Twitter tags (summary_large_image), `<link rel="canonical">` and a meta description, all pointing at `https://news-letter-cxo.vercel.app/`. New card `public/img/signal-og.png` (1200x627, the site's mark, wordmark and kicker beside the hero previews' line globe), published to `/img/` by the existing workflow. Browser-tab title unchanged; only `<head>` changed. Live from the Run workflow by hand at 08:45 IST on 27 Sep (on `973177f`); the Post Inspector then read title, image and description, but no author or date (BP-45). Tests: `tests/test_social_preview.py`. | `git revert 00000078be`, then rebuild and republish |
