@@ -1,0 +1,23 @@
+{
+  "name": "primary",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A1MITG/SYGNALZ.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/A1MITG/SYGNALZ/issues"
+  },
+  "homepage": "https://github.com/A1MITG/SYGNALZ#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
