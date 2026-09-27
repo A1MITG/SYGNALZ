@@ -3,7 +3,8 @@
 Crawlers read the first HTML response and run no JavaScript, so the Open
 Graph and Twitter tags live in the page's static <head>, the same file the
 workflow publishes as the site's index.html. The card is
-public/img/signal-og.png (1200 x 627, LinkedIn's 1.91:1), published to /img/
+public/img/signal-og.png (2400 x 1254: LinkedIn's 1.91:1 at twice its
+1200 x 627, so LinkedIn only ever scales it down and it stays sharp), published to /img/
 with the rest of public/img.
 """
 import re
@@ -21,7 +22,7 @@ PRODUCTION = 'https://news-letter-cxo.vercel.app/'
 TITLE = 'SIGNAL — Know What Matters'
 DESCRIPTION = 'Signals from everywhere. Multiple lenses. One intelligent brief.'
 # ?v=N makes LinkedIn and X fetch a changed card instead of their cached copy.
-IMAGE = PRODUCTION + 'img/signal-og.png?v=2'
+IMAGE = PRODUCTION + 'img/signal-og.png?v=3'
 
 
 class _Head(HTMLParser):
@@ -60,7 +61,7 @@ class TestSocialPreview(unittest.TestCase):
         self.assertEqual(m['og:url'], PRODUCTION)
         self.assertEqual(m['og:image'], IMAGE)
         self.assertEqual((m['og:image:width'], m['og:image:height'], m['og:image:type']),
-                         ('1200', '627', 'image/png'))
+                         ('2400', '1254', 'image/png'))
 
     def test_twitter_tags(self):
         m = self.head.meta
@@ -89,11 +90,12 @@ class TestSocialPreview(unittest.TestCase):
         self.assertEqual(m['og:publish_date'], '2026-09-27T09:00:00+05:30')   # 9:00 IST
         self.assertEqual(m['article:published_time'], '2026-09-27T09:00:00+05:30')
 
-    def test_the_card_is_a_1200_by_627_png(self):
+    def test_the_card_is_a_1_91_png_at_twice_linkedins_size(self):
         data = CARD.read_bytes()
         self.assertEqual(data[:8], b'\x89PNG\r\n\x1a\n')
         width, height = struct.unpack('>II', data[16:24])
-        self.assertEqual((width, height), (1200, 627))
+        self.assertEqual((width, height), (2400, 1254))
+        self.assertAlmostEqual(width / height, 1.91, places=2)
         self.assertLess(len(data), 5 * 1024 * 1024)          # LinkedIn's limit is 5 MB
 
     def test_the_workflow_publishes_the_card(self):
