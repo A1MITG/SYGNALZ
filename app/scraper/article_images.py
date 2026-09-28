@@ -105,9 +105,12 @@ def fill_missing_images(articles, fetch=None):
             return 0
         fetch = lambda urls: asyncio.run(_fetch_all(urls))
 
+    from .news_search import is_search_link
+    # A news-search link opens a redirect page, whose share image is the
+    # search engine's own card, not the story's.
     missing = [a for a in articles
-               if a.get('url') and (not (a.get('image') or '').startswith('http')
-                                    or is_thumbnail(a.get('image')))]
+               if a.get('url') and not is_search_link(a['url'])
+               and (not (a.get('image') or '').startswith('http') or is_thumbnail(a.get('image')))]
     todo = sorted({a['url'] for a in missing} - _seen.keys())
     if todo:
         results = dict(fetch(todo))

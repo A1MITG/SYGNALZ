@@ -10,6 +10,8 @@
 # the sole source of the April-2024 articles that reached the front page.
 # Replaced with Business Standard + ET top stories, both verified same-day.
 
+from urllib.parse import quote
+
 TIER_1_SOURCES = {
     "Industry & Market Intelligence": [
         "https://www.insurancejournal.com/rss",
@@ -84,6 +86,20 @@ TIER_2_SOURCES = {
 NEWS_SITEMAPS = (
     "https://www.moneycontrol.com/news/news-sitemap.xml",
 )
+
+# Google News searches for India GCC stories from the last day
+# (app/scraper/news_search.py; only what the GCC rubric accepts is kept).
+# The GCC portals themselves (Financial Express's GCC pages, Analytics India
+# Magazine, CXOToday, TechCircle) serve their feeds empty to a scraper, and
+# on 2026-09-28 the ET GCC portal had nothing newer than Friday evening,
+# while these searches found GCC openings and appointments from that day.
+_GOOGLE_NEWS = "https://news.google.com/rss/search?hl=en-IN&gl=IN&ceid=IN:en&q="
+NEWS_SEARCHES = tuple(_GOOGLE_NEWS + quote(q) for q in (
+    'GCC India when:1d',
+    '"global capability centre" when:1d',
+    '"global capability center" when:1d',
+    'GCC (Bengaluru OR Hyderabad OR Pune OR Chennai OR Gurugram OR Noida) when:1d',
+))
 
 # URL fragments of articles to drop. Mobile World Live republishes its stories
 # in French and Spanish under these paths, which put the same story on a tile

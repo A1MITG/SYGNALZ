@@ -258,6 +258,15 @@ def _publisher(url):
     return publisher_for(host)
 
 
+def _publisher_of(raw):
+    """_publisher, except that a news-search result names its own publisher:
+    its link is the search engine's (app/scraper/news_search.py)."""
+    from ..scraper.news_search import is_search_link
+    if is_search_link(raw.get('url')) and raw.get('source'):
+        return raw['source']
+    return _publisher(raw.get('url', ''))
+
+
 # People Movers is for business leaders. A headline about a head of state,
 # a minister, a lawmaker or a party figure is left out unless it also names a
 # corporate role ("Minister names new Air India CEO" stays). "President"
@@ -306,7 +315,7 @@ def build_movers(current_articles, limit=8):
     """
     from ..intelligence import events
     from ..intelligence.freshness import classify
-    from ..intelligence.normalize import parse_date, publisher_for
+    from ..intelligence.normalize import parse_date
 
     moves, seen = [], set()
     for raw in current_articles:
@@ -332,7 +341,7 @@ def build_movers(current_articles, limit=8):
             'url': url,
             'type': label,
             'kind': 'exit' if label == 'Steps down' else 'appointment',
-            'source': publisher_for(url.split('/')[2]) if url.count('/') >= 2 else '',
+            'source': _publisher_of(raw),
             'date': when.strftime('%d %b') if when else '',
             'ts': when.timestamp() if when else 0,
             'image': _article_image(raw),

@@ -125,8 +125,12 @@ class TestWiring(unittest.TestCase):
             return [{'title': 'Acme opens GCC in Pune', 'url': 'https://www.moneycontrol.com/a-1.html',
                      'date': '2026-09-25T09:00:00+05:30', 'summary': '', 'image': '', 'author': ''}]
 
+        async def no_search(session, url, fetch):
+            return []
+
         with mock.patch.object(scraper, 'scrape_source', no_rss), \
              mock.patch.object(scraper, 'scrape_news_sitemap', gcc_story), \
+             mock.patch.object(scraper, 'scrape_news_search', no_search), \
              mock.patch.dict(os.environ, {'NEWS_API_KEY': ''}):
             articles = _run(scraper.run_scraper())
         self.assertEqual([a['url'] for a in articles], ['https://www.moneycontrol.com/a-1.html'])

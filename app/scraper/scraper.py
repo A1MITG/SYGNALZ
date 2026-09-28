@@ -8,8 +8,9 @@ from html import unescape
 import aiohttp
 from bs4 import BeautifulSoup
 
+from .news_search import scrape_news_search
 from .news_sitemaps import scrape_news_sitemap
-from .sources import EXCLUDE_URL_PARTS, NEWS_SITEMAPS, TIER_1_SOURCES, TIER_2_SOURCES
+from .sources import EXCLUDE_URL_PARTS, NEWS_SEARCHES, NEWS_SITEMAPS, TIER_1_SOURCES, TIER_2_SOURCES
 
 logger = logging.getLogger(__name__)
 
@@ -143,6 +144,9 @@ async def run_scraper(tier='all'):
         # GCC stories from news sitemaps (publishers whose RSS is dead).
         if tier in ('tier2', 'all'):
             tasks += [scrape_news_sitemap(session, url, fetch_html) for url in NEWS_SITEMAPS]
+            # GCC stories from news searches, last: a publisher's own copy of
+            # the same story comes first and is the one kept.
+            tasks += [scrape_news_search(session, url, fetch_html) for url in NEWS_SEARCHES]
         # return_exceptions so one source's parse failure can't abort the
         # whole scrape — the rest of the sources still return their articles.
         results = await asyncio.gather(*tasks, return_exceptions=True)
