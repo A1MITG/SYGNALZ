@@ -41,6 +41,19 @@
             }
         }
 
+        // Headlines and links come from news feeds: escape them, and link
+        // only to web addresses (never a "javascript:" link).
+        function esc(v) {
+            return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        function safeUrl(v) {
+            const url = String(v == null ? '' : v).trim();
+            return /^https?:\/\//i.test(url) ? esc(url) : '#';
+        }
+
         function renderSignals(data) {
             const content = document.getElementById('signals-content');
             document.getElementById('tb-page').textContent =
@@ -57,16 +70,16 @@
                 hasContent = true;
                 html += `<section class="sec">
                     <div class="sec-head">
-                        <span class="sec-name">${signal.name}</span>
-                        <span class="sec-aud">${signal.audience}</span>
+                        <span class="sec-name">${esc(signal.name)}</span>
+                        <span class="sec-aud">${esc(signal.audience)}</span>
                     </div>
-                    <p class="sec-purpose">${signal.purpose}</p>
+                    <p class="sec-purpose">${esc(signal.purpose)}</p>
                     ${items.map((a, i) => `
                         <article class="row">
                             <span class="idx">${String(i + 1).padStart(2, '0')}</span>
                             <div>
-                                <h3><a href="${a.url}" target="_blank" rel="noopener">${a.title}</a></h3>
-                                <div class="meta">${sourceOf(a.url)}${a.score ? ' &middot; SCORE ' + a.score : ''}</div>
+                                <h3><a href="${safeUrl(a.url)}" target="_blank" rel="noopener">${esc(a.title)}</a></h3>
+                                <div class="meta">${esc(sourceOf(a.url))}${a.score ? ' &middot; SCORE ' + esc(a.score) : ''}</div>
                             </div>
                         </article>`).join('')}
                 </section>`;

@@ -21,6 +21,15 @@ on:
 permissions:
   contents: write
 
+# One build at a time: the hourly watchdog (site-watchdog.yml) may start a
+# build while a late scheduled one is still queued. The second waits.
+concurrency:
+  group: build-signals
+  cancel-in-progress: false
+
+env:
+  LIVE_URL: https://news-letter-cxo.vercel.app
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -48,13 +57,27 @@ jobs:
         env:
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
 
+      # Is public/ fit to go live? An error stops the run here: the site keeps
+      # the last good build, and GitHub emails the repo owner.
+      - name: Check the build before publishing
+        run: python scripts/site_health.py gate
+
       - name: Commit build to working branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Land on the branch as it is now, not as it was when this run
+          # started: a push, or another build, may have landed meanwhile. Only
+          # the files the build writes are this run's to change.
+          BUILT="command_center_data.json command_center.html brief.html index.html signals.json signal.css"
+          mkdir -p /tmp/built
+          for f in $BUILT; do cp "public/$f" /tmp/built/; done
+          git fetch -q origin "$GITHUB_REF_NAME"
+          git reset -q --hard FETCH_HEAD
+          for f in $BUILT; do cp "/tmp/built/$f" public/; done
           git add public/
           git diff --staged --quiet || git commit -m "Signals + Command Center rebuild: $(date -u +'%Y-%m-%d %H:%M UTC')"
-          git push
+          git push origin "HEAD:$GITHUB_REF_NAME"
 
       # news-letter-cxo.vercel.app is wired to this branch, so its root is the
       # Command Center; the Signals page rides along at /signals (cleanUrls
@@ -98,3 +121,8 @@ jobs:
           git add index.html command_center_data.json img
           git commit -q -m "Command Center rebuild: $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" command-center-deploy
+
+      # Is Vercel serving this build? It redeploys on the signals-deploy push
+      # within a minute or two. A failure means the site did not update.
+      - name: Check the live site
+        run: python scripts/site_health.py deployed

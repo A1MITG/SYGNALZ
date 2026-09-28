@@ -1,0 +1,57 @@
+name: Site watchdog
+
+# Hourly: is the live data late for its last refresh slot (09:00 or 19:00
+# IST)? GitHub's scheduler has started "Build Signals (static)" 3 h 50 min
+# and 5.5 h late, and once not at all, with nobody told. When the data is
+# late, this starts a build (unless one is already queued or running) and
+# fails, so GitHub emails the repo owner. The check itself is
+# scripts/site_health.py watchdog (standard library only: no install step).
+
+on:
+  schedule:
+    - cron: "20 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  actions: write
+  contents: read
+
+env:
+  LIVE_URL: https://news-letter-cxo.vercel.app
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Is the live data late?
+        id: check
+        run: |
+          set +e
+          python scripts/site_health.py watchdog
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          # 0: on time. 3: late (next step). Anything else: the check failed.
+          [ "$code" -eq 0 ] || [ "$code" -eq 3 ]
+
+      - name: Start a build and raise the alarm
+        if: steps.check.outputs.code == '3'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          busy=$(gh run list --workflow build-signals.yml --limit 5 --json status \
+                 --jq '[.[] | select(.status != "completed")] | length')
+          if [ "$busy" = "0" ]; then
+            gh workflow run build-signals.yml --ref "${{ github.event.repository.default_branch }}"
+            echo "::error::The live data is late for its refresh slot. A build has been started."
+          else
+            echo "::error::The live data is late for its refresh slot. A build is already queued or running."
+          fi
+          exit 1

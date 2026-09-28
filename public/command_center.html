@@ -1482,6 +1482,13 @@ a { color: inherit; }
             });
         });
 
+    // A link from a feed goes into href only if it is a web address, so a
+    // "javascript:" or "data:" link from a broken or hostile feed never runs.
+    function safeUrl(v) {
+        const url = String(v == null ? '' : v).trim();
+        return /^https?:\/\//i.test(url) ? esc(url) : '#';
+    }
+
     function esc(v) {
         return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({
             '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -1501,7 +1508,7 @@ a { color: inherit; }
         document.getElementById('moversCount').textContent =
             plural(moves.length - pinned, 'recent move', 'recent moves') + (pinned ? ` · ${pinned} pinned` : '');
         row.innerHTML = moves.length ? moves.map(m => `
-            <a class="move-card" href="${esc(m.url)}" target="_blank" rel="noopener">
+            <a class="move-card" href="${safeUrl(m.url)}" target="_blank" rel="noopener">
                 ${m.image
                     ? `<div class="move-photo"><img src="${esc(m.image)}" alt="" loading="lazy" onerror="this.parentNode.className='move-photo none';this.remove()"></div>`
                     : `<div class="move-photo none"><span class="mark"><i style="background:#c9971c"></i><i style="background:#2f6fed"></i><i style="background:#c0392b"></i></span><span class="src">${esc(m.source)}</span></div>`}
@@ -1528,7 +1535,7 @@ a { color: inherit; }
             // The newest quote's date, so an older set never passes as today's.
             (quotes.length ? ` · newest ${quotes.reduce((a, b) => ((b.ts || 0) > (a.ts || 0) ? b : a)).date}` : '');
         row.innerHTML = quotes.length ? quotes.map(q => `
-            <a class="quote-card" href="${esc(q.url)}" target="_blank" rel="noopener">
+            <a class="quote-card" href="${safeUrl(q.url)}" target="_blank" rel="noopener">
                 <blockquote>&ldquo;${esc(q.quote)}&rdquo;</blockquote>
                 <div class="quote-who">${esc(q.leader)} <span>&middot; ${esc(q.company)}</span></div>
                 <span class="row-meta">${esc(q.source)}${q.date ? ' &middot; ' + esc(q.date) : ''} &middot; read source &rarr;</span>
@@ -1562,7 +1569,7 @@ a { color: inherit; }
                     </div>
                 </div>
                 <div class="pulse-body">
-                    <a class="pulse-view" href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title)}</a>
+                    <a class="pulse-view" href="${safeUrl(c.url)}" target="_blank" rel="noopener">${esc(c.title)}</a>
                     <div class="pulse-meta">${esc(c.source)} &middot; today</div>
                 </div>
             </div>`).join('');
@@ -1584,7 +1591,7 @@ a { color: inherit; }
         slot.innerHTML = `
         <div class="featured-deck${many ? ' cycling' : ''}">
             <div class="featured-stack">${list.map((f, i) => `
-                <a class="featured${i ? '' : ' on'}" href="${esc(f.url)}" target="_blank" rel="noopener"${i ? ' aria-hidden="true" tabindex="-1"' : ''}>
+                <a class="featured${i ? '' : ' on'}" href="${safeUrl(f.url)}" target="_blank" rel="noopener"${i ? ' aria-hidden="true" tabindex="-1"' : ''}>
                     <div class="featured-body">
                         <div class="featured-pin">${f.pinned ? 'Pinned &middot; ' : ''}${esc(f.source || '')}${f.date ? ` &middot; ${esc(f.date)}` : ''}</div>
                         <h2>${esc(f.title)}</h2>
@@ -1741,7 +1748,7 @@ a { color: inherit; }
             const eng = ENGINE_DATA[item.dataset.id];
             flyout.innerHTML = eng.comingSoon
                 ? `<div class="dd-empty">Coming soon — no dedicated feed yet</div>`
-                : eng.articles.map(a => `<a href="${a.url}" target="_blank" rel="noopener">${a.title}</a>`).join('');
+                : eng.articles.map(a => `<a href="${safeUrl(a.url)}" target="_blank" rel="noopener">${esc(a.title)}</a>`).join('');
             const rect = item.getBoundingClientRect();
             flyout.style.left = rect.left + 'px';
             flyout.style.top = rect.bottom + 'px';
@@ -1788,7 +1795,7 @@ a { color: inherit; }
         } else {
             body.innerHTML = eng.articles.map(a => `
                 <div class="panel-item">
-                    <h4><a href="${a.url}" target="_blank" rel="noopener">${a.title}</a></h4>
+                    <h4><a href="${safeUrl(a.url)}" target="_blank" rel="noopener">${esc(a.title)}</a></h4>
                 </div>`).join('');
         }
         document.getElementById('panelBackdrop').classList.add('open');
