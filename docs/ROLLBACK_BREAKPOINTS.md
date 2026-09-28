@@ -4,7 +4,7 @@ A breakpoint (BP) is a commit you can safely return to. This register lists ever
 one, what it changed, how far it has travelled (local → committed → pushed →
 live), and the exact command to roll it back.
 
-*Last updated: 2026-09-27 (BP-25 to BP-30, BP-32 and BP-33 live; BP-34 to BP-36 live; BP-31 pushed; BP-37 to BP-45 live; BP-46 to BP-48 pushed) · working branch `final` (GitHub default) · repo `A1MITG/NewsLetter-CXO`
+*Last updated: 2026-09-27 (BP-25 to BP-30, BP-32 and BP-33 live; BP-34 to BP-36 live; BP-31 pushed; BP-37 to BP-45 live; BP-46 to BP-50 pushed) · working branch `final` (GitHub default) · repo `A1MITG/NewsLetter-CXO`
 (GitHub now redirects it to `A1MITG/SYGNALZ`).*
 
 ---
@@ -27,6 +27,8 @@ label in their commit message. BP-07 and BP-08 are assigned here.
 
 | BP | Commit | Date (IST) | Stage | Change | What it did | Roll back with |
 |---|---|---|---|---|---|---|
+| BP-50 | `ba09e0c` | 2026-09-28 | Pushed | VisitCounter | Private visit counter, never shown: one hit per browser session on the live site to Abacus (`signal-a1mit/visits`); read the total at https://abacus.jasoncameron.dev/get/signal-a1mit/visits. | `git revert ba09e0c`, then rebuild and republish |
+| BP-49 | `02987f3` | 2026-09-28 | Pushed | LeadersWiderNet | Leaders on Record: 17 more leaders (India business and GCC, global CEOs), 6 business feeds, dotted initials match; intro relabelled and the count shows the newest quote's date. Live test 12 quotes (was 9). | `git revert 02987f3`, then rebuild and republish |
 | BP-48 | `c8c005e` | 2026-09-27 14:30 | Pushed | AnalyticsAllPages | The Vercel analytics lines added to the `/brief` and `/signals` templates, so all three pages are tracked from `final` (Vercel's agent had added them on `signals-deploy` in PR #1, which every build regenerates). `test_is_text_only` allows only those two script tags. | `git revert c8c005e`, then rebuild and republish |
 | BP-47 | `77773a0` | 2026-09-27 11:10 | Pushed | WebAnalytics | Vercel Web Analytics loader in the main page's `<head>` (anonymous page views, referrers, countries, devices; no cookies; no visible change). Records once Analytics is enabled in the Vercel project. `/brief` stays script-free by design. | `git revert 77773a0`, then rebuild and republish |
 | BP-46 | `dbd2666` | 2026-09-27 10:05 | Pushed | SharpCard | The social card published at 2400x1254 (same design, 1.91:1 at twice LinkedIn's 1200x627) so LinkedIn's 1280x800 rescale only ever shrinks it; og:image:width/height 2400/1254; card URL `?v=3`. Tests: `tests/test_social_preview.py`. | `git revert dbd2666`, then rebuild and republish |
