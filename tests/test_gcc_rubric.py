@@ -1,14 +1,18 @@
 """Signal GCC's rubric (app/analysis/gcc_rubric.py), section by section.
 
 A GCC story names a capability centre AND says what is happening to one, and
-"GCC" beside Gulf words is the Gulf Cooperation Council. Named cases are
-headlines that really reached, or should have reached, the live GCC tile.
+"GCC" beside Gulf words is the Gulf Cooperation Council (beside Chennai's civic
+business, the Greater Chennai Corporation). Named cases are headlines that
+really reached, or should have reached, the live GCC tile.
 """
 import unittest
 
-from app.analysis.gcc_rubric import (BRANCHES, ENTITY, FACETS, MIN_SCORE, NAMED_CENTRE,
-                                     NOT_EVIDENCE, gcc_axes, gcc_branches, gcc_means_gulf,
-                                     gcc_vocabulary, names_a_centre)
+from app.analysis.gcc_rubric import (BRANCHES, CAPABILITY_AREAS, CENTRE, CHENNAI, CITY_TIER,
+                                     COMPILER, ENTITY, FACETS, GULF, MIN_SCORE, NAMED_CENTRE,
+                                     NOT_EVIDENCE, SECTORS, STORY_TYPES, WHAT_HAPPENED,
+                                     WHAT_THE_CENTRE_DOES, WHOM_IT_SERVES, gcc_axes,
+                                     gcc_branches, gcc_cities, gcc_meaning, gcc_means_gulf,
+                                     gcc_vocabulary, names_a_centre, read_gcc, score_gcc)
 from app.analysis.signals import KEYWORDS, SIGNAL_FLOORS, classify_article, score_signals
 
 
@@ -25,7 +29,107 @@ def _tile(title, summary=''):
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# 1. ENTITY
+# 1. GEOGRAPHY
+# ═════════════════════════════════════════════════════════════════════════════
+
+class TestGeography(unittest.TestCase):
+    """Cities tag a story; they never score (see NOT EVIDENCE)."""
+
+    def test_cities_are_tagged_by_their_canonical_name(self):
+        self.assertEqual(gcc_cities('Acme opens GCC in Bangalore, then Gurgaon and Vizag'),
+                         ('Bengaluru', 'Gurugram', 'Visakhapatnam'))
+
+    def test_one_city_is_tagged_once(self):
+        self.assertEqual(gcc_cities('Noida and Greater Noida GCCs'), ('Noida',))
+
+    def test_core_and_emerging_markets(self):
+        self.assertEqual(CITY_TIER['Hyderabad'], 'core')
+        self.assertEqual(CITY_TIER['Coimbatore'], 'emerging')
+
+    def test_a_city_never_changes_the_score(self):
+        self.assertEqual(read_gcc('Acme opens GCC').score,
+                         read_gcc('Acme opens GCC in Coimbatore').score)
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+# 2. MEANING
+# ═════════════════════════════════════════════════════════════════════════════
+
+class TestGulfCooperationCouncil(unittest.TestCase):
+
+    GULF = (
+        'Saudi Arabia and UAE lead GCC summit on energy security',
+        'India, GCC to resume free trade agreement talks next month',
+        'India-GCC trade crosses $160 billion',
+        'GCC countries approve unified tourist visa',
+        'Gulf Cooperation Council secretary-general meets Jaishankar',
+        'GCC ministers discuss Red Sea shipping security',
+        'Remittances from GCC nations rise 12%',
+        'Saudi Arabia and UAE lead GCC summit on manufacturing',
+    )
+
+    CENTRES = (
+        'Dubai-based Emirates NBD opens GCC in Chennai, to hire 500',
+        'Abu Dhabi bank expands its GCC in Hyderabad',
+        'GCC leaders say AI adoption is stalling',
+        'NASSCOM GCC Summit: capability centres bet on agentic AI',
+    )
+
+    def test_the_bloc_is_never_a_capability_centre(self):
+        for title in self.GULF:
+            self.assertTrue(gcc_means_gulf(title), title)
+            self.assertNotEqual(_tile(title), 'Signal GCC', title)
+            self.assertFalse(gcc_axes(title)[1], title)
+
+    def test_a_gulf_company_opening_an_indian_gcc_is_a_gcc_story(self):
+        """Stated plainly ("GCC in Chennai", "its GCC"), the centre wins."""
+        for title in self.CENTRES:
+            self.assertFalse(gcc_means_gulf(title), title)
+            self.assertEqual(_tile(title), 'Signal GCC', title)
+
+    def test_gulf_evidence_moves_to_global(self):
+        scores = score_signals('Saudi Arabia and UAE lead GCC summit on energy security')
+        self.assertEqual(scores['Signal GCC'], 0)
+        self.assertGreater(scores['Signal Global'], 0)
+
+
+class TestOtherMeanings(unittest.TestCase):
+    """The letters as Chennai's civic body and as a compiler (BP-54)."""
+
+    CHENNAI_CORPORATION = (
+        # Google News, "GCC" searches, 28 Sep 2026:
+        'GCC anti-rabies drive: Over 1L dogs vaccinated',
+        'More cameras, flood monitors for GCC’s command and control centre',
+        # ...and the kind that clears the facet gate without this rule:
+        'GCC to set up 50 new Amma canteens across the city',
+        'GCC commissioner launches drive against encroachments',
+        'GCC councillors approve new storm water drains for the city',
+    )
+
+    def test_the_chennai_corporation_is_not_a_capability_centre(self):
+        for title in self.CHENNAI_CORPORATION:
+            self.assertEqual(gcc_meaning(title), CHENNAI, title)
+            self.assertFalse(read_gcc(title).is_gcc, title)
+            self.assertFalse(names_a_centre(title), title)
+
+    def test_a_capability_centre_in_chennai_is_still_one(self):
+        for title in ('Chennai GCC hiring surges as insurers expand',
+                      'Dubai-based Emirates NBD opens GCC in Chennai, to hire 500'):
+            self.assertEqual(gcc_meaning(title), CENTRE, title)
+            self.assertTrue(read_gcc(title).is_gcc, title)
+
+    def test_the_compiler_is_not_a_capability_centre(self):
+        title = 'GCC 15 released with faster builds, launches new C++ modules support'
+        self.assertEqual(gcc_meaning(title), COMPILER)
+        self.assertFalse(read_gcc(title).is_gcc)
+
+    def test_meaning_needs_the_letters(self):
+        self.assertIsNone(gcc_meaning('Starbucks opens a global capability centre'))
+        self.assertEqual(gcc_meaning('Gulf Cooperation Council meets'), GULF)
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+# 3. ENTITY
 # ═════════════════════════════════════════════════════════════════════════════
 
 class TestEntity(unittest.TestCase):
@@ -54,9 +158,13 @@ class TestEntity(unittest.TestCase):
         for term in NAMED_CENTRE:
             self.assertEqual(ENTITY.get(term), 4, term)
 
+    def test_a_suppliers_global_mandate_is_not_a_centre(self):
+        """'global mandate' was a 2-point entity until BP-54: this cleared 6."""
+        self.assertFalse(read_gcc('Infosys wins global mandate expansion deal').is_gcc)
+
 
 # ═════════════════════════════════════════════════════════════════════════════
-# 2. FACETS -- the India GCC taxonomy
+# 4. FACETS -- the India GCC taxonomy
 # ═════════════════════════════════════════════════════════════════════════════
 
 class TestBothAxesRequired(unittest.TestCase):
@@ -101,6 +209,17 @@ class TestFacetSemantics(unittest.TestCase):
             self.assertIn(facet.branch, BRANCHES, name)
         self.assertEqual({f.branch for f in FACETS.values()}, set(BRANCHES))
 
+    def test_branches_read_in_three_dimensions(self):
+        """What happened, what the centre does, whom it serves."""
+        self.assertEqual(BRANCHES, WHAT_HAPPENED + WHAT_THE_CENTRE_DOES + WHOM_IT_SERVES)
+
+    def test_the_area_and_sector_tables_are_the_facets_terms(self):
+        """One list to edit: a new area or sector term scores and tags."""
+        self.assertEqual(set(FACETS['capability'].terms),
+                         {t for terms in CAPABILITY_AREAS.values() for t in terms})
+        self.assertEqual(set(FACETS['sector'].terms),
+                         {t for terms in SECTORS.values() for t in terms})
+
 
 class TestTaxonomyBranches(unittest.TestCase):
     """One real or representative headline per branch of the India GCC tree."""
@@ -117,10 +236,25 @@ class TestTaxonomyBranches(unittest.TestCase):
         'Consolidation': 'TCS is buying into GCCs. What does it mean for India’s captive model?',
     }
 
+    # Branches added in BP-54, from the GCC engine blueprint.
+    NEW_CASES = {
+        'Global mandate': 'Enterprises tap GCCs for bigger cybersecurity mandate as global roles expand',
+        'Research': "Nearly 70% of India's GCCs stuck at AI pilot stage: Dell-Zinnov report",
+    }
+
     def test_each_branch_reaches_the_gcc_tile(self):
         for branch, title in self.CASES.items():
             self.assertEqual(_tile(title), 'Signal GCC', title)
             self.assertIn(branch, gcc_branches(title), title)
+
+    def test_the_new_branches(self):
+        for branch, title in self.NEW_CASES.items():
+            self.assertIn(branch, gcc_branches(title), title)
+
+    def test_a_reporting_line_is_not_research(self):
+        title = 'Acme names GCC head who will report to the global CIO'
+        self.assertNotIn('Research', gcc_branches(title))
+        self.assertIn('Leadership', gcc_branches(title))
 
     def test_job_cuts_are_consolidation(self):
         """Moneycontrol, 25 Sep 2026: "cut", not "cuts"."""
@@ -133,6 +267,26 @@ class TestTaxonomyBranches(unittest.TestCase):
                    'the titles; what shaped these GCC leaders and country heads.')
         self.assertEqual(_tile('Faces of Change: Manish Tambe', summary), 'Signal GCC')
         self.assertEqual(gcc_branches('Faces of Change: Manish Tambe', summary), ['Leadership'])
+
+
+class TestTags(unittest.TestCase):
+    """Capability areas and sectors describe a story; they are the facets' terms."""
+
+    def test_what_the_centre_does_and_whom_it_serves(self):
+        reading = read_gcc('Syneos Health opens GCC in Hyderabad to build AI and data '
+                           'capabilities for pharma clients')
+        self.assertEqual(reading.capabilities, ('AI & GenAI', 'Digital, data & cloud'))
+        self.assertEqual(reading.sectors, ('Life sciences & healthcare',))
+        self.assertEqual(reading.cities, ('Hyderabad',))
+
+    def test_a_centres_name_is_its_capability_tag(self):
+        """Blanked as evidence, but an engineering centre does engineering."""
+        self.assertIn('Engineering & R&D',
+                      read_gcc('Airbus opens engineering centres in Bengaluru').capabilities)
+
+    def test_the_finance_minister_is_not_a_finance_function(self):
+        reading = read_gcc('Finance minister unveils GCC incentives')
+        self.assertNotIn('Business operations', reading.capabilities)
 
 
 class TestTopicFacetsNeedANamedCentre(unittest.TestCase):
@@ -157,7 +311,7 @@ class TestTopicFacetsNeedANamedCentre(unittest.TestCase):
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# 3. NOT EVIDENCE
+# 5. NOT EVIDENCE
 # ═════════════════════════════════════════════════════════════════════════════
 
 class TestGeographyIsNotEvidence(unittest.TestCase):
@@ -196,50 +350,52 @@ class TestGeographyIsNotEvidence(unittest.TestCase):
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# 4. GULF
+# 6. STORY TYPE
 # ═════════════════════════════════════════════════════════════════════════════
 
-class TestGulfCooperationCouncil(unittest.TestCase):
+class TestStoryType(unittest.TestCase):
+    """Fact against commentary, from the headline: real GCC headlines of Sep 2026."""
 
-    GULF = (
-        'Saudi Arabia and UAE lead GCC summit on energy security',
-        'India, GCC to resume free trade agreement talks next month',
-        'India-GCC trade crosses $160 billion',
-        'GCC countries approve unified tourist visa',
-        'Gulf Cooperation Council secretary-general meets Jaishankar',
-        'GCC ministers discuss Red Sea shipping security',
-        'Remittances from GCC nations rise 12%',
-        'Saudi Arabia and UAE lead GCC summit on manufacturing',
-    )
+    CASES = {
+        'Syneos Health opens GCC in Hyderabad': 'event',
+        'Ex-HSBC HR leader Dimple Kaloya joins MetLife GCC as CHRO': 'event',
+        'GCCs lease a record 12 million sq ft of office space': 'event',
+        "Nearly 70% of India's GCCs stuck at AI pilot stage: Dell-Zinnov report": 'research',
+        'TCS is buying into GCCs. What does it mean for India’s captive model?': 'analysis',
+        'A seat at the table: What India’s GCC leaders want next': 'analysis',
+        'Faces of Change: Manish Tambe': 'profile',
+        'GCC leaders say AI adoption is stalling': 'commentary',
+        "Opinion: India's GCCs must move up the value chain": 'opinion',
+        'When capability finds a new home': 'other',
+    }
 
-    CENTRES = (
-        'Dubai-based Emirates NBD opens GCC in Chennai, to hire 500',
-        'Abu Dhabi bank expands its GCC in Hyderabad',
-        'GCC leaders say AI adoption is stalling',
-        'NASSCOM GCC Summit: capability centres bet on agentic AI',
-    )
+    def test_real_headlines(self):
+        for title, kind in self.CASES.items():
+            self.assertEqual(read_gcc(title).story_type, kind, title)
 
-    def test_the_bloc_is_never_a_capability_centre(self):
-        for title in self.GULF:
-            self.assertTrue(gcc_means_gulf(title), title)
-            self.assertNotEqual(_tile(title), 'Signal GCC', title)
-            self.assertFalse(gcc_axes(title)[1], title)
+    def test_every_type_is_listed(self):
+        self.assertEqual(set(self.CASES.values()), set(STORY_TYPES))
 
-    def test_a_gulf_company_opening_an_indian_gcc_is_a_gcc_story(self):
-        """Stated plainly ("GCC in Chennai", "its GCC"), the centre wins."""
-        for title in self.CENTRES:
-            self.assertFalse(gcc_means_gulf(title), title)
-            self.assertEqual(_tile(title), 'Signal GCC', title)
-
-    def test_gulf_evidence_moves_to_global(self):
-        scores = score_signals('Saudi Arabia and UAE lead GCC summit on energy security')
-        self.assertEqual(scores['Signal GCC'], 0)
-        self.assertGreater(scores['Signal Global'], 0)
+    def test_the_type_never_changes_the_score(self):
+        """A label for the event graph, not evidence."""
+        self.assertEqual(read_gcc('Opinion: Acme opens GCC').score, read_gcc('Acme opens GCC').score)
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# 5. SCORING
+# 7. READING
 # ═════════════════════════════════════════════════════════════════════════════
+
+class TestReading(unittest.TestCase):
+
+    def test_the_helpers_read_the_same_pass(self):
+        title, summary = 'Starbucks to set up GCC in Chennai', 'It plans to hire 800 tech professionals.'
+        reading = read_gcc(title, summary)
+        self.assertEqual(score_gcc(title, summary, 2), reading.score)
+        self.assertEqual(gcc_axes(title, summary), (reading.entity, bool(reading.facets)))
+        self.assertEqual(gcc_branches(title, summary), list(reading.branches))
+        self.assertTrue(reading.is_gcc)
+        self.assertEqual(reading.meaning, CENTRE)
+
 
 class TestScoring(unittest.TestCase):
 

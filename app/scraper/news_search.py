@@ -21,12 +21,11 @@ from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
 
-from ..analysis.gcc_rubric import MIN_SCORE, gcc_means_gulf, score_gcc
+from ..analysis.gcc_rubric import read_gcc
 
 logger = logging.getLogger(__name__)
 
 MAX_STORIES = 15        # per search
-HEADLINE_WEIGHT = 2     # signals.TITLE_MULTIPLIER: a result is scored on its headline alone
 SEARCH_HOSTS = frozenset({'news.google.com'})
 
 
@@ -63,8 +62,9 @@ def parse_search_feed(xml):
 
 
 def is_gcc_story(title):
-    """The GCC tile's own rubric, on the headline; the Gulf Cooperation Council is not a GCC."""
-    return score_gcc(title, '', HEADLINE_WEIGHT) >= MIN_SCORE and not gcc_means_gulf(title)
+    """The GCC tile's own rubric, on the headline alone. It knows the other
+    GCCs: the Gulf Cooperation Council and the Greater Chennai Corporation."""
+    return read_gcc(title).is_gcc
 
 
 async def scrape_news_search(session, url, fetch):
