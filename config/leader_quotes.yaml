@@ -33,6 +33,26 @@ leaders:
   - { name: Yang Zhilin,        company: Moonshot AI (Kimi) }
   - { name: Arthur Mensch,      company: Mistral AI }
   - { name: Aravind Srinivas,   company: Perplexity }
+  # 2026-09-27: India's business and GCC leaders, and the global CEOs the
+  # audience follows, so the row is not only AI labs. Names as the Indian
+  # press prints them ("N Chandrasekaran"; a dotted "N." also matches).
+  - { name: N Chandrasekaran,   company: Tata Sons }
+  - { name: K Krithivasan,      company: TCS }
+  - { name: Salil Parekh,       company: Infosys }
+  - { name: Nandan Nilekani,    company: Infosys }
+  - { name: C Vijayakumar,      company: HCLTech }
+  - { name: Srini Pallia,       company: Wipro }
+  - { name: Rishad Premji,      company: Wipro }
+  - { name: Mukesh Ambani,      company: Reliance Industries }
+  - { name: Anand Mahindra,     company: Mahindra Group }
+  - { name: Uday Kotak,         company: Kotak Mahindra Bank }
+  - { name: Rajesh Nambiar,     company: Nasscom }
+  - { name: Tim Cook,           company: Apple }
+  - { name: Andy Jassy,         company: Amazon }
+  - { name: Jamie Dimon,        company: JPMorgan Chase }
+  - { name: Arvind Krishna,     company: IBM }
+  - { name: Julie Sweet,        company: Accenture }
+  - { name: Marc Benioff,       company: Salesforce }
 
 # Company newsrooms and blogs: every recent post is read.
 newsrooms:
@@ -57,6 +77,13 @@ press:
   MIT Technology Review: https://www.technologyreview.com/topic/artificial-intelligence/feed
   Fortune: https://fortune.com/feed/
   Axios: https://api.axios.com/feed/
+  # 2026-09-27: business press, for the business and GCC leaders above.
+  CNBC Top News: https://www.cnbc.com/id/100003114/device/rss/rss.html
+  ET: https://economictimes.indiatimes.com/rssfeedstopstories.cms
+  Mint: https://www.livemint.com/rss/companies
+  Business Standard: https://www.business-standard.com/rss/companies-101.rss
+  BusinessLine: https://www.thehindubusinessline.com/companies/feeder/default.rss
+  CNBC-TV18: https://www.cnbctv18.com/commonfeeds/v1/cne/rss/business.xml
 
 # Anthropic publishes no feed; its news page is read directly.
 anthropic_news: https://www.anthropic.com/news

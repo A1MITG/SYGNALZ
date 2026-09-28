@@ -1001,7 +1001,7 @@ a { color: inherit; }
         <span class="eyebrow" style="font-size:13px;">Leaders on Record</span>
         <span class="sub" id="recordCount"></span>
     </div>
-    <p class="row-lede">AI and frontier-tech leaders in their own words, quoted verbatim by a company newsroom or the technology press.</p>
+    <p class="row-lede">Business, technology and AI leaders in their own words, quoted verbatim by the press or their own company. The latest on-the-record quotes from the last two weeks.</p>
     <div class="row-scroller people-wrap">
         <div class="people-row" id="recordRow"><!-- populated from _record --></div>
         <button type="button" class="row-arrow prev" aria-label="Scroll Leaders on Record left" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
@@ -1527,7 +1527,9 @@ a { color: inherit; }
         if (!row) return;
         const quotes = record.quotes || [];
         document.getElementById('recordCount').textContent =
-            plural(quotes.length, 'quote', 'quotes') + ` · last ${record.window_days || 14} days`;
+            plural(quotes.length, 'quote', 'quotes') + ` · last ${record.window_days || 14} days` +
+            // The newest quote's date, so an older set never passes as today's.
+            (quotes.length ? ` · newest ${quotes.reduce((a, b) => ((b.ts || 0) > (a.ts || 0) ? b : a)).date}` : '');
         row.innerHTML = quotes.length ? quotes.map(q => `
             <a class="quote-card" href="${esc(q.url)}" target="_blank" rel="noopener">
                 <blockquote>&ldquo;${esc(q.quote)}&rdquo;</blockquote>

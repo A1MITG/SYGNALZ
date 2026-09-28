@@ -183,7 +183,9 @@ def extract_quotes(article, html):
             if not hit:
                 continue
             name = m_['alias'][next(g for g in hit.groups() if g)]
-            if name not in body:            # a bare surname counts only if the full name appears
+            # A bare surname counts only if the full name appears; "N. Chandrasekaran"
+            # is the same name as "N Chandrasekaran".
+            if name not in body and name not in re.sub(r'\b([A-Z])\.\s*(?=[A-Z])', r'\1 ', body):
                 continue
             text = m.group(1).strip().rstrip(',').strip()
             # “A,” Huang said, tracing ... “B.” — the same speaker carrying on.
