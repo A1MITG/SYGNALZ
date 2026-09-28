@@ -1993,6 +1993,18 @@ a { color: inherit; }
     }
     initRowArrows();
 
+    // Private visit counter, never shown on the page: one hit per browser
+    // session, live site only. The total is read at
+    // https://abacus.jasoncameron.dev/get/signal-a1mit/visits
+    (function () {
+        if (!/\.vercel\.app$/.test(location.hostname)) return;
+        try {
+            if (sessionStorage.getItem('signal_counted')) return;
+            sessionStorage.setItem('signal_counted', '1');
+        } catch (e) { /* private mode: count anyway */ }
+        fetch('https://abacus.jasoncameron.dev/hit/signal-a1mit/visits', { keepalive: true }).catch(() => {});
+    })();
+
     // Personalizable Intelligence Bar: pin / hide / drag-reorder, persisted to localStorage
     (function() {
         const ribbon = document.getElementById('ribbon');
