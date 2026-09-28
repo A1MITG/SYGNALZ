@@ -258,6 +258,35 @@ def _publisher(url):
     return publisher_for(host)
 
 
+# People Movers is for business leaders. A headline about a head of state,
+# a minister, a lawmaker or a party figure is left out unless it also names a
+# corporate role ("Minister names new Air India CEO" stays). "President"
+# alone is ambiguous (a company president), so it counts as political only
+# beside the context that says so: elections, protests, parliament, a party.
+_POLITICAL_OFFICE = re.compile(
+    r"\b(?:prime\s+minister|chief\s+minister|deputy\s+minister|minister|ministers|"
+    r"head\s+of\s+(?:state|government)|opposition\s+leader|leader\s+of\s+(?:the\s+)?opposition|"
+    r"lawmakers?|senators?|congress(?:man|woman)|mps?|mlas?|mayor|speaker\s+of|"
+    r"cabinet|parliament\w*|party\s+(?:leader|chief|president)|premier|monarch|dictator|junta)\b",
+    re.IGNORECASE,
+)
+_POLITICAL_PRESIDENT = re.compile(r"\bpresident\b", re.IGNORECASE)
+_POLITICAL_CONTEXT = re.compile(
+    r"\b(?:elections?|electoral|polls?|protests?|protesters|populist|parliament\w*|opposition|coup|"
+    r"impeach\w*|referendum|ruling\s+party|voters|regime)\b",
+    re.IGNORECASE,
+)
+
+
+def _is_political(title):
+    """True when a move headline is about a politician rather than a business leader."""
+    if _CORPORATE_ROLE.search(title):
+        return False
+    if _POLITICAL_OFFICE.search(title):
+        return True
+    return bool(_POLITICAL_PRESIDENT.search(title) and _POLITICAL_CONTEXT.search(title))
+
+
 _MOVE_LABELS = {'EXECUTIVE_APPOINTMENT': 'Appointed', 'EXECUTIVE_EXIT': 'Steps down'}
 _APPOINT_WORDS = re.compile(r"\b(?:named|names|appoint\w*|promot\w*|joins|succeed\w*|elected)\b", re.IGNORECASE)
 
@@ -270,6 +299,10 @@ def build_movers(current_articles, limit=8):
     is often background rather than a move (a lawsuit that "names OpenAI and
     its CEO" fired the detector until BP-25 vetoed legal contexts), and a row
     called People Movers has to be right every time it shows a card.
+
+    Politicians are left out (_is_political): the row is for the business
+    and CXO audience. `limit=None` returns every move, for build_people_rows
+    to de-duplicate before it cuts the row.
     """
     from ..intelligence import events
     from ..intelligence.freshness import classify
@@ -282,7 +315,7 @@ def build_movers(current_articles, limit=8):
             continue
         title = (raw.get('title') or '').strip()
         url = raw.get('url', '')
-        if not title or not url or url in seen:
+        if not title or not url or url in seen or _is_political(title):
             continue
         found = [e for e in events.detect(title, raw.get('summary', ''))
                  if e['type'] in _MOVE_LABELS and any(x['where'] == 'title' for x in e['evidence'])]
@@ -305,7 +338,7 @@ def build_movers(current_articles, limit=8):
             'image': _article_image(raw),
         })
     moves.sort(key=lambda m: m['ts'], reverse=True)
-    return moves[:limit]
+    return moves if limit is None else moves[:limit]
 
 
 PINNED_MOVES = Path(__file__).resolve().parents[2] / 'config' / 'pinned_moves.yaml'
@@ -402,11 +435,20 @@ def build_record(quote_set, movers):
 
     ``quote_set`` is app.scraper.leader_quotes.get_leader_quotes(). A move is
     the more specific fact about a person, so it wins.
+    The same words reported by several outlets are shown once, from the most
+    trusted of them (BP-51).
     """
+    from .dedupe import fold, keep_most_trusted
+
+    def same_quote(a, b):
+        return (a['leader'] == b['leader']
+                and re.sub(r'\W+', ' ', fold(a['quote']))[:80] == re.sub(r'\W+', ' ', fold(b['quote']))[:80])
+
     titles = [m['title'] for m in movers]
     record = dict(quote_set)
-    record['quotes'] = [q for q in quote_set.get('quotes', [])
-                        if not _mentions_surname(q['leader'], titles)]
+    quotes = [q for q in quote_set.get('quotes', [])
+              if not _mentions_surname(q['leader'], titles)]
+    record['quotes'] = keep_most_trusted(quotes, same=same_quote)
     return record
 
 
@@ -418,11 +460,11 @@ def build_people_rows(current_articles, quote_set, pulse_limit=8, pinned=(), mov
     general "in the news" catch-all, so it takes whoever the others did not.
 
     `pinned` (from load_pinned_moves) leads People Movers; a pinned story the
-    scan also found is shown once, as the pin.
+    scan also found is shown once, as the pin. Any story several outlets
+    carry is shown once, from the most trusted of them (dedupe.py).
     """
-    pin_urls = {p['url'] for p in pinned}
-    movers = (list(pinned) + [m for m in build_movers(current_articles)
-                              if m['url'] not in pin_urls])[:movers_limit]
+    from .dedupe import keep_most_trusted
+    movers = keep_most_trusted(list(pinned) + build_movers(current_articles, limit=None))[:movers_limit]
     record = build_record(quote_set, movers)
     pulse = build_pulse_cards(
         current_articles, limit=pulse_limit,
@@ -430,6 +472,7 @@ def build_people_rows(current_articles, quote_set, pulse_limit=8, pinned=(), mov
         exclude_names={q['leader'] for q in record['quotes']},
         exclude_text=[m['title'] for m in movers],
     )
+    pulse = keep_most_trusted(pulse)
     return {'_movers': movers, '_record': record, '_pulse': pulse}
 
 
@@ -530,7 +573,12 @@ def build_engine_data(signals_data, articles_by_title=None, pinned=()):
     ``pinned`` (from load_pinned_stories) leads its engine's tile; a pinned
     story the scan also found is shown once, as the pin. Pins count toward
     the tile's MAX_PER_SIGNAL.
+
+    A story several outlets carry appears once on the page, in one tile, as
+    its most trusted copy (dedupe.py); Featured and the Brief read these
+    tiles, so they inherit it.
     """
+    from .dedupe import keep_most_trusted
     from .signals import MAX_PER_SIGNAL
     by_name = {s['name']: s for s in signals_data.get('signals', [])}
     by_title = articles_by_title or {}
@@ -550,6 +598,15 @@ def build_engine_data(signals_data, articles_by_title=None, pinned=()):
             articles = (pins + [a for a in articles
                                 if a['url'] not in seen and a['title'] not in seen])[:MAX_PER_SIGNAL]
         engine_data[engine_id] = {'name': display_name, 'articles': articles}
+
+    everything = [(engine_id, a) for engine_id, e in engine_data.items() for a in e['articles']]
+    kept = keep_most_trusted([dict(a, _at=i) for i, (_, a) in enumerate(everything)])
+    kept_at = {a['_at'] for a in kept}
+    for engine in engine_data.values():
+        engine['articles'] = []
+    for i, (engine_id, article) in enumerate(everything):
+        if i in kept_at:
+            engine_data[engine_id]['articles'].append(article)
 
     for engine_id, display_name in COMING_SOON_ENGINES.items():
         engine_data[engine_id] = {
