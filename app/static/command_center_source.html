@@ -996,7 +996,7 @@ a { color: inherit; }
         <span class="eyebrow" style="font-size:13px;">Leaders on Record</span>
         <span class="sub" id="recordCount"></span>
     </div>
-    <p class="row-lede">Business, technology and AI leaders in their own words, quoted verbatim by the press or their own company. The latest on-the-record quotes from the last two weeks.</p>
+    <p class="row-lede">Business, technology and AI leaders in their own words, quoted verbatim by the press or their own company. The latest on-the-record quotes from the last 24 hours.</p>
     <div class="row-scroller people-wrap">
         <div class="people-row" id="recordRow"><!-- populated from _record --></div>
         <button type="button" class="row-arrow prev" aria-label="Scroll Leaders on Record left" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
@@ -1521,8 +1521,10 @@ a { color: inherit; }
         const row = document.getElementById('recordRow');
         if (!row) return;
         const quotes = record.quotes || [];
+        const days = record.window_days || 1;
+        const span = days === 1 ? '24 hours' : `${days} days`;
         document.getElementById('recordCount').textContent =
-            plural(quotes.length, 'quote', 'quotes') + ` · last ${record.window_days || 14} days` +
+            plural(quotes.length, 'quote', 'quotes') + ` · last ${span}` +
             // The newest quote's date, so an older set never passes as today's.
             (quotes.length ? ` · newest ${quotes.reduce((a, b) => ((b.ts || 0) > (a.ts || 0) ? b : a)).date}` : '');
         row.innerHTML = quotes.length ? quotes.map(q => `
@@ -1531,7 +1533,7 @@ a { color: inherit; }
                 <div class="quote-who">${esc(q.leader)} <span>&middot; ${esc(q.company)}</span></div>
                 <span class="row-meta">${esc(q.source)}${q.date ? ' &middot; ' + esc(q.date) : ''} &middot; read source &rarr;</span>
             </a>`).join('')
-            : `<div class="row-empty">No verbatim quotes in the last ${record.window_days || 14} days.</div>`;
+            : `<div class="row-empty">No verbatim quotes in the last ${span}.</div>`;
         const leaders = record.leaders || [];
         document.getElementById('recordListening').innerHTML = leaders.length
             ? '<span class="listening-label">Listening to</span>' + leaders.map(l =>
@@ -1656,7 +1658,7 @@ a { color: inherit; }
             });
             const headlines = Array.from(cycle.querySelectorAll('.tile-headline'));
             if (!headlines.length) {
-                cycle.innerHTML = '<h4 class="tile-headline showing visible">No qualifying story today</h4>';
+                cycle.innerHTML = '<h4 class="tile-headline showing visible">No story in the last 24 hours</h4>';
                 return;
             }
             startTileHeadlineCycler(headlines, buildTilePhotos(tile, articles));
@@ -1782,7 +1784,7 @@ a { color: inherit; }
         if (eng.comingSoon) {
             body.innerHTML = `<div class="panel-empty">${eng.note}</div>`;
         } else if (!eng.articles || !eng.articles.length) {
-            body.innerHTML = `<div class="panel-empty">No qualifying story today.</div>`;
+            body.innerHTML = `<div class="panel-empty">No story in the last 24 hours.</div>`;
         } else {
             body.innerHTML = eng.articles.map(a => `
                 <div class="panel-item">

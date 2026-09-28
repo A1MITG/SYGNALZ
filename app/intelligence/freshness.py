@@ -21,10 +21,8 @@ _FALLBACK = {
         {"name": "BREAKING", "max_age_hours": 6, "weight": 1.00},
         {"name": "CURRENT", "max_age_hours": 12, "weight": 0.92},
         {"name": "RECENT", "max_age_hours": 24, "weight": 0.80},
-        {"name": "DAY_OLD", "max_age_hours": 48, "weight": 0.60},
-        {"name": "STALE", "max_age_hours": 168, "weight": 0.30},
     ],
-    "archive_after_hours": 168,
+    "archive_after_hours": 24,
     "undated": {"bucket": "UNDATED", "weight": 0.40, "treat_as_current": False},
 }
 
@@ -59,7 +57,7 @@ def classify(published_at: datetime | None, now: datetime | None = None) -> dict
     # A future-dated article is a feed error, not breaking news. Clamp to 0
     # so a bad timestamp cannot buy top ranking.
     age = max(0.0, age)
-    archive_after = float(cfg.get("archive_after_hours", 168))
+    archive_after = float(cfg.get("archive_after_hours", _FALLBACK["archive_after_hours"]))
 
     if age > archive_after:
         return {"bucket": "ARCHIVE", "age_hours": round(age, 2), "weight": 0.0,

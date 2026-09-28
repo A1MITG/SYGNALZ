@@ -58,8 +58,9 @@ class TestFreshnessGate(unittest.TestCase):
         self.assertEqual(out['stale_excluded'], 0)
 
     def test_boundary_is_the_configured_archive_threshold(self):
-        inside = _rss(datetime.now(timezone.utc) - timedelta(hours=167))
-        outside = _rss(datetime.now(timezone.utc) - timedelta(hours=169))
+        # BP-52: 24 hours (was 168).
+        inside = _rss(datetime.now(timezone.utc) - timedelta(hours=23))
+        outside = _rss(datetime.now(timezone.utc) - timedelta(hours=25))
         self.assertTrue(classify(parse_date(inside))['is_current'])
         self.assertFalse(classify(parse_date(outside))['is_current'])
 

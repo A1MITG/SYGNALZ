@@ -23,20 +23,21 @@ def test_buckets_in_order():
     assert classify(_at(1), NOW)["bucket"] == "BREAKING"
     assert classify(_at(9), NOW)["bucket"] == "CURRENT"
     assert classify(_at(20), NOW)["bucket"] == "RECENT"
-    assert classify(_at(36), NOW)["bucket"] == "DAY_OLD"
-    assert classify(_at(100), NOW)["bucket"] == "STALE"
+    # BP-52: nothing older than 24 hours is news (DAY_OLD and STALE are gone).
+    assert classify(_at(36), NOW)["bucket"] == "ARCHIVE"
+    assert classify(_at(100), NOW)["bucket"] == "ARCHIVE"
     assert classify(_at(500), NOW)["bucket"] == "ARCHIVE"
 
 
 def test_boundaries_are_inclusive():
     assert classify(_at(6), NOW)["bucket"] == "BREAKING"
     assert classify(_at(6.01), NOW)["bucket"] == "CURRENT"
-    assert classify(_at(168), NOW)["bucket"] == "STALE"
-    assert classify(_at(168.01), NOW)["bucket"] == "ARCHIVE"
+    assert classify(_at(24), NOW)["bucket"] == "RECENT"
+    assert classify(_at(24.01), NOW)["bucket"] == "ARCHIVE"
 
 
 def test_weights_decrease_monotonically():
-    ages = [1, 9, 20, 36, 100]
+    ages = [1, 9, 20]
     weights = [classify(_at(a), NOW)["weight"] for a in ages]
     assert weights == sorted(weights, reverse=True)
     assert all(0.0 < w <= 1.0 for w in weights)
@@ -54,7 +55,7 @@ def test_two_year_old_article_is_archived():
 
 
 def test_no_archived_article_is_ever_current():
-    for hours in (169, 200, 1000, 20000):
+    for hours in (25, 36, 169, 1000, 20000):
         r = classify(_at(hours), NOW)
         assert r["archived"] and not r["is_current"]
 
@@ -64,7 +65,7 @@ def test_live_corpus_has_no_stale_survivors(raw_articles):
     sigs = apply_all(normalize_all(raw_articles))
     for s in current_only(sigs):
         assert s.freshness["age_hours"] is not None
-        assert s.freshness["age_hours"] <= 168, (
+        assert s.freshness["age_hours"] <= 24, (
             f"{s.freshness['age_hours']}h old survived the filter: {s.title[:60]!r}")
 
 

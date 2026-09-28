@@ -8,7 +8,7 @@
 # Company only, never a job title: titles change, and a wrong one would be a
 # factual error printed under someone's name.
 
-window_days: 14          # how far back quotes are kept
+window_days: 1           # how far back quotes are kept: the last 24 hours (BP-52)
 max_per_leader: 2
 max_chars: 280           # longer quotes are excerpted at a sentence, marked with …
 refresh_hours: 6         # how long a fetched set stays fresh

@@ -7,6 +7,10 @@
 # Buckets below are sized to the actual cadence. Tighten them only if and
 # when ingestion frequency increases.
 #
+# BP-52: only the last 24 hours is news. The window was 7 days (168h), which
+# let a strong Friday story hold a tile all weekend; the DAY_OLD (48h) and
+# STALE (168h) buckets went with it.
+#
 # Measured on the live corpus at time of writing: median age 15.6h,
 # p75 29.8h, p95 137.4h, max 19,818h (~2.3 years). That long tail is exactly
 # what archive_after_hours exists to remove from "Today's Intelligence".
@@ -16,13 +20,11 @@ buckets:
   - { name: BREAKING, max_age_hours: 6,   weight: 1.00 }
   - { name: CURRENT,  max_age_hours: 12,  weight: 0.92 }
   - { name: RECENT,   max_age_hours: 24,  weight: 0.80 }
-  - { name: DAY_OLD,  max_age_hours: 48,  weight: 0.60 }
-  - { name: STALE,    max_age_hours: 168, weight: 0.30 }
 
 # Beyond this, an article is retained in the store but never presented as
 # today's intelligence. PRD: "Never present multi-year-old news inside
 # Today's Intelligence."
-archive_after_hours: 168        # 7 days
+archive_after_hours: 24         # 24 hours: nothing older is shown
 
 # Articles the feed gave no date for. We cannot claim they are current, and
 # we will not silently discard them either — they are held at a modest
