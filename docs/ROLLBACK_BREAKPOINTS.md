@@ -4,7 +4,7 @@ A breakpoint (BP) is a commit you can safely return to. This register lists ever
 one, what it changed, how far it has travelled (local → committed → pushed →
 live), and the exact command to roll it back.
 
-*Last updated: 2026-09-27 (BP-25 to BP-30, BP-32 and BP-33 live; BP-34 to BP-36 live; BP-31 pushed; BP-37 to BP-45 live; BP-46 to BP-50 pushed) · working branch `final` (GitHub default) · repo `A1MITG/NewsLetter-CXO`
+*Last updated: 2026-09-28 (BP-25 to BP-30, BP-32 and BP-33 live; BP-34 to BP-36 live; BP-31 pushed; BP-37 to BP-45 live; BP-46 to BP-51 pushed) · working branch `final` (GitHub default) · repo `A1MITG/NewsLetter-CXO`
 (GitHub now redirects it to `A1MITG/SYGNALZ`).*
 
 ---
@@ -27,6 +27,7 @@ label in their commit message. BP-07 and BP-08 are assigned here.
 
 | BP | Commit | Date (IST) | Stage | Change | What it did | Roll back with |
 |---|---|---|---|---|---|---|
+| BP-51 | `f5b2211` | 2026-09-28 | Pushed | OneStoryOnce | Every section shows a story once, from the most trusted publisher (pins win; then a headline naming the person, a picture, newer): new `app/analysis/dedupe.py` used by People Movers, Executive Pulse, Leaders on Record (same quote, several outlets) and the engine tiles within and across tiles (Featured and the Brief inherit it). People Movers leaves out heads of state, ministers, lawmakers and party figures unless the headline names a corporate role. On the 28 Sep 04:33 UTC data: Mehli Mistry 3 to 1, Vucic x3 out, three tile retellings out. Tests: `tests/test_dedupe.py`. | `git revert f5b2211`, then rebuild and republish |
 | BP-50 | `ba09e0c` | 2026-09-28 | Pushed | VisitCounter | Private visit counter, never shown: one hit per browser session on the live site to Abacus (`signal-a1mit/visits`); read the total at https://abacus.jasoncameron.dev/get/signal-a1mit/visits. | `git revert ba09e0c`, then rebuild and republish |
 | BP-49 | `02987f3` | 2026-09-28 | Pushed | LeadersWiderNet | Leaders on Record: 17 more leaders (India business and GCC, global CEOs), 6 business feeds, dotted initials match; intro relabelled and the count shows the newest quote's date. Live test 12 quotes (was 9). | `git revert 02987f3`, then rebuild and republish |
 | BP-48 | `c8c005e` | 2026-09-27 14:30 | Pushed | AnalyticsAllPages | The Vercel analytics lines added to the `/brief` and `/signals` templates, so all three pages are tracked from `final` (Vercel's agent had added them on `signals-deploy` in PR #1, which every build regenerates). `test_is_text_only` allows only those two script tags. | `git revert c8c005e`, then rebuild and republish |
