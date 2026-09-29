@@ -55,6 +55,11 @@ TIER_2_SOURCES = {
         "https://hr.economictimes.indiatimes.com/rss/topstories",
         "https://www.thehindubusinessline.com/info-tech/feeder/default.rss",
         "https://www.thehindubusinessline.com/companies/feeder/default.rss",
+        # 2026-09-29 (BP-57): People Movers. HRKatha carries India's HR and
+        # leadership moves the same day ("MiPhi brings in Intel's Nupur
+        # Shrivastava as CHRO"); about 50 items. LinkedIn pages are not read:
+        # its terms forbid scraping.
+        "https://www.hrkatha.com/feed/",
     ],
     # 2026-09-24: trade press for the Command Center's last three tile-only
     # domains, which the general feeds above barely cover. All verified
@@ -85,6 +90,10 @@ TIER_2_SOURCES = {
 # source carried.
 NEWS_SITEMAPS = (
     "https://www.moneycontrol.com/news/news-sitemap.xml",
+    # 2026-09-29 (BP-57): Analytics India Magazine's RSS serves nothing to a
+    # scraper, but its news sitemap lists the day's stories (AI and GCC news,
+    # tech leadership moves such as "MongoDB CEO Joins Meta to Lead ...").
+    "https://analyticsindiamag.com/news-sitemap.xml",
 )
 
 # Google News searches for India GCC stories from the last day

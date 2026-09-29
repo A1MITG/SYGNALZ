@@ -275,8 +275,11 @@ def _publisher_of(raw):
 _POLITICAL_OFFICE = re.compile(
     r"\b(?:prime\s+minister|chief\s+minister|deputy\s+minister|minister|ministers|"
     r"head\s+of\s+(?:state|government)|opposition\s+leader|leader\s+of\s+(?:the\s+)?opposition|"
-    r"lawmakers?|senators?|congress(?:man|woman)|mps?|mlas?|mayor|speaker\s+of|"
-    r"cabinet|parliament\w*|party\s+(?:leader|chief|president)|premier|monarch|dictator|junta)\b",
+    r"lawmakers?|senators?|congress(?:man|woman)|mps?|mlas?|pm|mayor|speaker\s+of|"
+    r"cabinet|parliament\w*|party\s+(?:leader|chief|president)|premier|monarch|dictator|junta|"
+    # A party's own leadership race ("Greens leadership tilt", BP-57).
+    r"leadership\s+(?:tilt|spill|contest|race|bid|challenge|ballot)|greens|tories|"
+    r"(?:labor|labour|conservative|liberal|democratic|republican)\s+party)\b",
     re.IGNORECASE,
 )
 _POLITICAL_PRESIDENT = re.compile(r"\bpresident\b", re.IGNORECASE)

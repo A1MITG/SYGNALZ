@@ -1,16 +1,20 @@
 # app/scraper/news_sitemaps.py
-"""GCC stories from publishers whose RSS is dead but whose news sitemap is live.
+"""GCC stories and leadership moves from publishers whose RSS is dead but
+whose news sitemap is live.
 
 Moneycontrol's RSS feeds froze upstream in April 2024 and were removed on
 2026-09-20, yet it still publishes a Google News sitemap for search engines:
 its last few days of stories, each with headline, publication time and
 picture. On 2026-09-25 it listed two GCC stories no other source carried.
+Analytics India Magazine's RSS serves nothing to a scraper; its sitemap works
+the same way (BP-57).
 
-Only stories whose headline names a capability centre are kept
-(gcc_rubric.names_a_centre). The sitemap lists every Moneycontrol story,
-about 300 a day; taking them all, on headlines alone, would reshuffle every
-tile. A sitemap carries no description, so for each story kept the article
-page's own og:description is read -- a few pages per build.
+Two kinds of story are kept, on the headline alone: those that name a
+capability centre (gcc_rubric.names_a_centre), and appointments and exits
+stated in the headline (is_a_move, People Movers' own test). A sitemap lists
+every story, about 300 a day for Moneycontrol; taking them all would reshuffle
+every tile. A sitemap carries no description, so for each story kept the
+article page's own og:description is read -- a few pages per build.
 """
 import asyncio
 import logging
@@ -21,13 +25,23 @@ import aiohttp
 from bs4 import BeautifulSoup
 
 from ..analysis.gcc_rubric import names_a_centre
+from ..intelligence import events
 
 logger = logging.getLogger(__name__)
 
 # The description is in the page's <head>, a few KB in; stop reading there.
 _MAX_BYTES = 64 * 1024
 # Stories kept per sitemap per scrape, newest first: a bound on page fetches.
-MAX_STORIES = 10
+MAX_STORIES = 10   # GCC stories
+MAX_MOVES = 8      # leadership moves, as many as People Movers shows
+
+_MOVES = ('EXECUTIVE_APPOINTMENT', 'EXECUTIVE_EXIT')
+
+
+def is_a_move(title):
+    """An appointment or exit the headline itself states (as build_movers requires)."""
+    return any(event['type'] in _MOVES and any(x['where'] == 'title' for x in event['evidence'])
+               for event in events.detect(title))
 
 _META_TAG = re.compile(r'<meta\b[^>]*>', re.I)
 _ATTR = re.compile(r'([\w:-]+)\s*=\s*["\']([^"\']*)["\']')
@@ -81,14 +95,18 @@ async def _describe(session, story):
 
 
 async def scrape_news_sitemap(session, url, fetch):
-    """The GCC stories in one news sitemap, described from their pages.
+    """The GCC stories and leadership moves in one news sitemap, described
+    from their pages.
 
     ``fetch`` is scraper.fetch_html (session, url -> bytes or None).
     """
     xml = await fetch(session, url)
     if not xml:
         return []
-    stories = [s for s in parse_news_sitemap(xml) if names_a_centre(s['title'])][:MAX_STORIES]
+    listed = parse_news_sitemap(xml)
+    gcc = [s for s in listed if names_a_centre(s['title'])][:MAX_STORIES]
+    moves = [s for s in listed if not names_a_centre(s['title']) and is_a_move(s['title'])][:MAX_MOVES]
+    stories = gcc + moves
     await asyncio.gather(*(_describe(session, s) for s in stories))
-    logger.info("%s: %d GCC stories", url, len(stories))
+    logger.info("%s: %d GCC stories, %d leadership moves", url, len(gcc), len(moves))
     return stories

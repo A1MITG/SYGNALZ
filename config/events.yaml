@@ -59,6 +59,10 @@ events:
       - '\blawsuits?\b'
       - '\b(?:defendants?|plaintiffs?)\b'
       - '\bcomplaint\b'                  # the filing; plural is usually customers
+      # Market roundups mention a move among many ("Price Action: Allcargo
+      # sheds 2% on MD, CEO resignation; Ola ..."): a list, not a move (BP-57).
+      - '^price action\b'
+      - '\b(?:stocks? to (?:watch|buy)|buzzing stocks|stock market live|live updates?)\b'
     # Roles: "chief" covers chief executive/financial/commercial officer, but
     # not "chief minister" or "chief justice", which are political and judicial.
     patterns:
@@ -71,15 +75,36 @@ events:
       - { rx: '\b(?:appointed|appointment of|new chief executive|succeeds as)\b', weight: 2 }
       - { rx: '\bnamed\b.{0,40}\b(?:ceo|cfo|coo|cio|cto|chief(?!\s+(?:minister|justice)\b)|president|managing director|chair(?:man|woman|person)?|head of)\b', weight: 2 }
       - { rx: '\bpeople moves\b', weight: 1 }
+      # How the Indian business and HR press words a move (BP-57): "joins X as
+      # CHRO", "joins Meta to lead", "brings in Intel's N as CHRO", "new CEO
+      # takes charge". Headline only, like the passive above. "As" needs a role
+      # after it ("joins alliance as founding member" is not a move); "to lead"
+      # and "to head" are a role in themselves. On 29 Sep 2026 these found 11
+      # more moves in 740 headlines (HRKatha, Analytics India Magazine, the
+      # day's scrape), with none wrong.
+      - { rx: '\b(?:joins|joined|rejoins)\b.{0,50}\bto (?:lead|head)\b', weight: 3, where: title }
+      - { rx: '\b(?:joins|joined|rejoins|elevated|elevates)\b.{0,50}\b(?:as|to)\s+(?:(?:its|the|new|interim|acting|global|group|india|country|regional|senior)\s+){0,3}(?:ceo|cfo|coo|cio|cto|chro|cmo|cdo|ciso|chief(?!\s+(?:minister|justice)\b)|president|vice president|vp|svp|evp|managing director|md|director|head|chair(?:man|woman|person)?|partner|country manager|general manager|leader)\b', weight: 3, where: title }
+      - { rx: '\b(?:brings in|brought in|ropes in|roped in|taps|tapped|hires|hired|onboards|poaches)\b.{0,60}\bto (?:lead|head)\b', weight: 3, where: title }
+      - { rx: '\b(?:brings in|brought in|ropes in|roped in|taps|tapped|hires|hired|onboards|poaches)\b.{0,60}\bas\s+(?:(?:its|the|new|interim|acting|global|group|india|country|regional|senior)\s+){0,3}(?:ceo|cfo|coo|cio|cto|chro|cmo|cdo|ciso|chief(?!\s+(?:minister|justice)\b)|president|vice president|vp|svp|evp|managing director|md|director|head|chair(?:man|woman|person)?|partner|country manager|general manager|leader)\b', weight: 3, where: title }
+      - { rx: '\b(?:takes charge|took charge|assumes charge|assumed charge|takes the helm|took the helm)\b', weight: 3, where: title }
+      - { rx: '\btakes? over as\s+(?:(?:its|the|new|interim|acting|global|group|india|country|regional|senior)\s+){0,3}(?:ceo|cfo|coo|cio|cto|chro|cmo|cdo|ciso|chief(?!\s+(?:minister|justice)\b)|president|vice president|vp|managing director|md|director|head|chair(?:man|woman|person)?)\b', weight: 3, where: title }
 
   EXECUTIVE_EXIT:
     significance: 3
+    veto:
+      # Market roundups, as for EXECUTIVE_APPOINTMENT (BP-57).
+      - '^price action\b'
+      - '\b(?:stocks? to (?:watch|buy)|buzzing stocks|stock market live|live updates?)\b'
     patterns:
       - { rx: '\b(?:steps down|stepping down|to step down|resigns as|has resigned|ousted)\b', weight: 3 }
       - { rx: '\b(?:departure of|to depart|exits as|succession plan)\b', weight: 2 }
       # Decisive alone: "resigns" in a headline is unambiguous, and the
       # common phrasing is "resigns amid/after/over", not "resigns as".
       - { rx: '\bresign(?:ation|s|ed)?\b', weight: 3 }
+      # "Quits" needs the role or "as" beside it: "Acme quits Russia" is a
+      # market exit, "Acme CFO quits" a person's (BP-57).
+      - { rx: '\b(?:quits as|quit as|to quit as|retires as|to retire as|retiring as)\b', weight: 3, where: title }
+      - { rx: '\b(?:ceo|cfo|coo|cio|cto|chro|cmo|chief\s+\w+(?:\s+officer)?|president|managing director|chair(?:man|woman|person)?)\b.{0,40}\bquits\b', weight: 3, where: title }
 
   REGULATION:
     significance: 4

@@ -45,6 +45,8 @@ PUBLISHERS = {
     "theloadstar.com": "The Loadstar",
     "manufacturingdive.com": "Manufacturing Dive",
     "peoplematters.in": "People Matters",
+    "hrkatha.com": "HRKatha",
+    "analyticsindiamag.com": "Analytics India Magazine",
     "prnewswire.com": "PR Newswire",
 }
 

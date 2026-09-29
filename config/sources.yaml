@@ -57,6 +57,12 @@ sources:
   business-standard.com:          { tier: tier_2 }   # feed since 2026-09-20
   thehindubusinessline.com:       { tier: tier_2 }   # feeds since 2026-09-25 (BP-38)
 
+  # ---- tier 2: India HR and technology trade press (2026-09-29, BP-57) ----
+  # Their own beat (leadership moves, AI and GCCs), a notch under the
+  # business papers when both carry the same story.
+  hrkatha.com:                    { tier: tier_2, authority: 0.75 }
+  analyticsindiamag.com:          { tier: tier_2, authority: 0.75 }
+
   # ---- tier 2: domain trade press (2026-09-24, Command Center tiles) ----
   # telecom. and manufacturing.economictimes inherit economictimes' tier.
   rcrwireless.com:                { tier: tier_2 }
