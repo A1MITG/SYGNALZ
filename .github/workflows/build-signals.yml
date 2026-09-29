@@ -95,13 +95,29 @@ jobs:
           # Today's Brief: the closer's button links /brief, which cleanUrls
           # serves from brief.html.
           cp public/brief.html /tmp/signals-deploy/brief.html
-          echo '{ "cleanUrls": true }' > /tmp/signals-deploy/vercel.json
+          # The build's own alarm clock (BP-56): GitHub starts this workflow's
+          # schedule 4-7 hours late, so Vercel Cron calls /api/trigger-build at
+          # 09:00 and 19:00 IST (03:30 and 13:30 UTC; the free plan runs each
+          # within the hour), and that function starts this workflow through
+          # GitHub's API. It needs CRON_SECRET and GITHUB_DISPATCH_TOKEN in
+          # the Vercel project; deploy/api/trigger-build.js says how.
+          mkdir -p /tmp/signals-deploy/api
+          cp deploy/api/trigger-build.js /tmp/signals-deploy/api/
+          cat > /tmp/signals-deploy/vercel.json <<'JSON'
+          {
+            "cleanUrls": true,
+            "crons": [
+              { "path": "/api/trigger-build", "schedule": "30 3 * * *" },
+              { "path": "/api/trigger-build", "schedule": "30 13 * * *" }
+            ]
+          }
+          JSON
           cd /tmp/signals-deploy
           git init -q
           git checkout -q -b signals-deploy
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html command_center_data.json img signals.html signal.css signals.json brief.html vercel.json
+          git add index.html command_center_data.json img signals.html signal.css signals.json brief.html vercel.json api
           git commit -q -m "Signals rebuild: $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" signals-deploy
 
