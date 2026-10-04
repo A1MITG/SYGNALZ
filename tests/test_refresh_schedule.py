@@ -1,4 +1,4 @@
-"""The feed refreshes twice a day, at 09:00 and 19:00 IST.
+"""The feed refreshes every 3 hours, on the IST grid (00:00 ... 21:00).
 
 The schedule lives in two places that must agree: the cron in
 .github/workflows/build-signals.yml (UTC), which runs the build, and
@@ -40,8 +40,9 @@ def _build_slots_ist():
     raise AssertionError('REFRESH_SLOTS_IST not found in the build script')
 
 
-def test_workflow_runs_at_0900_and_1900_ist():
-    assert _cron_slots_ist() == ['09:00', '19:00']
+def test_workflow_runs_every_three_hours_ist():
+    assert _cron_slots_ist() == ['00:00', '03:00', '06:00', '09:00',
+                                 '12:00', '15:00', '18:00', '21:00']
 
 
 def test_page_schedule_matches_the_workflow():

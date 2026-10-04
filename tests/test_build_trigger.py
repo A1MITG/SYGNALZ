@@ -40,18 +40,25 @@ class TestDeployConfig(unittest.TestCase):
     def test_clean_urls_stay(self):
         self.assertIs(_vercel_json()['cleanUrls'], True)
 
-    def test_the_crons_fire_at_the_refresh_slots(self):
-        """The same slots the page promises (REFRESH_SLOTS_IST)."""
+    def test_the_crons_fire_on_refresh_slots(self):
+        """Vercel's free plan runs a cron at most once a day, so these cover
+        only some of REFRESH_SLOTS_IST — the hourly watchdog drives the rest.
+        Each one must still land on a real slot, or the page would refresh at
+        a time it never promised."""
         slots = []
         for cron in _vercel_json()['crons']:
             self.assertEqual(cron['path'], '/api/trigger-build')
             minute, hour, dom, month, dow = cron['schedule'].split()
-            # Vercel's free plan runs a cron at most once a day.
+            # Once a day: no lists or steps anywhere in the expression.
             self.assertEqual((dom, month, dow), ('*', '*', '*'))
             self.assertNotIn(',', minute + hour)
+            self.assertNotIn('*', minute + hour)
+            self.assertNotIn('/', minute + hour)
             t = (int(hour) * 60 + int(minute) + IST_OFFSET) % (24 * 60)
             slots.append(f'{t // 60:02d}:{t % 60:02d}')
-        self.assertEqual(sorted(slots), _build_slots_ist())
+        self.assertTrue(slots, 'no Vercel cron is left to start the build')
+        self.assertEqual(len(set(slots)), len(slots), 'two crons on the same slot')
+        self.assertLessEqual(set(slots), set(_build_slots_ist()))
 
     def test_the_function_is_published(self):
         run = _publish_step()

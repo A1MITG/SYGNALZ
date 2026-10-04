@@ -105,8 +105,12 @@ class TestWatchdog(unittest.TestCase):
         self.assertEqual(health.missed_slot(self._ist(27, 19, 8), self._ist(28, 10, 20), self.SLOTS),
                          self._ist(28, 9))
 
-    def test_the_scheduler_gets_an_hours_grace(self):
-        self.assertIsNone(health.missed_slot(self._ist(27, 19, 8), self._ist(28, 9, 50), self.SLOTS))
+    def test_a_slot_gets_a_short_grace_before_the_build_starts(self):
+        """The watchdog drives the schedule now, so it waits only LATE_GRACE
+        (15 min) after a slot before starting the build, not an hour."""
+        self.assertIsNone(health.missed_slot(self._ist(27, 19, 8), self._ist(28, 9, 10), self.SLOTS))
+        self.assertEqual(health.missed_slot(self._ist(27, 19, 8), self._ist(28, 9, 20), self.SLOTS),
+                         self._ist(28, 9))
 
     def test_a_missed_evening_is_caught_next_morning_too(self):
         self.assertEqual(health.missed_slot(self._ist(27, 9, 5), self._ist(28, 8, 0), self.SLOTS),
@@ -141,11 +145,26 @@ class TestWorkflows(unittest.TestCase):
     def test_the_watchdog_runs_hourly_and_can_start_a_build(self):
         wf = yaml.safe_load(self.WATCHDOG.read_text(encoding='utf-8'))
         on = wf.get('on', wf.get(True))
-        self.assertEqual(on['schedule'][0]['cron'], '20 * * * *')
+        minute, hour, dom, month, dow = on['schedule'][0]['cron'].split()
+        # Hourly, and off the hour where GitHub's scheduler is busiest.
+        self.assertEqual((hour, dom, month, dow), ('*', '*', '*', '*'))
+        self.assertNotIn(minute, ('0', '00'))
         self.assertEqual(wf['permissions']['actions'], 'write')
         runs = ' '.join(self._steps(self.WATCHDOG))
         self.assertIn('site_health.py watchdog', runs)
         self.assertIn('gh workflow run build-signals.yml', runs)
+
+    def test_a_routine_catch_does_not_raise_the_alarm(self):
+        """Starting a build is how most slots run now. Only stale data
+        (exit 4) should fail the run and email the repo owner."""
+        runs = ' '.join(self._steps(self.WATCHDOG))
+        self.assertIn('-eq 4', runs)
+        self.assertIn('exit 1', runs)
+        # The old version ended the step with a bare, unconditional `exit 1`.
+        # Now every exit 1 sits inside the stale guard, so none is unindented.
+        start = next(r for r in self._steps(self.WATCHDOG) if 'gh workflow run' in r)
+        self.assertNotIn('\nexit 1', '\n' + start)
+        self.assertLess(start.index('"4"'), start.index('exit 1'))
 
 
 if __name__ == '__main__':

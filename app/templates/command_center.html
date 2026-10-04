@@ -1424,7 +1424,11 @@ a { color: inherit; }
                 nextEl.hidden = !nextEl.textContent;
                 const ago = Math.max(0, Math.round((now - built) / 60000));
                 const title = [`Last refreshed ${ago < 60 ? `${ago} min` : `${Math.round(ago / 60)} h`} ago.`];
-                if (slots.length) title.push(`Refreshed each day at ${slots.join(' and ')} IST.`);
+                // Evenly spaced slots read better as a cadence than as a list,
+                // and make no per-slot promise that a late build would break.
+                const everyH = slots.length > 1 ? 24 / slots.length : 0;
+                if (everyH && Number.isInteger(everyH)) title.push(`Refreshes every ${everyH} hours.`);
+                else if (slots.length) title.push(`Refreshed each day at ${slots.join(' and ')} IST.`);
                 if (meta.stale_excluded) title.push(`${meta.stale_excluded} articles excluded as stale or undated.`);
                 cell.title = title.join(' ');
             }

@@ -43,10 +43,16 @@ logger = logging.getLogger(__name__)
 
 PUBLIC_DIR = ROOT / 'public'
 
-# When the scheduled build runs, in IST. The cron in
+# When the scheduled build runs, in IST: every 3 hours. The cron in
 # .github/workflows/build-signals.yml is what actually runs it;
 # tests/test_refresh_schedule.py keeps the two in step.
-REFRESH_SLOTS_IST = ('09:00', '19:00')
+#
+# On Vercel's free plan a cron can only fire once a day, so the deploy
+# branch's vercel.json covers just two of these slots (09:00 and 21:00 IST).
+# The hourly watchdog (site-watchdog.yml) drives the other six: it notices
+# the data is past a slot and starts the build itself.
+REFRESH_SLOTS_IST = ('00:00', '03:00', '06:00', '09:00',
+                     '12:00', '15:00', '18:00', '21:00')
 
 # Injected into the Flask template only: tells the page to read the live API
 # instead of the static snapshot.

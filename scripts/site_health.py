@@ -2,7 +2,7 @@
 
     python scripts/site_health.py gate       before publishing: is public/ fit to go live?
     python scripts/site_health.py deployed   after publishing: is Vercel serving this build?
-    python scripts/site_health.py watchdog   hourly: is the live data late for a refresh slot?
+    python scripts/site_health.py watchdog   hourly: is the live data due a refresh slot?
 
 Each prints what it found (and, on GitHub, writes it to the run's summary)
 and exits non-zero on a problem. That fails the workflow run, and GitHub
@@ -34,9 +34,11 @@ REQUIRED = ('command_center.html', 'command_center_data.json', 'index.html',
 MIN_LIVE_TILES = 3     # fewer tiles with a story: the scrape broke. Do not publish.
 WARN_LIVE_TILES = 10   # fewer: a quiet hour or a source down. Publish, and say so.
 MAX_BUILD_AGE = timedelta(hours=2)    # older data is not this build's
-LATE_GRACE = timedelta(minutes=60)    # GitHub's scheduler often starts a run this late
+LATE_GRACE = timedelta(minutes=15)    # how long after a slot the watchdog starts the build
 DEPLOY_WAIT = timedelta(minutes=8)    # Vercel redeploys within a minute or two
-LATE = 3                              # the watchdog's exit code for late data
+LATE = 3                              # watchdog exit code: a slot is due, start a build
+STALE = 4                             # watchdog exit code: builds are not fixing it, alarm
+STALE_AFTER = timedelta(hours=7)      # more than two 3-hourly slots without a refresh
 
 # Every section whose items carry a link, as (key, list of items).
 _LINKED = ('_movers', '_pulse', '_features')
@@ -190,10 +192,13 @@ def watchdog():
     if slot is None:
         print(f'On time: built {built.astimezone(IST):%d %b %H:%M} IST, {_hours(now - built)} ago.')
         return 0
-    _summary([f'### Live data is late',
+    age = now - built
+    stale = age > STALE_AFTER
+    _summary([f'### Live data is {"stale" if stale else "due a refresh"}',
               f'- The {slot:%H:%M} IST refresh of {slot:%d %b} has not reached {LIVE_URL}.',
-              f'- The live data was built {built.astimezone(IST):%d %b %H:%M} IST, {_hours(now - built)} ago.'])
-    return LATE
+              f'- The live data was built {built.astimezone(IST):%d %b %H:%M} IST, {_hours(age)} ago.']
+             + ([f'- That is over {_hours(STALE_AFTER)}: the builds are not fixing it.'] if stale else []))
+    return STALE if stale else LATE
 
 
 def main(argv=None):

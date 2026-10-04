@@ -1,7 +1,11 @@
 name: Build Signals (static)
 
-# Regenerates public/ twice a day, at 09:00 and 19:00 IST, or on demand via
-# "Run workflow". Commits it to the working branch for history, and also
+# Regenerates public/ every 3 hours, on the IST 3-hour grid (00:00, 03:00,
+# ... 21:00), or on demand via "Run workflow". GitHub's own scheduler is
+# unreliable (see below), so most slots are actually started by the hourly
+# watchdog in site-watchdog.yml; this schedule is a best-effort backup and
+# Vercel Cron covers two slots a day. Commits it to the working branch for
+# history, and also
 # force-pushes the relevant static files to two orphan branches —
 # `signals-deploy` (Signals page) and `command-center-deploy` (Command
 # Center) — the ones Vercel actually watches, since neither ever contains
@@ -12,10 +16,12 @@ name: Build Signals (static)
 
 on:
   schedule:
-    # 09:00 and 19:00 IST (03:30 and 13:30 UTC). The page says when the next
-    # refresh is due from REFRESH_SLOTS_IST in build_command_center_data.py;
-    # tests/test_refresh_schedule.py keeps the two in step.
-    - cron: "30 3,13 * * *"
+    # Every 3 hours on the IST grid: 00:00, 03:00 ... 21:00 IST, which is
+    # :30 past every third UTC hour. Written out rather than as */3 because
+    # tests/test_refresh_schedule.py parses the hour field directly. The page
+    # says when the next refresh is due from REFRESH_SLOTS_IST in
+    # build_command_center_data.py; that test keeps the two in step.
+    - cron: "30 0,3,6,9,12,15,18,21 * * *"
   workflow_dispatch: {}
 
 permissions:
@@ -96,11 +102,17 @@ jobs:
           # serves from brief.html.
           cp public/brief.html /tmp/signals-deploy/brief.html
           # The build's own alarm clock (BP-56): GitHub starts this workflow's
-          # schedule 4-7 hours late, so Vercel Cron calls /api/trigger-build at
-          # 09:00 and 19:00 IST (03:30 and 13:30 UTC; the free plan runs each
-          # within the hour), and that function starts this workflow through
-          # GitHub's API. It needs CRON_SECRET and GITHUB_DISPATCH_TOKEN in
-          # the Vercel project; deploy/api/trigger-build.js says how.
+          # schedule 4-7 hours late, so Vercel Cron calls /api/trigger-build,
+          # and that function starts this workflow through GitHub's API. It
+          # needs CRON_SECRET and GITHUB_DISPATCH_TOKEN in the Vercel project;
+          # deploy/api/trigger-build.js says how.
+          #
+          # Vercel's free plan runs a cron at most once a day, so these two
+          # cover only the 09:00 and 21:00 IST slots (03:30 and 15:30 UTC;
+          # the free plan runs each within the hour). The other six slots are
+          # started by the hourly watchdog in site-watchdog.yml. Both times
+          # must stay on the REFRESH_SLOTS_IST grid — tests/test_build_trigger.py
+          # checks that.
           mkdir -p /tmp/signals-deploy/api
           cp deploy/api/trigger-build.js /tmp/signals-deploy/api/
           cat > /tmp/signals-deploy/vercel.json <<'JSON'
@@ -108,7 +120,7 @@ jobs:
             "cleanUrls": true,
             "crons": [
               { "path": "/api/trigger-build", "schedule": "30 3 * * *" },
-              { "path": "/api/trigger-build", "schedule": "30 13 * * *" }
+              { "path": "/api/trigger-build", "schedule": "30 15 * * *" }
             ]
           }
           JSON

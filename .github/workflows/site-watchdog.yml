@@ -1,15 +1,22 @@
 name: Site watchdog
 
-# Hourly: is the live data late for its last refresh slot (09:00 or 19:00
-# IST)? GitHub's scheduler has started "Build Signals (static)" 3 h 50 min
-# and 5.5 h late, and once not at all, with nobody told. When the data is
-# late, this starts a build (unless one is already queued or running) and
-# fails, so GitHub emails the repo owner. The check itself is
-# scripts/site_health.py watchdog (standard library only: no install step).
+# Hourly: is the live data due one of its 3-hourly refresh slots? GitHub's
+# scheduler has started "Build Signals (static)" 3 h 50 min and 5.5 h late,
+# and once not at all, with nobody told, and Vercel's free plan can only run
+# a cron once a day. So this watchdog is the primary driver of the schedule:
+# six of the eight daily slots are started here, and that is routine, not an
+# alarm. It only fails the run — and so emails the repo owner — when the data
+# is stale (STALE_AFTER in site_health.py), meaning the builds it starts are
+# not fixing the problem. The check itself is scripts/site_health.py watchdog
+# (standard library only: no install step).
 
 on:
   schedule:
-    - cron: "20 * * * *"
+    # :50 past the hour. Slots land at :30 past, so a slot that the Vercel
+    # cron did not cover is picked up 20 minutes later; LATE_GRACE gives the
+    # covered ones time to build first. Off the hour, where GitHub's
+    # scheduler is busiest.
+    - cron: "50 * * * *"
   workflow_dispatch: {}
 
 permissions:
@@ -31,18 +38,19 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Is the live data late?
+      - name: Is the live data due a refresh?
         id: check
         run: |
           set +e
           python scripts/site_health.py watchdog
           code=$?
           echo "code=$code" >> "$GITHUB_OUTPUT"
-          # 0: on time. 3: late (next step). Anything else: the check failed.
-          [ "$code" -eq 0 ] || [ "$code" -eq 3 ]
+          # 0: on time. 3: a slot is due (routine). 4: stale, the builds are
+          # not fixing it. Anything else: the check itself failed.
+          [ "$code" -eq 0 ] || [ "$code" -eq 3 ] || [ "$code" -eq 4 ]
 
-      - name: Start a build and raise the alarm
-        if: steps.check.outputs.code == '3'
+      - name: Start the build
+        if: steps.check.outputs.code == '3' || steps.check.outputs.code == '4'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -50,8 +58,14 @@ jobs:
                  --jq '[.[] | select(.status != "completed")] | length')
           if [ "$busy" = "0" ]; then
             gh workflow run build-signals.yml --ref "${{ github.event.repository.default_branch }}"
-            echo "::error::The live data is late for its refresh slot. A build has been started."
+            echo "A refresh slot is due. A build has been started."
           else
-            echo "::error::The live data is late for its refresh slot. A build is already queued or running."
+            echo "A refresh slot is due. A build is already queued or running."
           fi
-          exit 1
+          # Starting a build is how most slots run now, so that succeeds
+          # quietly. Stale data means the builds are not fixing it: fail, and
+          # GitHub emails the repo owner.
+          if [ "${{ steps.check.outputs.code }}" = "4" ]; then
+            echo "::error::The live data is stale: the builds are not fixing it."
+            exit 1
+          fi
