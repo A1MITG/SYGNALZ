@@ -768,7 +768,6 @@ a { color: inherit; }
          in one row that drifts on its own (startRibbonDrift). ===== -->
     <div id="engines" class="band-head">
         <span class="eyebrow" style="font-size:13px;">Explore Intelligence Engines</span>
-        <span class="sub" id="engineCount">&nbsp;</span>
         <span class="engine-tools">
             <span>⭐ <b>Pin</b> · 👁 <b>Hide</b> · drag to reorder</span>
             <span class="info" tabindex="0" role="note" aria-label="Your layout is saved in this browser only">i<span class="tip">Your pins, hides and order are saved in this browser only. Signing in and syncing across devices is not built yet.</span></span>
@@ -1500,7 +1499,6 @@ a { color: inherit; }
             renderMovers(_movers || []);
             renderPulseCards(_pulse || []);
             renderRecord(_record || { quotes: [], leaders: [] });
-            updateEngineCount();
             worldTime.setMeta(CC_META);
             initTileHeadlines();
             initTicker();
@@ -1669,14 +1667,6 @@ a { color: inherit; }
         deck.querySelector('.row-arrow.next').addEventListener('click', () => { show(at + 1); restart(); });
         dots.forEach((d, k) => d.addEventListener('click', () => { show(k); restart(); }));
         restart();
-    }
-
-    function updateEngineCount() {
-        const el = document.getElementById('engineCount');
-        if (!el) return;
-        const all = Object.values(ENGINE_DATA);
-        const live = all.filter(e => !e.comingSoon).length;
-        el.textContent = `${live} live today · ${all.length - live} expanding source coverage`;
     }
 
     function initTileHeadlines() {

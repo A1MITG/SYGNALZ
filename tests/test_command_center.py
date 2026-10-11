@@ -131,11 +131,12 @@ class TestRoutes(unittest.TestCase):
         self.assertIn('href="/brief"', body)
         self.assertIn('href="/signals"', body)
 
-    def test_engine_count_is_not_hardcoded(self):
-        """The live/coming-soon counts must derive from the data, not a literal."""
+    def test_engine_count_line_is_gone(self):
+        """The 'N live today · N expanding source coverage' line was dropped:
+        every engine is live, so it told readers nothing."""
         body = self.client.get('/').get_data(as_text=True)
-        self.assertIn('id="engineCount"', body)
-        self.assertNotIn('12 live today', body)
+        self.assertNotIn('engineCount', body)
+        self.assertNotIn('expanding source coverage', body)
 
     def test_health_still_ok(self):
         resp = self.client.get('/health')
