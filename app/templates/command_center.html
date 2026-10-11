@@ -671,6 +671,22 @@ a { color: inherit; }
     .founder-statement { font-size: 17px; }
 }
 
+/* Scroll-to-top: shared by the Command Center and Today's Brief. CSS only:
+   #top scrolls to the start of the page, the scroll timeline fades it in. */
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+.to-top { position: fixed; right: max(24px, env(safe-area-inset-right)); bottom: max(24px, env(safe-area-inset-bottom)); z-index: 80; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; background: #0b1524; color: #fff; border: 1.5px solid rgba(255,255,255,.38); box-shadow: 0 8px 22px rgba(0,0,0,.3); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s, background-color .25s; }
+.to-top svg { width: 20px; height: 20px; transition: transform .25s cubic-bezier(.2,.8,.2,1); }
+.to-top:hover { background: #14243a; transform: translateY(-3px); box-shadow: 0 14px 30px rgba(11,21,36,.34); }
+.to-top:hover svg { transform: translateY(-2px); }
+.to-top:active { transform: translateY(0) scale(.94); transition-duration: .08s; }
+.to-top:focus-visible { outline: 2px solid #2f6fed; outline-offset: 3px; }
+@supports (animation-timeline: scroll()) {
+    .to-top { animation: to-top-in linear both; animation-timeline: scroll(); animation-range: 240px 420px; }
+    @keyframes to-top-in { from { opacity: 0; scale: .6; translate: 0 16px; visibility: hidden; } to { opacity: 1; scale: 1; translate: 0 0; visibility: visible; } }
+}
+@media (max-width: 1023px) { .to-top { right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); } }
+@media (max-width: 600px) { .to-top { width: 44px; height: 44px; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); } }
+@media print { .to-top { display: none; } }
 </style>
 <!-- Vercel Web Analytics: anonymous page views (no cookies). Enabled in the
      Vercel project's Analytics tab; the script is served by Vercel itself. -->
@@ -2122,5 +2138,6 @@ a { color: inherit; }
         applyPrefs();
     })();
 </script>
+<a class="to-top" href="#top" aria-label="Back to top" title="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
 </body>
 </html>
