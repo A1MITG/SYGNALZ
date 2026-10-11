@@ -78,6 +78,11 @@ a { color: inherit; }
 .nav .word { font-weight: 800; letter-spacing: .18em; font-size: 14px; color: #fff; }
 .nav a.link { font-size: 12.5px; color: rgba(255,255,255,.65); text-decoration: none; }
 .nav a.link:hover { color: #fff; }
+/* Today's Brief: the one nav link with a soft outline and glow, so it reads as the way in. */
+.nav-right a.link[href="/brief"] { color: #fff; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(110,160,255,.45); background: rgba(47,111,237,.12); box-shadow: 0 0 10px rgba(47,111,237,.28); transition: box-shadow .25s, border-color .25s, background-color .25s; }
+.nav-right a.link[href="/brief"]:hover { border-color: rgba(140,180,255,.75); background: rgba(47,111,237,.2); box-shadow: 0 0 16px rgba(47,111,237,.45); }
+@media (prefers-reduced-motion: no-preference) { .nav-right a.link[href="/brief"] { animation: brief-glow 3.2s ease-in-out infinite; } .nav-right a.link[href="/brief"]:hover { animation: none; } }
+@keyframes brief-glow { 0%, 100% { box-shadow: 0 0 8px rgba(47,111,237,.22); } 50% { box-shadow: 0 0 14px rgba(47,111,237,.4); } }
 .nav .icon-btn { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.65); font-size: 13px; cursor: pointer; }
 .nav .icon-btn:hover { color: #fff; }
 
