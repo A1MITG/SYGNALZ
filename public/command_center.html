@@ -200,12 +200,14 @@ a { color: inherit; }
 .tile.live .tile-headline, .tile.flat .tile-headline { color: #fff; }
 .hero-sub { position: relative; z-index: 2; font-size: 14.5px; line-height: 1.5; color: var(--slate); max-width: 500px; margin: 0 auto 20px; }
 .hero-cta { position: relative; z-index: 2; display: flex; gap: 12px; justify-content: center; }
-/* Parked, not removed. The two nav links and the hero's CTA pair were
+/* Parked, not removed. The Signals nav link and the hero's CTA pair were
    spending vertical space above the first row of news without earning it,
    so the news now starts higher. Nothing behind them changed: the markup,
    the hrefs, and the /brief and /signals routes are all still live and
    reachable directly. To bring them back, delete this one rule -- the
-   "parked" class on those three elements then does nothing.
+   "parked" class on those elements then does nothing.
+   The Today's Brief nav link is back in the nav (not parked): it puts the
+   brief one click away from anywhere on the page.
    The closer section's .hero-cta is deliberately NOT parked: it sits at
    the foot of the page, where the space costs nothing. */
 /* !important is load-bearing: a responsive rule below re-shows these two
@@ -712,7 +714,7 @@ a { color: inherit; }
             </div>
         </div>
         <div class="nav-right">
-            <a class="link parked" href="/brief">Today's Brief</a>
+            <a class="link" href="/brief">Today's Brief</a>
             <a class="link parked" href="/signals">Signals</a>
             <span class="icon-btn" title="Search (not yet wired up)">&#128269;</span>
             <a class="link" href="#manifesto">Manifesto</a>
