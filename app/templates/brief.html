@@ -36,9 +36,10 @@ footer a { color: var(--link); }
 .back-home { position: fixed; left: max(24px, env(safe-area-inset-left)); bottom: max(28px, env(safe-area-inset-bottom)); z-index: 10; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 16px 0 14px; border-radius: 999px; background: var(--navy); color: #fff; font: 600 12px/1 var(--sans); letter-spacing: .02em; text-decoration: none; box-shadow: 0 6px 18px rgba(11,21,36,.22); transition: transform .2s, box-shadow .2s; }
 .back-home:hover, .back-home:focus-visible { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(11,21,36,.3); }
 .back-home:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
-@supports (animation-timeline: scroll()) {
-    .back-home { animation: back-home-in linear both; animation-timeline: scroll(); animation-range: 0 160px; }
-    @keyframes back-home-in { from { opacity: 0; translate: 0 10px; visibility: hidden; } to { opacity: 1; translate: 0 0; visibility: visible; } }
+/* Always on screen, so the way back is there from the first line. A short entrance on load only. */
+@media (prefers-reduced-motion: no-preference) {
+    .back-home { animation: back-home-in .45s cubic-bezier(.2,.8,.2,1) .15s both; }
+    @keyframes back-home-in { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
 }
 @media (max-width: 1023px) { .back-home { left: max(20px, env(safe-area-inset-left)); bottom: max(24px, env(safe-area-inset-bottom)); } }
 @media (max-width: 600px) { .back-home { left: max(16px, env(safe-area-inset-left)); bottom: max(18px, env(safe-area-inset-bottom)); } }
