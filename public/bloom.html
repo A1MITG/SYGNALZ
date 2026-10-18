@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bloom by SIGNAL: good news from around the world</title>
+<meta name="description" content="Only good news: everyday heroes, companies doing good, breakthroughs and planet wins from around the world, refreshed every 3 hours.">
+<meta property="og:title" content="Bloom by SIGNAL">
+<meta property="og:description" content="Only good news: everyday heroes, companies doing good, breakthroughs and planet wins.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#fbf7f0">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+    --cream: #fbf7f0; --card: #ffffff; --ink: #1f2a24; --muted: #6b746e; --line: #ece4d6;
+    --navy: #0b1524;
+    --heroes: #e2725b; --csr: #2a9d8f; --breakthroughs: #7468d6; --planet: #4c9a5b; --community: #d99a2b;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --head: 108px;
+}
+@media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.001ms!important; transition-duration:.001ms!important; scroll-behavior:auto!important; } }
+html, body { height: 100%; }
+body { font-family: var(--sans); background: var(--cream); color: var(--ink); overflow: hidden; }
+a { color: inherit; }
+
+/* ---------- Header ---------- */
+.top { position: fixed; inset: 0 0 auto 0; z-index: 20; height: var(--head);
+       background: rgba(251,247,240,.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+       border-bottom: 1px solid var(--line); }
+.bar { max-width: 640px; margin: 0 auto; padding: 12px 16px 8px; display: flex; align-items: center; gap: 10px; }
+.brand { display: flex; align-items: baseline; gap: 8px; text-decoration: none; }
+.brand .sig { font-size: 11px; font-weight: 800; letter-spacing: .22em; color: var(--navy); }
+.brand .bloom { font-family: var(--serif); font-size: 24px; color: var(--ink); }
+.brand .bloom span { color: var(--heroes); }
+.bar .home { margin-left: auto; font-size: 12.5px; font-weight: 600; color: var(--muted); text-decoration: none;
+             border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; background: #fff; }
+.bar .home:hover { color: var(--ink); }
+.chips { max-width: 640px; margin: 0 auto; padding: 2px 16px 10px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; font: 600 12.5px var(--sans); color: var(--muted); background: #fff; border: 1px solid var(--line);
+        border-radius: 999px; padding: 7px 13px; cursor: pointer; white-space: nowrap; transition: all .2s ease; }
+.chip .n { opacity: .6; margin-left: 4px; font-weight: 500; }
+.chip[aria-pressed="true"] { color: #fff; background: var(--c, var(--ink)); border-color: var(--c, var(--ink)); }
+.chip:focus-visible, .btn:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+
+/* ---------- Feed: one story per screen ---------- */
+.feed { position: fixed; inset: var(--head) 0 0 0; overflow-y: auto; scroll-snap-type: y mandatory; scroll-behavior: smooth;
+        overscroll-behavior: contain; }
+.slide { height: calc(100vh - var(--head)); height: calc(100dvh - var(--head)); scroll-snap-align: start; scroll-snap-stop: always;
+         display: flex; align-items: center; justify-content: center; padding: 14px 16px 18px; }
+.card { width: 100%; max-width: 560px; height: 100%; max-height: 760px; background: var(--card); border-radius: 22px;
+        box-shadow: 0 10px 40px rgba(60,40,10,.10), 0 1px 0 rgba(60,40,10,.05); overflow: hidden;
+        display: flex; flex-direction: column; opacity: 0; transform: translateY(18px) scale(.985);
+        transition: opacity .6s ease, transform .6s ease; }
+.slide.in .card { opacity: 1; transform: none; }
+.pic { position: relative; flex: 1 1 52%; min-height: 160px; background: var(--c); overflow: hidden; }
+.pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pic .art { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.35), transparent 55%),
+                        radial-gradient(circle at 75% 80%, rgba(255,255,255,.18), transparent 50%), var(--c); }
+.pic .art span { font-size: 84px; filter: drop-shadow(0 6px 18px rgba(0,0,0,.15)); }
+.pic .lane { position: absolute; left: 14px; top: 14px; font: 700 11px var(--sans); letter-spacing: .06em; text-transform: uppercase;
+             color: #fff; background: var(--c); border-radius: 999px; padding: 6px 11px; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+.pic .badge { position: absolute; right: 14px; top: 14px; font: 700 11px var(--sans); letter-spacing: .04em;
+              color: var(--ink); background: #fff7d6; border-radius: 999px; padding: 6px 11px; }
+.body { flex: 0 1 auto; padding: 20px 22px 18px; display: flex; flex-direction: column; gap: 10px; }
+.body h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(21px, 4.6vw, 26px); line-height: 1.22; letter-spacing: -.005em; }
+.body h2 a { text-decoration: none; }
+.body p { font-size: 15px; line-height: 1.5; color: #46504a; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.meta { font-size: 12.5px; color: var(--muted); }
+.actions { display: flex; gap: 10px; margin-top: 4px; }
+.btn { font: 600 13.5px var(--sans); border-radius: 999px; padding: 10px 16px; cursor: pointer; text-decoration: none;
+       border: 1.5px solid var(--ink); background: var(--ink); color: #fff; display: inline-flex; align-items: center; gap: 6px; }
+.btn.ghost { background: #fff; color: var(--ink); border-color: var(--line); }
+.btn.ghost:hover { border-color: var(--ink); }
+
+/* Intro and end slides */
+.card.plain { justify-content: center; align-items: center; text-align: center; padding: 32px 28px; gap: 16px;
+              background: linear-gradient(160deg, #fff 0%, #fff6ea 100%); }
+.plain .big { font-size: 58px; }
+.plain h1, .plain h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(26px, 6vw, 34px); line-height: 1.15; }
+.plain h1 b { color: var(--heroes); font-weight: 400; }
+.plain p { color: #46504a; font-size: 15.5px; line-height: 1.55; max-width: 400px; }
+.counts { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 420px; }
+.counts span { font-size: 12.5px; font-weight: 600; color: var(--c); background: color-mix(in srgb, var(--c) 12%, #fff);
+               border-radius: 999px; padding: 6px 11px; }
+.hint { font-size: 12.5px; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 6px; }
+.hint i { display: block; width: 18px; height: 18px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+          transform: rotate(45deg); animation: nudge 1.8s ease-in-out infinite; }
+@keyframes nudge { 0%,100% { transform: translateY(0) rotate(45deg); } 50% { transform: translateY(6px) rotate(45deg); } }
+.status { position: fixed; inset: var(--head) 0 0 0; display: flex; align-items: center; justify-content: center; text-align: center;
+          color: var(--muted); font-size: 15px; padding: 24px; }
+
+/* Share sheet */
+.sheet { position: fixed; inset: 0; z-index: 40; background: rgba(20,20,20,.35); display: none; align-items: flex-end; justify-content: center; }
+.sheet.open { display: flex; }
+.sheet .panel { width: 100%; max-width: 560px; background: #fff; border-radius: 20px 20px 0 0; padding: 18px 18px 26px;
+                display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.sheet .panel h3 { grid-column: 1 / -1; font: 600 15px var(--sans); margin-bottom: 4px; }
+.sheet .panel .btn { justify-content: center; }
+.toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: var(--ink); color: #fff; font-size: 13px;
+         border-radius: 999px; padding: 9px 16px; opacity: 0; transition: opacity .3s ease; z-index: 50; pointer-events: none; }
+.toast.show { opacity: 1; }
+.pos { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+.pos:not([hidden]) + .home { margin-left: 0; }
+@media (min-height: 900px) { .card { max-height: 820px; } }
+</style>
+</head>
+<body>
+<header class="top">
+    <div class="bar">
+        <a class="brand" href="/" aria-label="SIGNAL home"><span class="sig">SIGNAL</span><span class="bloom">Bloom<span>.</span></span></a>
+        <span class="pos" id="pos" hidden></span>
+        <a class="home" href="/">&larr; Back to Signal</a>
+    </div>
+    <nav class="chips" id="chips" aria-label="Lanes"></nav>
+</header>
+
+<main class="feed" id="feed" aria-live="polite"></main>
+<div class="status" id="status">Gathering good news&hellip;</div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Share this story">
+    <div class="panel">
+        <h3>Share a smile</h3>
+        <a class="btn ghost" id="sh-wa" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="btn ghost" id="sh-li" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn ghost" id="sh-x" target="_blank" rel="noopener">X</a>
+        <button class="btn ghost" id="sh-copy" type="button">Copy link</button>
+    </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+    'use strict';
+    var DATA_URL = window.BLOOM_DATA_URL || './bloom.json';
+    var LANES = {
+        heroes:        { label: 'Everyday Heroes',      emoji: '✨', color: 'var(--heroes)' },
+        csr:           { label: 'Companies Doing Good', emoji: '🤝', color: 'var(--csr)' },
+        breakthroughs: { label: 'Breakthroughs',        emoji: '🔬', color: 'var(--breakthroughs)' },
+        planet:        { label: 'Planet Wins',          emoji: '🌱', color: 'var(--planet)' },
+        community:     { label: 'Community',            emoji: '🏡', color: 'var(--community)' }
+    };
+    var feed = document.getElementById('feed'), chips = document.getElementById('chips'),
+        statusEl = document.getElementById('status'), pos = document.getElementById('pos');
+    var data = null, filter = 'all', shareUrl = '', shareTitle = '';
+
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+    function safeUrl(u) { return /^https?:\/\//i.test(u || '') ? u : '#'; }
+    function ago(iso) {
+        var t = Date.parse(iso); if (!t) return '';
+        var h = Math.max(0, (Date.now() - t) / 36e5);
+        if (h < 1) return 'just now';
+        if (h < 24) return Math.round(h) + 'h ago';
+        var d = Math.round(h / 24); return d === 1 ? 'yesterday' : d + ' days ago';
+    }
+
+    function matches(s) {
+        if (filter === 'all') return true;
+        if (filter === 'india') return !!s.india;
+        return s.lane === filter;
+    }
+
+    function storySlide(s, pinned) {
+        var lane = LANES[s.lane] || LANES.community;
+        var url = safeUrl(s.url);
+        var img = s.image && /^https?:\/\//i.test(s.image)
+            ? '<img src="' + esc(s.image) + '" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">' : '';
+        return '<section class="slide"><article class="card" style="--c:' + lane.color + '">' +
+            '<div class="pic"><div class="art"><span aria-hidden="true">' + lane.emoji + '</span></div>' + img +
+            '<span class="lane">' + esc(lane.label) + '</span>' +
+            (pinned ? '<span class="badge">🌼 Bloom of the Day</span>' : '') + '</div>' +
+            '<div class="body"><h2><a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(s.title) + '</a></h2>' +
+            (s.summary ? '<p>' + esc(s.summary) + '</p>' : '') +
+            '<div class="meta">' + esc(s.source) + (s.date ? ' &middot; ' + esc(ago(s.date)) : '') + (s.india ? ' &middot; India' : '') + '</div>' +
+            '<div class="actions"><a class="btn" href="' + esc(url) + '" target="_blank" rel="noopener">Read the story &#8599;</a>' +
+            '<button class="btn ghost" type="button" data-share="' + esc(url) + '" data-title="' + esc(s.title) + '">Share</button></div>' +
+            '</div></article></section>';
+    }
+
+    function render() {
+        var list = (data.pick ? [data.pick] : []).concat(data.stories || []).filter(matches);
+        var html = '';
+        var counts = (data.lanes || []).filter(function (l) { return l.count; }).map(function (l) {
+            var lane = LANES[l.id] || LANES.community;
+            return '<span style="--c:' + lane.color + '">' + lane.emoji + ' ' + l.count + ' ' + esc(lane.label) + '</span>';
+        }).join('');
+        var label = filter === 'all' ? '' : filter === 'india' ? ' in India' : ' in ' + LANES[filter].label;
+        html += '<section class="slide"><div class="card plain">' +
+            '<div class="big" aria-hidden="true">🌼</div>' +
+            '<h1><b>' + list.length + '</b> good ' + (list.length === 1 ? 'thing' : 'things') + ' happened' + esc(label) + ' this week</h1>' +
+            '<p>Only good news from around the world: people making a difference, companies doing good, and wins for science and the planet.</p>' +
+            (filter === 'all' ? '<div class="counts">' + counts + '</div>' : '') +
+            (list.length ? '<div class="hint">Scroll to bloom<i></i></div>' : '') + '</div></section>';
+        list.forEach(function (s) { html += storySlide(s, s === data.pick); });
+        html += '<section class="slide"><div class="card plain">' +
+            '<div class="big" aria-hidden="true">🌻</div>' +
+            '<h2>You’re all caught up</h2>' +
+            '<p>That’s every good story we found this week. New ones bloom every 3 hours, so close the tab and go do something kind.</p>' +
+            '<div class="actions"><button class="btn ghost" type="button" id="again">Start again</button>' +
+            '<a class="btn" href="/">Back to Signal</a></div></div></section>';
+        feed.innerHTML = html;
+        feed.scrollTop = 0;
+        total = list.length;
+        observe();
+    }
+
+    function renderChips() {
+        var total = (data.stories || []).length + (data.pick ? 1 : 0);
+        var items = [{ id: 'all', label: 'All', n: total }];
+        (data.lanes || []).forEach(function (l) { if (LANES[l.id] && l.count) items.push({ id: l.id, label: LANES[l.id].label, n: l.count, c: LANES[l.id].color }); });
+        if ((data._meta || {}).india_count) items.push({ id: 'india', label: '🇮🇳 Good in India', n: (data._meta || {}).india_count || 0 });
+        chips.innerHTML = items.map(function (i) {
+            return '<button class="chip" type="button" data-f="' + i.id + '" aria-pressed="' + (i.id === filter) + '"' +
+                (i.c ? ' style="--c:' + i.c + '"' : '') + '>' + esc(i.label) + '<span class="n">' + i.n + '</span></button>';
+        }).join('');
+    }
+
+    var io = null, total = 0;
+    function observe() {
+        if (io) io.disconnect();
+        var slides = feed.querySelectorAll('.slide');
+        if (!('IntersectionObserver' in window)) { slides.forEach(function (s) { s.classList.add('in'); }); return; }
+        io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                    e.target.classList.add('in');
+                    var i = Array.prototype.indexOf.call(slides, e.target);
+                    if (i >= 1 && i <= total) { pos.hidden = false; pos.textContent = i + ' / ' + total; }
+                    else pos.hidden = true;
+                }
+            });
+        }, { root: feed, threshold: 0.55 });
+        slides.forEach(function (s) { io.observe(s); });
+    }
+
+    chips.addEventListener('click', function (e) {
+        var b = e.target.closest('.chip'); if (!b) return;
+        filter = b.getAttribute('data-f');
+        renderChips(); render();
+        b = chips.querySelector('[data-f="' + filter + '"]');
+        if (b && b.scrollIntoView) b.scrollIntoView({ inline: 'center', block: 'nearest' });
+    });
+
+    var sheet = document.getElementById('sheet'), toast = document.getElementById('toast');
+    function say(msg) { toast.textContent = msg; toast.classList.add('show'); setTimeout(function () { toast.classList.remove('show'); }, 1800); }
+    feed.addEventListener('click', function (e) {
+        if (e.target.id === 'again') { feed.scrollTop = 0; return; }
+        var b = e.target.closest('[data-share]'); if (!b) return;
+        shareUrl = b.getAttribute('data-share'); shareTitle = b.getAttribute('data-title');
+        var text = shareTitle + ' 🌼 (good news via SIGNAL Bloom)';
+        if (navigator.share) { navigator.share({ title: shareTitle, text: text, url: shareUrl }).catch(function () {}); return; }
+        document.getElementById('sh-wa').href = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + shareUrl);
+        document.getElementById('sh-li').href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl);
+        document.getElementById('sh-x').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(shareUrl);
+        sheet.classList.add('open');
+    });
+    sheet.addEventListener('click', function (e) {
+        if (e.target.id === 'sh-copy') {
+            (navigator.clipboard ? navigator.clipboard.writeText(shareUrl) : Promise.reject()).then(function () { say('Link copied'); }, function () { say(shareUrl); });
+        }
+        if (e.target === sheet || e.target.closest('a,#sh-copy')) sheet.classList.remove('open');
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') sheet.classList.remove('open');
+        if (/^(ArrowDown|ArrowUp|j|k)$/.test(e.key) && !e.target.closest('input,textarea')) {
+            e.preventDefault();
+            feed.scrollBy({ top: (/Down|j/.test(e.key) ? 1 : -1) * feed.clientHeight, behavior: 'smooth' });
+        }
+    });
+
+    fetch(DATA_URL, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (d) {
+            data = d || {};
+            if (!(data.stories || []).length && !data.pick) { statusEl.textContent = 'No good news gathered yet. The next refresh is within 3 hours.'; return; }
+            statusEl.remove();
+            renderChips(); render();
+        })
+        .catch(function () { statusEl.textContent = 'Good news is unavailable right now. Please try again shortly.'; });
+})();
+</script>
+</body>
+</html>

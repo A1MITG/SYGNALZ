@@ -1,0 +1,18 @@
+# Bloom of the Day, read by app/analysis/bloom.py:load_pinned.
+#
+# The first pin whose `until` (inclusive) has not passed leads /bloom with a
+# "Bloom of the Day" badge. With no live pin, the newest Everyday Heroes
+# story with a picture leads instead.
+#
+# Pin only a story a publication has actually run, and link it.
+#
+#   title    the story's headline, as published
+#   url      the story itself
+#   source   the publisher's name as it should be credited
+#   summary  one line on what happened (optional)
+#   image    the story's picture, an absolute URL (optional)
+#   lane     heroes, csr, breakthroughs, planet or community (default heroes)
+#   india    true for an Indian story (optional)
+#   until    last day the pin is shown (YYYY-MM-DD)
+
+pins: []
