@@ -17,9 +17,11 @@ logger = logging.getLogger(__name__)
 
 async def fetch_newsapi_articles(session, api_key):
     """Fetch articles from NewsAPI with insurance keywords."""
-    url = f"https://newsapi.org/v2/everything?q=insurance+OR+insurer+OR+reinsurance&language=en&sortBy=publishedAt&pageSize=20&apiKey={api_key}"
+    # The key goes in a header, not the URL, so it never shows up in an
+    # error message or log line that prints the request URL.
+    url = "https://newsapi.org/v2/everything?q=insurance+OR+insurer+OR+reinsurance&language=en&sortBy=publishedAt&pageSize=20"
     try:
-        async with session.get(url) as response:
+        async with session.get(url, headers={'X-Api-Key': api_key}) as response:
             if response.status == 200:
                 data = await response.json()
                 articles = []
