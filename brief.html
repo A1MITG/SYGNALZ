@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGNAL — Today's Brief · Saturday, 24 October 2026</title>
+<!-- Rendered by app/analysis/brief.py for both the static build (public/brief.html)
+     and Flask's /brief. Text only by design: no images, no scripts. -->
+<style>
+:root {
+    --navy: #0b1524; --ink: #0a0a0a; --slate: #5a6472; --slate-light: #8a94a2;
+    --rule: #e3e6ea; --link: #1a4fbf; --paper: #ffffff;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: Consolas, "SF Mono", monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); }
+.brief { max-width: 720px; margin: 0 auto; padding: 44px 24px 56px; }
+header { border-bottom: 2px solid var(--navy); padding-bottom: 14px; margin-bottom: 8px; }
+.mast { font: 700 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--slate); margin-bottom: 10px; }
+h1 { font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.2; color: var(--navy); }
+.dateline { margin-top: 6px; font-size: 13px; color: var(--slate); }
+section { padding: 22px 0 4px; border-bottom: 1px solid var(--rule); }
+section:last-of-type { border-bottom: 0; }
+h2 { font: 700 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--navy); margin-bottom: 12px; }
+ol { list-style: none; }
+li { margin-bottom: 14px; line-height: 1.45; }
+li a { font-family: var(--serif); font-size: 16.5px; color: var(--link); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+.src { font: 10.5px var(--mono); color: var(--slate-light); white-space: nowrap; }
+.sum { font-size: 14px; color: var(--slate); }
+.empty { padding: 28px 0; font-family: var(--serif); font-size: 16px; color: var(--slate); }
+footer { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--slate); }
+footer a { color: var(--link); }
+@media (max-width: 600px) { .brief { padding: 28px 16px 36px; } h1 { font-size: 25px; } }
+.back-home { position: fixed; left: max(24px, env(safe-area-inset-left)); bottom: max(28px, env(safe-area-inset-bottom)); z-index: 10; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 16px 0 14px; border-radius: 999px; background: var(--navy); color: #fff; font: 600 12px/1 var(--sans); letter-spacing: .02em; text-decoration: none; box-shadow: 0 6px 18px rgba(11,21,36,.22); transition: transform .2s, box-shadow .2s; }
+.back-home:hover, .back-home:focus-visible { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(11,21,36,.3); }
+.back-home:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+/* Always on screen, so the way back is there from the first line. A short entrance on load only. */
+@media (prefers-reduced-motion: no-preference) {
+    .back-home { animation: back-home-in .45s cubic-bezier(.2,.8,.2,1) .15s both; }
+    @keyframes back-home-in { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+}
+@media (max-width: 1023px) { .back-home { left: max(20px, env(safe-area-inset-left)); bottom: max(24px, env(safe-area-inset-bottom)); } }
+@media (max-width: 600px) { .back-home { left: max(16px, env(safe-area-inset-left)); bottom: max(18px, env(safe-area-inset-bottom)); } }
+@media print { .back-home { display: none; } footer a { color: inherit; text-decoration: none; } li a { color: var(--ink); } }
+/* Scroll-to-top: shared by the Command Center and Today's Brief. CSS only:
+   #top scrolls to the start of the page, the scroll timeline fades it in. */
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+.to-top { position: fixed; right: max(24px, env(safe-area-inset-right)); bottom: max(24px, env(safe-area-inset-bottom)); z-index: 80; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; background: #0b1524; color: #fff; border: 1.5px solid rgba(255,255,255,.38); box-shadow: 0 8px 22px rgba(0,0,0,.3); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s, background-color .25s; }
+.to-top svg { width: 20px; height: 20px; transition: transform .25s cubic-bezier(.2,.8,.2,1); }
+.to-top:hover { background: #14243a; transform: translateY(-3px); box-shadow: 0 14px 30px rgba(11,21,36,.34); }
+.to-top:hover svg { transform: translateY(-2px); }
+.to-top:active { transform: translateY(0) scale(.94); transition-duration: .08s; }
+.to-top:focus-visible { outline: 2px solid #2f6fed; outline-offset: 3px; }
+@supports (animation-timeline: scroll()) {
+    .to-top { animation: to-top-in linear both; animation-timeline: scroll(); animation-range: 240px 420px; }
+    @keyframes to-top-in { from { opacity: 0; scale: .6; translate: 0 16px; visibility: hidden; } to { opacity: 1; scale: 1; translate: 0 0; visibility: visible; } }
+}
+@media (max-width: 1023px) { .to-top { right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); } }
+@media (max-width: 600px) { .to-top { width: 44px; height: 44px; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); } }
+@media print { .to-top { display: none; } }
+</style>
+<!-- Vercel Web Analytics: anonymous page views (no cookies). -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<article class="brief">
+    <header>
+        <p class="mast">SIGNAL · Today's Brief</p>
+        <h1>Saturday, 24 October 2026</h1>
+        <p class="dateline">Updated 21:39 IST · 66 stories across 14 areas · headlines link to the original reporting</p>
+    </header>
+
+    <section>
+        <h2>Global Affairs</h2>
+        <ol>
+
+            <li><a href="https://www.bbc.co.uk/news/articles/c60qk573yzz8o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">White House lifts tariffs on some Canadian goods as midterm elections loom</a> <span class="src">bbc.co.uk</span><br><span class="sum">From 30 October, tariffs will be eased on some products, including certain machinery, and placed on others, such as carpets.</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/jk-tyre-q2-net-profit-declines-by-71-y-o-y-to-65-crore-due-to-geopolitical-tensions/article71617381.ece" target="_blank" rel="noopener">JK Tyre Q2 net profit declines by 71% y-o-y to ₹65 crore due to geopolitical tensions</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">EBITDA) margin contracted sharply to 7.1 per cent from 13.3 per cent</span></li>
+
+            <li><a href="https://www.supplychaindive.com/news/trump-tweaks-canada-tariffs-removing-certain-goods-while-adding-others/833895/" target="_blank" rel="noopener">Trump tweaks Canada tariffs, removing certain goods while adding others</a> <span class="src">supplychaindive.com</span><br><span class="sum">Plywood and certain packaging materials are among the products that will no longer face the 50% tariff, effective Oct. 30.</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/news/international/world-news/iran-claims-strait-of-hormuz-control-warns-us-warships-against-entering-persian-gulf-amid-fresh-strike-threat/articleshow/135166686.cms" target="_blank" rel="noopener">IRGC claims Strait of Hormuz control</a> <span class="src">economictimes.indiatimes.com</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/indias-bulk-scotch-tariff-dispute-risks-undermining-india-uk-trade-deal-industry-group-says/article71617675.ece" target="_blank" rel="noopener">India’s bulk Scotch tariff dispute risks undermining India-UK trade deal, industry group says</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">An industry association has sought urgent clarification from the government as the tariff dispute raises concerns over market access and investment</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Economy, Business &amp; Markets</h2>
+        <ol>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/setco-automotive-swings-to-20361-crore-profit-plans-lava-cast-merger-to-cut-costs/article71620201.ece" target="_blank" rel="noopener">Setco Automotive swings to ₹203.61 crore profit, plans Lava Cast merger to cut costs</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">Setco Automotive returned to a consolidated profit of ₹203.61 crore in the April–June 2026 quarter, against a loss a year earlier, while revenue rose 12.3%</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/tata-motors-cvs-profit-rebounds-to-2138-crore-in-q2-as-revenue-jumps-419/article71615837.ece" target="_blank" rel="noopener">Tata Motors Q2 consolidated profit rebounds to ₹1,257 crore; revenue rises 36.3%</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">The company moved closer to completing its €3.91-billion Iveco acquisition</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/south-africa-moves-towards-5-400-crore-takeover-of-lakshmi-mittal-s-struggling-steel-business-what-s-in-the-deal-11792823948118.html" target="_blank" rel="noopener">South Africa moves towards  ₹5,400 crore takeover of Lakshmi Mittal’s struggling steel business: What’s in the deal?</a> <span class="src">livemint.com</span><br><span class="sum">South Africa is reportedly moving towards a ₹5,400 crore takeover of Lakshmi and Aditya Mittal’s steel business.</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/info-tech/apple-india-revenue-crosses-1-lakh-crore-in-fy26-net-profit-rises-66/article71617571.ece" target="_blank" rel="noopener">Apple India revenue crosses ₹1 lakh crore in FY26, net profit rises 66%</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">Apple India reported strong financial growth in FY26, with revenue crossing ₹1 lakh crore and net profit rising sharply, according to Tofler.</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/lumax-profit-jumps-58-bets-150-crore-on-electronics-plant-to-generate-500-crore-revenue/article71619969.ece" target="_blank" rel="noopener">Lumax profit jumps 58%, bets ₹150 crore on electronics plant to generate ₹500 crore revenue</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">Lumax Auto Technologies reported a 57.8% rise in quarterly profit and 34.5% revenue growth despite higher material costs</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>AI, Technology &amp; Innovation</h2>
+        <ol>
+
+            <li><a href="https://economictimes.indiatimes.com/tech/startups/honasa-consumer-elevates-vipul-maheshwari-to-chief-product-technology-officer/articleshow/135167378.cms" target="_blank" rel="noopener">Honasa Consumer elevates Vipul Maheshwari to chief product &amp; technology officer</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">In his new role, Maheshwari will lead the company’s product, technology, engineering and analytics functions.</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/openai-resumes-frontier-ai-training-after-security-overhaul-discloses-flaw-in-widely-used-software/articleshow/135161388.cms" target="_blank" rel="noopener">OpenAI resumes frontier AI training after security overhaul, discloses flaw in widely used software</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">OpenAI had paused training of its most capable models after one of its research models used a configuration error to gain limited internet access in September.</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/world/people/openai-acquired-his-startup-in-2024-now-alexander-embiricos-leads-a-new-ai-product/articleshow/135170364.cms" target="_blank" rel="noopener">OpenAI bought his startup; now he leads a AI product</a> <span class="src">economictimes.indiatimes.com</span></li>
+
+            <li><a href="https://www.businessinsurance.com/ai-serves-up-a-menu-of-mistakes/" target="_blank" rel="noopener">AI serves up a menu of mistakes</a> <span class="src">businessinsurance.com</span><br><span class="sum">Businesses hoping artificial intelligence will make their operations more efficient might want to check what the technology is cooking up before serving it to customers.</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/chinas-moonshot-ai-launches-kimi-k3-1-pro-plans-full-model-weights-release-by-nov/articleshow/135162538.cms" target="_blank" rel="noopener">China&#39;s Moonshot AI launches Kimi K3.1 Pro; plans full model weights release by November</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">Chinese artificial intelligence (AI) company Moonshot AI has unveiled Kimi K3.1 Pro, a 3-trillion-parameter open-weight AI model featuring a 1-million-token context…</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>GCC &amp; Enterprise Technology</h2>
+        <ol>
+
+            <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE00MG9BYkJ3SnpaQkN3QWRhOVUzcHFia1VheldhMzdFNEhIa3FRVVZYcXNpdWExTnkyUHVqZy0tb2NqSlhtRmtzWlZ6UFhUakdvQ2c?oc=5" target="_blank" rel="noopener">Japanese firms helped position India as an AI innovation hub, with 100+ companies establishing or expanding Global Capability Centres (GCCs) in the country, according to a Cushman &amp; Wakefield report released on Wednesday. The centres are moving bey</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMi4wFBVV95cUxOeVU3M2xxZEkwUnVzd3JHZmxwRk0yMlgxcnAyRjdYbmlzMWdKandNSjUwNGE3d0JxRUVaWGw1cVRtQkUydFZvNVczbFRtS1RFM1pra3pjQ0xSV28yb3pFWkVGSHkxcUFXaFF3RmVvY2xJcmFBaWt3NmxMbGNaRDFNZE11M2ZWZ1dsZ0FvMlp4bVZKNF9odGJKeFB0QXp0SjlFMnRsRENKLXEtRDVrOENOME9CbF8zVkV0NFlKWHMtNHhwcC1MRldXWGE1Rno4OWN3RUFLRXNtaUFNLXNFTXd5M3FoWQ?oc=5" target="_blank" rel="noopener">India’s GCCs to add 1-1.4 Million Jobs and drive 150-170 Million Sq. Ft. of office demand by 2031: Embark Report</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxOTkllYUVkOXBONFVKSWZwTm5YbjVfc3lVQkFEWGtzamZDQ2ZmX0Fkc1Fldkh4N2Y3Z3Jia3FNQ2dPcUduRFdFWEE0UEZnTmNTd0R2eUltY2xiNXZOdmxYclJaRWs4UFhQOXA3Q2d4V1h4SU9vSzhvY0NMVmNNRnNIRmVfOHlLVGN3WWpmbFBFV212aGdMWjJiYzZUcVBjemN1YmZWeHRR?oc=5" target="_blank" rel="noopener">Aon Leadership Forum Highlights Next Chapter of India&#39;s Global Capability Centre Story</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxPSWtCZDY3andRblAtMEo0WU4xaUx1T1NGUDRXMHNYR1FmZ0tHVXVoNk5VOXBRVzY2QUszY19WVV9tTFBkcTF0VThNTEkzbTJ3ZkNoYk83SnNpTGgteEtZV3NrRmF4X2dkSmRTcUdEUE9sdXkyQVdoSHZCVGdDLV81aC1iYk5PUFJJYkwzVUdsVmV6MWlseDFNTjJ4Y2pqenR3U2kydjR2bVBOUVlKRUl0M1F1Rmh5UQ?oc=5" target="_blank" rel="noopener">Prudential Financial opens 1st global capability center in Gurugram</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxOQWJKcTcyWHZ5cktadTJXcV96b0ozSml0UGtjeGlud2FhV2pVQUJUVHJ3aGpLZnp1cWpnV21rakN3WGVuRTFBX1ZjSlZ5ZDl6RVFfYnR2Q0ItaDhoNjRGZU54MUZ6TTlZeFRlY2t2OTdHbmE3bm9FM1JRampVNWRFVFNHZnNkS3lXSk96RVo2dmF4c3FKeFhQLUxzb2RncmF1anRPSklGaE5iX2tXUldPMEFlU0ZKc3hWSXpnRWhLVXk?oc=5" target="_blank" rel="noopener">India&#39;s healthcare GCCs to generate 67,000 jobs in 2026: Quess Corp report</a> <span class="src">news.google.com</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Insurance &amp; Financial Services</h2>
+        <ol>
+
+            <li><a href="https://www.businessinsurance.com/?p=834582" target="_blank" rel="noopener">European commercial insurers earn high ratings, but several are assessed by just one agency</a> <span class="src">businessinsurance.com</span><br><span class="sum">At first sight, the average rating outcomes — the Litmus Composite Scores — for BI’s European commercial lines list mimic the very high degree of sector strength seen in…</span></li>
+
+            <li><a href="https://www.businessinsurance.com/?p=834556" target="_blank" rel="noopener">Property owners invest in resilience, but insurers slow to recognize efforts</a> <span class="src">businessinsurance.com</span><br><span class="sum">Commercial property owners are investing in resilience measures, such as roof upgrades, automatic sprinklers and water-monitoring technologies, but insurer recognition…</span></li>
+
+            <li><a href="https://www.businessinsurance.com/?p=834570" target="_blank" rel="noopener">Data center boom brings premium growth, risks</a> <span class="src">businessinsurance.com</span><br><span class="sum">Billions of dollars in data center construction are generating significant insurance demand, but a growing challenge for insurers is the accumulation of exposures rather…</span></li>
+
+            <li><a href="https://www.businessinsurance.com/?p=834615" target="_blank" rel="noopener">2026 Business Insurance Best Places to Work</a> <span class="src">businessinsurance.com</span><br><span class="sum">Best Places to Work in Insurance is an annual feature presented by Business Insurance and Best Companies Group that ranks the agents, brokers, insurers and other…</span></li>
+
+            <li><a href="https://www.businessinsurance.com/?p=834544" target="_blank" rel="noopener">Senior care liability claims grow costlier</a> <span class="src">businessinsurance.com</span><br><span class="sum">Senior living facilities are seeing liability insurance rates stabilize amid increased capacity and competition, as they face a changing operating environment, but…</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Banking</h2>
+        <ol>
+
+            <li><a href="https://economictimes.indiatimes.com/markets/stocks/earnings/au-small-finance-bank-q2-profit-jumps-53-to-rs-858-crore/articleshow/135169847.cms" target="_blank" rel="noopener">AU Small Finance Bank Q2 profit jumps 53% to Rs 858 crore</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">Kolkata: AU Small Finance Bank reported a 53% surge in second-quarter net profit to Rs 858 crore from Rs 561 crore in the year-ago period, helped by business expansion…</span></li>
+
+            <li><a href="https://timesofindia.indiatimes.com/business/india-business/upper-layer-nbfcs-have-to-list-rbi-governor-on-tatas-dispels-doubts-on-sept-order/articleshow/135155571.cms" target="_blank" rel="noopener">Upper layer NBFCs have to list: RBI guv on Tatas; dispels doubts on Sept order</a> <span class="src">timesofindia.indiatimes.com</span><br><span class="sum">RBI governor Sanjay Malhotra’s comments also suggest Tata Sons is in breach of RBI rules.</span></li>
+
+            <li><a href="https://www.business-standard.com/companies/quarterly-results/q2-results-idfc-first-bank-castrol-india-jk-cement-30-more-on-oct-24-126102400225_1.html" target="_blank" rel="noopener">Q2 results: IDFC First Bank, Castrol India, JK Cement, 30 more on Oct 24</a> <span class="src">business-standard.com</span><br><span class="sum">Q2FY27 company results: Firms including Kotak Mahindra, AU Small Finance Bank, Kajaria Ceramics, Netweb Technologies, and Apollo Micro Systems are also to release their…</span></li>
+
+            <li><a href="https://www.livemint.com/companies/indian-overseas-bank-privatisation-what-is-the-buzz-about-centres-rules-and-regulations-for-the-process-explained-11792819469291.html" target="_blank" rel="noopener">Indian Overseas Bank privatisation: What is the buzz about? Centre&#39;s rules and regulations for the process, explained</a> <span class="src">livemint.com</span><br><span class="sum">While the Centre is considering reducing its stakes in four public sector banks to 75% to meet public-shareholding norms, it also plans to privatise at least two public…</span></li>
+
+            <li><a href="https://www.business-standard.com/companies/quarterly-results/kotak-mahindra-bank-q2-fy27-profit-nii-fcnr-deposits-asset-quality-126102400637_1.html" target="_blank" rel="noopener">Kotak Mahindra Bank&#39;s Q2 consolidated net profit rises 26% to ₹5,645 crore</a> <span class="src">business-standard.com</span><br><span class="sum">Standalone profit rose 29 per cent as NII grew 16 per cent and provisions fell, though large FCNR(B) inflows pushed net interest margin down to 4.31 per cent</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Manufacturing</h2>
+        <ol>
+
+            <li><a href="https://www.livemint.com/companies/company-results/jsw-steel-profit-more-than-triples-on-strong-demand-beats-street-estimates-11792764827881.html" target="_blank" rel="noopener">JSW Steel profit more than triples on strong demand, beats Street estimates</a> <span class="src">livemint.com</span><br><span class="sum">Higher realisations and strong domestic demand drove a surge in September-quarter earnings, as the steelmaker cleared ₹16,150 crore in fresh capex to support its…</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/jsw-steel-q2-net-up-three-fold-on-higher-volumes-better-realisation/article71616006.ece" target="_blank" rel="noopener">JSW Steel Q2 net up three-fold on higher volumes, better realisation</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">The company spent ₹11,136 crore on capex in the first half of this fiscal year and plans to invest another ₹12,864 crore in the second half, bringing total investment to…</span></li>
+
+            <li><a href="https://www.manufacturingdive.com/news/us-steel-invest-3b-hot-strip-mill-near-pittsburgh-edgar-thomson/833835/" target="_blank" rel="noopener">US Steel to invest nearly $3B in hot strip mill near Pittsburgh</a> <span class="src">manufacturingdive.com</span><br><span class="sum">The company’s board of directors increased project funding from an initial $2 billion to $2.5 billion range.</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/volkswagen-frozen-india-ev-investments-as-jsw-joint-venture-talks-continue-what-is-next-11792831037225.html" target="_blank" rel="noopener">Volkswagen has frozen India EV investments as JSW joint venture talks continue - What is next?</a> <span class="src">livemint.com</span><br><span class="sum">Volkswagen is pausing investment in an India electric-vehicle program until it has greater clarity on a potential partnership with JSW Group.</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/how-dispute-with-sole-supplier-of-an-indispensable-part-forced-boeing-to-halt-production-of-777-freighter-767-planes-11792815757030.html" target="_blank" rel="noopener">How dispute with sole supplier of an ‘indispensable’ part forced Boeing to halt production of 777 freighter, 767 planes</a> <span class="src">livemint.com</span><br><span class="sum">A dispute with Florida supplier Vaero halted Boeing 777 freighter production for nearly two months and disrupted 767 output, including freighters and KC-46 tankers.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Energy</h2>
+        <ol>
+
+            <li><a href="https://www.livemint.com/companies/news/trinidad-and-tobago-in-talks-with-ongc-videsh-oil-india-to-refine-venezuelan-crude-11792749605379.html" target="_blank" rel="noopener">Trinidad and Tobago in talks with ONGC Videsh, Oil India to refine Venezuelan crude</a> <span class="src">livemint.com</span><br><span class="sum">The Caribbean government has proposed that the two Indian oil companies process crude from neighbouring Venezuela at the Guaracara refinery in Pointe-à-Pierre, which…</span></li>
+
+            <li><a href="https://www.business-standard.com/companies/quarterly-results/bpcl-q2-profit-falls-22-5-to-4-993-cr-as-fuel-price-freeze-hits-earnings-126102400659_1.html" target="_blank" rel="noopener">BPCL Q2 profit falls 22.5% to ₹4,993 cr as fuel price freeze hits earnings</a> <span class="src">business-standard.com</span><br><span class="sum">The company said it continued investing in infrastructure, supply-chain resilience and digital transformation, while ensuring uninterrupted fuel supplies across the…</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/tech/technology/why-ai-data-centers-are-powering-a-boom-in-fuel-cell-demand/articleshow/135161365.cms" target="_blank" rel="noopener">Why AI data centers are powering a boom in fuel-cell demand</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">A fuel cell generates electricity through a chemical reaction between a fuel, such as natural gas or hydrogen, and oxygen, converting the fuel&#39;s energy directly into…</span></li>
+
+            <li><a href="https://www.insurancejournal.com/news/midwest/2026/10/23/890190.htm" target="_blank" rel="noopener">Michigan, Ohio Gas Prices Spike Further Amid Refinery Breakdown</a> <span class="src">insurancejournal.com</span><br><span class="sum">Gas prices in two Midwestern battleground states saw further hikes on Thursday as the region’s market grapples with a refinery issue in Illinois.</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/kec-international-bags-orders-worth-2872-cr-from-power-grid-corporation-of-india/article71619466.ece" target="_blank" rel="noopener">KEC International bags orders worth ₹2,872 cr from Power Grid Corporation of India</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">With these wins, the year-to-date order intake has crossed ₹13,500 crore, including ₹9,500 crore from the Transmission and Distribution (T&amp;D) business</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Defence</h2>
+        <ol>
+
+            <li><a href="https://www.theguardian.com/world/2026/oct/24/ukraine-zelenskyy-military-starlink-satellite-connection-stable-after-restrictions" target="_blank" rel="noopener">Ukraine’s military says Starlink satellite connection stable after recent restrictions</a> <span class="src">theguardian.com</span><br><span class="sum">Volodymyr Zelenskyy offers thanks to US allies for restoring system key to air defence and ‘frontline logistics’ Ukraine’s military has a “stable connection to…</span></li>
+
+            <li><a href="https://www.theguardian.com/world/2026/oct/24/israel-soldiers-raze-west-bank-neighbourhood-hebron-families-from-homes" target="_blank" rel="noopener">Israeli soldiers raze neighbourhood in Hebron, driving families from homes</a> <span class="src">theguardian.com</span><br><span class="sum">PM Benjamin Netanyahu vows ‘to destroy this place’ in retaliation for militant attack on army checkpoint Israeli troops have levelled a neighbourhood in Hebron, driving…</span></li>
+
+            <li><a href="https://www.aljazeera.com/news/2026/10/24/iran-says-wont-allow-us-warships-to-get-close-as-trump-ponders-new-attacks?traffic_source=rss" target="_blank" rel="noopener">Iran says won’t allow US warships to get close as Trump ponders new attacks</a> <span class="src">aljazeera.com</span><br><span class="sum">Iranian officials, media and analysts sense war is closer, but signal there will be no backing down.</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/news/international/world-news/four-philippine-air-force-pilots-killed-in-training-accident/articleshow/135164873.cms" target="_blank" rel="noopener">Four Philippine Air Force pilots killed in training</a> <span class="src">economictimes.indiatimes.com</span></li>
+
+            <li><a href="https://www.theguardian.com/world/2026/oct/23/netanyahu-orders-very-extensive-operation-west-bank-two-israeli-soldiers-killed" target="_blank" rel="noopener">Israel launches collective punishment campaign in Hebron after two soldiers killed</a> <span class="src">theguardian.com</span><br><span class="sum">Benjamin Netanyahu and ministers promise demolitions and forced displacement after deadly gunfight Israel has launched a campaign of collective punishment against…</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Cyber Intelligence</h2>
+        <ol>
+
+            <li><a href="https://www.businessinsurance.com/?p=834578" target="_blank" rel="noopener">Basic cybersecurity controls remain critical as threats evolve</a> <span class="src">businessinsurance.com</span><br><span class="sum">Despite growing concerns about futuristic artificial intelligence and potential cyber-doom scenarios, most cyber incident losses still stem from familiar crimes like…</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/moonshot-curbs-hacking-ability-in-new-kimi-model-as-fears-grow-over-ai-powered-cyberattacks/articleshow/135162609.cms" target="_blank" rel="noopener">Moonshot curbs hacking ability in new Kimi model as fears grow over AI-powered cyberattacks</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">Beijing-based Moonshot announced the curbs while introducing Kimi K3.1 Pro, which it describes as its most capable 3-trillion-parameter-class open-weight model.</span></li>
+
+            <li><a href="https://www.livemint.com/companies/what-is-eu-investigating-booking-com-for-fake-hotel-listings-phishing-scams-and-more-explained-11792771189836.html" target="_blank" rel="noopener">What is EU investigating Booking.com for? Fake hotel listings, phishing scams and more | Explained</a> <span class="src">livemint.com</span><br><span class="sum">The European Commission will examine how Booking.com labels paid listings.</span></li>
+
+            <li><a href="https://timesofindia.indiatimes.com/business/india-business/india-seventh-most-targeted-by-cyberattacks-ms-executive-nicholas-butts/articleshow/135155567.cms" target="_blank" rel="noopener">India seventh most targeted by cyberattacks: MS executive Nicholas Butts</a> <span class="src">timesofindia.indiatimes.com</span><br><span class="sum">Butts cited Storm 3168, also called Jadepuffer, which he described as a China-based ransomware operation using AI agents against customers worldwide.</span></li>
+
+            <li><a href="https://timesofindia.indiatimes.com/business/international-business/two-critical-php-flaws-trigger-global-alert-millions-of-services-face-cyber-risk/articleshow/135155574.cms" target="_blank" rel="noopener">Two critical PHP flaws trigger global alert; millions of services face cyber risk</a> <span class="src">timesofindia.indiatimes.com</span><br><span class="sum">PHP advised users on Oct 23 to temporarily disable its session upload progress feature until the next regular bugfix release.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Supply Chain</h2>
+        <ol>
+
+            <li><a href="https://manufacturing.economictimes.indiatimes.com/news/industry/india-eyes-stronger-domestic-supply-chains-through-coal-gasification-rare-earth-corridors-anupriya-patel/135164657" target="_blank" rel="noopener">India eyes stronger domestic supply chains through coal gasification, rare earth corridors: Anupriya Patel</a> <span class="src">manufacturing.economictimes.indiatimes.com</span><br><span class="sum">MoS Anupriya Patel identifies semiconductor supply chain, plastic manufacturing, and regulatory changes as some areas where the government intends to add value…</span></li>
+
+            <li><a href="https://www.freightwaves.com/news/truckings-ruthless-vs-conservative-whos-winning" target="_blank" rel="noopener">Trucking’s “Ruthless” vs. “Conservative:” Who’s Winning?</a> <span class="src">freightwaves.com</span><br><span class="sum">In a lukewarm freight market, not all carriers are feeling the same heat.</span></li>
+
+            <li><a href="https://www.freightwaves.com/news/wabtec-earnings-rise-on-higher-freight-and-transit-sales" target="_blank" rel="noopener">Wabtec earnings rise on higher freight and transit sales</a> <span class="src">freightwaves.com</span><br><span class="sum">Rail equipment supplier Wabtec raised its outlook on higher third-quarter revenue and earnings.</span></li>
+
+            <li><a href="https://www.freightwaves.com/news/new-drewry-data-shows-import-demand-boosting-trans-pacific-rates" target="_blank" rel="noopener">New Drewry data shows import demand boosting trans-Pacific rates</a> <span class="src">freightwaves.com</span><br><span class="sum">Drewry’s World Container Index rose on higher rates on trans-Pacific and Asia-Europe routes.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Healthcare</h2>
+        <ol>
+
+            <li><a href="https://www.theguardian.com/us-news/2026/oct/24/measles-outbreak-reporting" target="_blank" rel="noopener">Additional 178 cases of measles reported by US health authorities amid outbreak</a> <span class="src">theguardian.com</span><br><span class="sum">Centers for Disease Control and Prevention reported 4,588 cases across the country, more than double the tally in 2025 Federal health authorities reported an additional…</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/torrent-pharma-q2-net-profit-falls-10-to-534-crore-revenue-rises-51/article71615894.ece" target="_blank" rel="noopener">Torrent Pharma Q2 Results: Net profit falls 10% to ₹534 cr; revenue rises 51%</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">Revenue from operations of the Ahmedabad-based company increased 50.8 per cent to ₹4,979 crore in the quarter, compared with ₹3,302 crore a year earlier</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/dr-reddys-launches-two-new-semaglutide-brands-amid-obeda-supply-disruptions/article71617670.ece" target="_blank" rel="noopener">Dr Reddy’s launches two new semaglutide brands amid Obeda supply disruptions</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">The drugmaker has shifted production to a partner facility and expects to resolve the impurity issue affecting its injectable product next month.</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/dr-reddys-q2-fy27-net-down-36-at-925-cr/article71616661.ece" target="_blank" rel="noopener">Dr Reddy’s Q2 FY27 net down 36% at ₹925 cr</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">Provision for Semaglutide inventory and lower lenalidomide revenues in North America hit performance</span></li>
+
+            <li><a href="https://www.bbc.co.uk/news/articles/cm1dwzvn6227o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">Vanessa Trump says she is cancer-free six months after revealing diagnosis</a> <span class="src">bbc.co.uk</span><br><span class="sum">The ex-wife of Donald Trump Jr, with whom she shares five children, announced in May that she had been diagnosed with breast cancer.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Telecom &amp; Digital Infrastructure</h2>
+        <ol>
+
+            <li><a href="https://www.livemint.com/companies/news/ukraine-seeks-starlink-alternative-after-musks-satellite-disruptions-what-nokia-and-iceye-are-building-11792817354127.html" target="_blank" rel="noopener">Ukraine seeks Starlink alternative after Musk&#39;s satellite disruptions: What Nokia and ICEYE are building?</a> <span class="src">livemint.com</span><br><span class="sum">Ukraine is exploring satellite communications with Nokia and ICEYE after SpaceX service restrictions disrupted drone connections.</span></li>
+
+            <li><a href="https://telecom.economictimes.indiatimes.com/news/industry/5g-sa-adoption-lags-bharti-airtel-deploying-redcap-says-gsa-report/135160379" target="_blank" rel="noopener">5G SA adoption lags, Bharti Airtel deploying RedCap, says GSA: Report</a> <span class="src">telecom.economictimes.indiatimes.com</span><br><span class="sum">Despite the slow pace, 5G SA is crucial for enabling advanced features such as network slicing and 5G reduced capability (RedCap).</span></li>
+
+            <li><a href="https://www.livemint.com/companies/people/reliance-jio-ipo-who-is-arjun-vaidya-bizman-shares-why-his-friend-akash-ambani-returned-to-india-from-us-video-11792851277334.html" target="_blank" rel="noopener">Reliance Jio IPO: Who is Arjun Vaidya? Bizman shares why his friend Akash Ambani returned to India from US | Video</a> <span class="src">livemint.com</span><br><span class="sum">Entrepreneur and investor Arjun Vaidya recalled Akash Ambani’s 2013 decision to return to India.</span></li>
+
+            <li><a href="https://www.businessinsurance.com/?p=834588" target="_blank" rel="noopener">Perspectives: Data centers, government uncertainty and the next wave of D&amp;O risk</a> <span class="src">businessinsurance.com</span><br><span class="sum">The artificial intelligence boom is driving enormous investment in data centers.</span></li>
+
+            <li><a href="https://www.bbc.co.uk/news/videos/cqy7lvv0lvzpo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">Who actually controls Ukraine&#39;s access to Starlink?</a> <span class="src">bbc.co.uk</span><br><span class="sum">President Zelensky says limits to the technology continue to affect Ukrainian forces, while US officials and Elon Musk offer conflicting accounts of who controls it.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Climate &amp; Sustainability</h2>
+        <ol>
+
+            <li><a href="https://www.theguardian.com/world/2026/oct/24/typhoon-champi-kills-one-and-injures-more-than-500-in-taiwan-as-it-heads-to-china" target="_blank" rel="noopener">Typhoon Champi kills one and injures more than 500 in Taiwan as it heads to China</a> <span class="src">theguardian.com</span><br><span class="sum">Super typhoon weakening but large parts of Taiwan, including Taipei, still mostly closed and flights cancelled Typhoon Champi swept past Taiwan on Saturday killing one…</span></li>
+
+            <li><a href="https://www.theguardian.com/australia-news/2026/oct/24/thunderstorms-heavy-rain-and-flash-flooding-predicted-for-much-of-australia" target="_blank" rel="noopener">Thunderstorms, heavy rain and flash flooding predicted for much of Australia</a> <span class="src">theguardian.com</span><br><span class="sum">Parts of Queensland, Victoria and South Australia can expect severe storms on Saturday, moving into NSW and Tasmania by Sunday Get our breaking news email , free app or…</span></li>
+
+        </ol>
+    </section>
+
+    <footer>Built from the same scored stories as the Command Center. <a href="/">Back to the Command Center</a></footer>
+</article>
+<a class="back-home" href="/" aria-label="Back to the main page">&larr; Main page</a>
+<a class="to-top" href="#top" aria-label="Back to top" title="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
+</body>
+</html>
