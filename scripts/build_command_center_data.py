@@ -109,6 +109,11 @@ def main(refresh=False):
         'built_at': built_at.isoformat(timespec='seconds'),
         'refresh_slots_ist': list(REFRESH_SLOTS_IST),
     }
+    # The range the "Past days" calendar offers; days are filed by
+    # scripts/archive_snapshot.py, which runs before this build.
+    days = archived_dates()
+    if days:
+        engine_data['_meta'].update(archive_first=days[0], archive_last=days[-1])
 
     PUBLIC_DIR.mkdir(exist_ok=True)
     out_path = PUBLIC_DIR / 'command_center_data.json'

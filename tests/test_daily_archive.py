@@ -116,14 +116,32 @@ class TestArchivePage(unittest.TestCase):
             self.assertTrue(data['_meta']['built_at'], day)
 
 
-class TestNavLink(unittest.TestCase):
-    """Amit chose the top menu (2026-10-24): Archive sits next to Today's Brief."""
+class TestPastDaysLink(unittest.TestCase):
+    """Amit chose option B (2026-10-24): a small "Past days" link beside the
+    Updated stamp that opens a calendar, not a top-menu item."""
 
-    def test_archive_follows_todays_brief_in_the_nav_on_every_screen(self):
-        src = (ROOT / 'app' / 'static' / 'command_center_source.html').read_text(encoding='utf-8')
-        self.assertIn('<a class="link" href="/brief">Today\'s Brief</a>\n'
-                      '            <a class="link" href="/archive">Archive</a>', src)
-        self.assertIn('.nav-right a.link[href="/archive"],', src)
+    @classmethod
+    def setUpClass(cls):
+        cls.src = (ROOT / 'app' / 'static' / 'command_center_source.html').read_text(encoding='utf-8')
+
+    def test_the_link_sits_in_the_updated_cell_with_a_date_input(self):
+        cell = self.src[self.src.index('<span class="wc-upd" hidden>'):]
+        cell = cell[:cell.index('</span></div>')]
+        self.assertIn('<a class="wc-arc" href="/archive" hidden>', cell)
+        self.assertIn('<input type="date"', cell)
+
+    def test_it_is_not_in_the_top_menu(self):
+        self.assertNotIn('<a class="link" href="/archive">', self.src)
+
+    def test_the_calendar_spans_the_days_on_file(self):
+        self.assertIn('pick.min = first; pick.max = last;', self.src)
+        self.assertIn("location.href = '/archive?d=' + pick.value", self.src)
+
+    def test_the_build_writes_the_range_and_snapshots_drop_it(self):
+        build = (ROOT / 'scripts' / 'build_command_center_data.py').read_text(encoding='utf-8')
+        self.assertIn('archive_first=days[0], archive_last=days[-1]', build)
+        meta = slim({'_meta': {'built_at': 'x', 'archive_first': 'a', 'archive_last': 'b'}})['_meta']
+        self.assertEqual(meta, {'built_at': 'x'})
 
 
 class TestWorkflow(unittest.TestCase):

@@ -42,7 +42,8 @@ def slim(data):
         data.pop('_featured', None)
     meta = dict(data.get('_meta') or {})
     # No "next refresh" on a past day, and no live-fetch stamp.
-    for key in ('refresh_slots_ist', 'fetched_minutes_ago', 'data_date'):
+    for key in ('refresh_slots_ist', 'fetched_minutes_ago', 'data_date',
+                'archive_first', 'archive_last'):
         meta.pop(key, None)
     data['_meta'] = meta
     if isinstance(data.get('_record'), dict):
@@ -90,7 +91,11 @@ ARCHIVE_INJECT = """<meta name="robots" content="noindex">
     (function () {
         var dates = __DATES__;
         var asked = new URLSearchParams(location.search).get('d');
-        var day = dates.indexOf(asked) >= 0 ? asked : (dates[dates.length - 1] || null);
+        // A day with no snapshot shows the nearest earlier day on file.
+        var day = null;
+        dates.forEach(function (d) { if (asked && d <= asked) day = d; });
+        // Before the first day, the first day; no day asked, the newest.
+        if (!day) day = (asked && /^\\d{4}-\\d{2}-\\d{2}$/.test(asked) ? dates[0] : dates[dates.length - 1]) || null;
         window.SIGNAL_ARCHIVE = { dates: dates, day: day, asked: asked };
         window.CC_DATA_URL = './snapshots/' + (day || 'none') + '.json';
         var M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
