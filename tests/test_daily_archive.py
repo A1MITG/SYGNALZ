@@ -116,6 +116,16 @@ class TestArchivePage(unittest.TestCase):
             self.assertTrue(data['_meta']['built_at'], day)
 
 
+class TestNavLink(unittest.TestCase):
+    """Amit chose the top menu (2026-10-24): Archive sits next to Today's Brief."""
+
+    def test_archive_follows_todays_brief_in_the_nav_on_every_screen(self):
+        src = (ROOT / 'app' / 'static' / 'command_center_source.html').read_text(encoding='utf-8')
+        self.assertIn('<a class="link" href="/brief">Today\'s Brief</a>\n'
+                      '            <a class="link" href="/archive">Archive</a>', src)
+        self.assertIn('.nav-right a.link[href="/archive"],', src)
+
+
 class TestWorkflow(unittest.TestCase):
 
     @classmethod
