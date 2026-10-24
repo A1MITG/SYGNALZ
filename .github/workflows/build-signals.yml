@@ -53,6 +53,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # The daily archive: public/command_center_data.json still holds the
+      # previous build here. If that was made on an earlier IST day, it was
+      # that day's last build, and is filed as public/snapshots/YYYY-MM-DD.json
+      # (scripts/archive_snapshot.py). Before the new build overwrites it.
+      - name: File yesterday's last build in the archive
+        run: python scripts/archive_snapshot.py
+
       - name: Build static Signals page
         run: python scripts/build_static_signals.py
         env:
@@ -75,12 +82,16 @@ jobs:
           # Land on the branch as it is now, not as it was when this run
           # started: a push, or another build, may have landed meanwhile. Only
           # the files the build writes are this run's to change.
-          BUILT="command_center_data.json command_center.html brief.html index.html signals.json signal.css"
-          mkdir -p /tmp/built
+          # Archive snapshots are only ever added, never rewritten (-n).
+          BUILT="command_center_data.json command_center.html brief.html index.html signals.json signal.css archive.html"
+          mkdir -p /tmp/built/snapshots public/snapshots
           for f in $BUILT; do cp "public/$f" /tmp/built/; done
+          cp -r public/snapshots/. /tmp/built/snapshots/
           git fetch -q origin "$GITHUB_REF_NAME"
           git reset -q --hard FETCH_HEAD
           for f in $BUILT; do cp "/tmp/built/$f" public/; done
+          mkdir -p public/snapshots
+          cp -rn /tmp/built/snapshots/. public/snapshots/
           git add public/
           git diff --staged --quiet || git commit -m "Signals + Command Center rebuild: $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push origin "HEAD:$GITHUB_REF_NAME"
@@ -101,6 +112,12 @@ jobs:
           # Today's Brief: the closer's button links /brief, which cleanUrls
           # serves from brief.html.
           cp public/brief.html /tmp/signals-deploy/brief.html
+          # The daily archive: /archive (archive.html) draws one day from
+          # /snapshots/YYYY-MM-DD.json. The snapshots live in the working
+          # branch, since this branch is replaced on every build.
+          cp public/archive.html /tmp/signals-deploy/archive.html
+          mkdir -p /tmp/signals-deploy/snapshots
+          cp -r public/snapshots/. /tmp/signals-deploy/snapshots/
           # The build's own alarm clock (BP-56): GitHub starts this workflow's
           # schedule 4-7 hours late, so Vercel Cron calls /api/trigger-build,
           # and that function starts this workflow through GitHub's API. It
@@ -129,7 +146,7 @@ jobs:
           git checkout -q -b signals-deploy
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html command_center_data.json img signals.html signal.css signals.json brief.html vercel.json api
+          git add index.html command_center_data.json img signals.html signal.css signals.json brief.html archive.html snapshots vercel.json api
           git commit -q -m "Signals rebuild: $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" signals-deploy
 

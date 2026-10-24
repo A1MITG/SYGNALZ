@@ -6,6 +6,7 @@ scripts/build_static_signals.py, by .github/workflows/build-signals.yml), to
 write:
     public/command_center_data.json
     public/brief.html   Today's Brief, the tiles' stories as a text-only page
+    public/archive.html the daily archive page (scripts/archive_snapshot.py)
 
 Maps the scored Signal categories from app/analysis/signals.py onto the
 Command Center's engine ids: the Signals page's six plus the tile-only
@@ -37,6 +38,7 @@ from app.analysis.brief import build_brief, render_brief
 from app.analysis.command_center import (build_engine_data, build_features, build_people_rows,
                                          load_pinned_moves, load_pinned_stories)
 from app.scraper.leader_quotes import get_leader_quotes
+from scripts.archive_snapshot import archived_dates, render_archive_page
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
@@ -140,6 +142,12 @@ def main(refresh=False):
     template_html = template_html.replace('src="./img/', 'src="/static/img/')
     template_out.write_text(template_html, encoding='utf-8')
     logger.info("Wrote %s", template_out)
+
+    # The /archive page: the same markup drawing one past day's snapshot
+    # (scripts/archive_snapshot.py files them), with every day on file listed.
+    archive_out = PUBLIC_DIR / 'archive.html'
+    archive_out.write_text(render_archive_page(source_html, archived_dates()), encoding='utf-8')
+    logger.info("Wrote %s", archive_out)
 
 
 if __name__ == '__main__':
