@@ -558,7 +558,13 @@ a { color: inherit; }
     .hero-headline { font-size: 24px; }
     .nav-right a.link { display: none; }
     .nav-right a.link[href="/brief"],
+    .nav-right a.link[href="/archive"],
     .nav-right a.link[href="/signals"] { display: inline; }
+}
+/* Phones: Today's Brief, Archive and search share the bar, so it tightens. */
+@media (max-width: 480px) {
+    .nav { padding: 0 12px; gap: 10px; }
+    .nav-right { gap: 10px; }
 }
 
 .econ-card.no-img { background: var(--navy); }
@@ -720,6 +726,7 @@ a { color: inherit; }
         </div>
         <div class="nav-right">
             <a class="link" href="/brief">Today's Brief</a>
+            <a class="link" href="/archive">Archive</a>
             <a class="link parked" href="/signals">Signals</a>
             <span class="icon-btn" title="Search (not yet wired up)">&#128269;</span>
             <a class="link" href="#manifesto">Manifesto</a>
