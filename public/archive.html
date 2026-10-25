@@ -96,6 +96,8 @@ a { color: inherit; }
 .ticker-item.soon-item { color: rgba(255,255,255,.35); }
 .ticker-item .ic { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; flex: none; transition: transform .25s cubic-bezier(.2,.8,.3,1); }
 .ticker-item .ic svg { width: 100%; height: 100%; overflow: visible; }
+/* The engine icons are drawn for white tiles; on the dark ticker, brighten their blues/greys and give the moving parts amber so the animation reads. */
+.ticker-item .ic { --blue: #4f8cff; --blue-bright: #8ab8ff; --amber: #f5a623; --slate: #9aa5b4; --slate-light: #b4bdc9; --navy: #f5a623; }
 .ticker-item .lbl-text { transition: color .25s ease; }
 .ticker-item::after { content: ''; position: absolute; left: 18px; right: 18px; bottom: 6px; height: 1.5px; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
 .ticker-item:hover .ic, .ticker-item.pulse-awake .ic { transform: scale(1.18); }
@@ -360,9 +362,14 @@ a { color: inherit; }
 .pulse-card { flex: 1 0 260px; background: #fff; border: 1px solid var(--slate-100); border-radius: 10px; overflow: hidden; }
 /* The photo deepens as the card widens, so a stretched card shows a portrait
    rather than a thin strip; the crop favours the upper part, where faces sit. */
-.pulse-photo { aspect-ratio: 16 / 7; min-height: 140px; max-height: 220px; position: relative; }
-.pulse-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
-.pulse-photo::after { content:''; position:absolute; inset:0; background: linear-gradient(0deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 45%); }
+.pulse-photo { width: 100%; aspect-ratio: 16 / 7; min-height: 140px; max-height: 220px; position: relative; overflow: hidden; background: var(--navy); }
+/* The whole picture shows, never a cropped face: it sits on a blurred,
+   darkened copy of itself that fills whatever shape the panel takes (as on
+   Featured Analysis). width: 100% above keeps the box from inheriting a
+   width cap from max-height through its aspect ratio. */
+.pulse-photo img { position: relative; z-index: 1; display: block; width: 100%; height: 100%; object-fit: contain; }
+.pulse-photo img.fill, .move-photo img.fill { position: absolute; z-index: 0; inset: -24px; width: calc(100% + 48px); height: calc(100% + 48px); object-fit: cover; filter: blur(20px) brightness(.55); }
+.pulse-photo::after { content:''; position:absolute; inset:0; z-index: 1; background: linear-gradient(0deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 45%); }
 .pulse-who { position: absolute; left: 14px; bottom: 10px; z-index: 2; color: #fff; }
 .pulse-who .name { font-weight: 700; font-size: 13px; }
 .pulse-who .co { font-size: 10.5px; color: rgba(255,255,255,.75); }
@@ -375,6 +382,15 @@ a { color: inherit; }
 .pulse-meta { font-family: var(--mono); font-size: 9.5px; color: var(--slate-light); text-transform: uppercase; }
 /* A phone fits one card; the edge of the next one shows there is more. */
 @media (max-width: 640px) { .pulse-card { flex-basis: calc(100% - 48px); } }
+/* A lone card (a one-story day) lies on its side: the picture in a
+   portrait-friendly panel on the left, the story beside it, so a full-width
+   card shows a whole face and no empty stretch. Phones keep it stacked. */
+@media (min-width: 641px) {
+    .pulse-card:only-child { display: flex; }
+    .pulse-card:only-child .pulse-photo { flex: 0 0 360px; width: auto; aspect-ratio: 4 / 3; min-height: 0; max-height: none; }
+    .pulse-card:only-child .pulse-body { flex: 1; align-self: center; padding: 24px 28px; }
+    .pulse-card:only-child .pulse-view { font-family: var(--serif); font-size: 20px; line-height: 1.35; color: var(--navy); margin-bottom: 12px; }
+}
 /* On a phone the arrows sit mid-photo, clear of the name along its foot. */
 @media (max-width: 700px) { .pulse-wrap .row-arrow { top: 70px; } }
 
@@ -523,8 +539,11 @@ a { color: inherit; }
 /* A move card leads with its story's own picture (the publisher's share
    image). With none, a navy panel with the SIGNAL mark: never a stand-in
    photo of someone else. */
-.move-photo { aspect-ratio: 16 / 8; max-height: 160px; min-height: 120px; background: var(--navy); position: relative; }
-.move-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; display: block; }
+.move-photo { aspect-ratio: 16 / 8; max-height: 160px; min-height: 120px; background: var(--navy); position: relative; overflow: hidden; }
+/* Shown whole on a blurred copy of itself (img.fill, shared with the Pulse
+   rule), so a small portrait is never blown up into a strip of forehead. */
+.move-photo img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; display: block; }
+.move-photo.none img.fill { display: none; }
 .move-photo.none { display: grid; place-items: center; background: linear-gradient(135deg, var(--navy), var(--navy-2)); }
 .move-photo.none .mark { display: flex; gap: 6px; }
 .move-photo.none .mark i { width: 12px; height: 12px; border-radius: 3px; display: block; }
@@ -542,6 +561,15 @@ a { color: inherit; }
 .listening-chip { font-size: 11px; color: var(--navy); background: #fff; border: 1px solid #e3e7ec; border-radius: 20px; padding: 2px 9px; }
 .listening-chip i { font-style: normal; color: var(--slate-light); }
 @media (max-width: 640px) { .move-card, .row-empty { flex-basis: 260px; } .quote-card { flex-basis: 280px; } }
+/* A lone move lies on its side, as a lone Pulse card does: picture left,
+   story right, across the row's full width. Phones keep it stacked. */
+@media (min-width: 641px) {
+    .move-card:only-child { flex-direction: row; }
+    .move-card:only-child .move-photo { flex: 0 0 360px; aspect-ratio: 4 / 3; min-height: 0; max-height: none; }
+    .move-card:only-child .move-body { justify-content: center; padding: 24px 28px; }
+    .move-card:only-child h4 { font-size: 22px; }
+    .move-card:only-child .row-meta { margin-top: 0; }
+}
 
 /* ---------- Pipeline ---------- */
 .pipeline { background: var(--navy); color: #fff; padding: 52px 0; }
@@ -1525,14 +1553,14 @@ a { color: inherit; }
         </svg>`,
         energy: `<svg viewBox="0 0 32 32">
             <circle cx="16" cy="15" r="10" fill="none" stroke="var(--slate-100)" stroke-width="1.4" pathLength="100"/>
-            <circle class="en-ring-pulse" cx="16" cy="15" r="10" fill="none" stroke="var(--blue-bright)" stroke-width="1.6" pathLength="100"/>
-            <path class="en-bolt" d="M17.5 6 L11 17 H15.5 L14 24 L21 12.5 H16.5 Z" fill="var(--amber)"/>
+            <circle class="en-ring-pulse" cx="16" cy="15" r="10" fill="none" stroke="var(--blue-bright, #5b9bff)" stroke-width="1.6" pathLength="100"/>
+            <path class="en-bolt" d="M17.5 6 L11 17 H15.5 L14 24 L21 12.5 H16.5 Z" fill="var(--amber, #f5a623)"/>
         </svg>`,
         defence: `<svg viewBox="0 0 32 32">
             <path d="M16 4 L25 8 V15 C25 22 21 26.5 16 28.5 C11 26.5 7 22 7 15 V8 Z" fill="none" stroke="var(--blue)" stroke-width="1.4"/>
-            <g transform="translate(16,15)"><line class="def-sweep" x1="0" y1="0" x2="0" y2="-9" stroke="var(--blue-bright)" stroke-width="1.1" opacity=".8"/></g>
-            <circle class="def-target" cx="16" cy="15" r="2.6" fill="none" stroke="var(--amber)" stroke-width="1" opacity="0"/>
-            <path class="def-target" d="M16 11.4 V13 M16 17 V18.6 M12.4 15 H14 M18 15 H19.6" stroke="var(--amber)" stroke-width="1" opacity="0"/>
+            <g transform="translate(16,15)"><line class="def-sweep" x1="0" y1="0" x2="0" y2="-9" stroke="var(--blue-bright, #5b9bff)" stroke-width="1.1" opacity=".8"/></g>
+            <circle class="def-target" cx="16" cy="15" r="2.6" fill="none" stroke="var(--amber, #f5a623)" stroke-width="1" opacity="0"/>
+            <path class="def-target" d="M16 11.4 V13 M16 17 V18.6 M12.4 15 H14 M18 15 H19.6" stroke="var(--amber, #f5a623)" stroke-width="1" opacity="0"/>
             <circle class="def-sat" r="1.1" fill="var(--slate)" style="offset-path: path('M4,15 A12,9 0 1 1 3.9,15'); animation: orbit-travel 6s linear infinite;"/>
         </svg>`,
         cyber: `<svg viewBox="0 0 32 32">
@@ -1798,7 +1826,7 @@ a { color: inherit; }
         row.innerHTML = moves.length ? moves.map(m => `
             <a class="move-card" href="${safeUrl(m.url)}" target="_blank" rel="noopener">
                 ${m.image
-                    ? `<div class="move-photo"><img src="${esc(m.image)}" alt="" loading="lazy" onerror="this.parentNode.className='move-photo none';this.remove()"></div>`
+                    ? `<div class="move-photo"><img src="${esc(m.image)}" alt="" loading="lazy" onerror="this.parentNode.className='move-photo none';this.remove()"><img class="fill" src="${esc(m.image)}" alt="" aria-hidden="true" loading="lazy"></div>`
                     : `<div class="move-photo none"><span class="mark"><i style="background:#c9971c"></i><i style="background:#2f6fed"></i><i style="background:#c0392b"></i></span><span class="src">${esc(m.source)}</span></div>`}
                 <div class="move-body">
                     <span class="move-type${m.kind === 'exit' ? ' exit' : ''}">${esc(m.type)}</span>
@@ -1851,6 +1879,7 @@ a { color: inherit; }
             <div class="pulse-card">
                 <div class="pulse-photo">
                     <img src="${esc(c.image)}" alt="" loading="lazy" decoding="async">
+                    <img class="fill" src="${esc(c.image)}" alt="" aria-hidden="true" loading="lazy" decoding="async">
                     <div class="pulse-who">
                         <div class="name">${esc(c.name)}</div>
                         ${c.role ? `<div class="co">${esc(c.role)}</div>` : ''}
