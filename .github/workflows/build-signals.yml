@@ -13,6 +13,11 @@ name: Build Signals (static)
 # Python auto-detection (see README's Vercel section for why that matters).
 # No Vercel token or deploy hook is needed; the push itself triggers
 # Vercel's redeploy.
+#
+# The test site: a push to `staging` (or "Run workflow" on it) builds the
+# same way but publishes to `staging-deploy` only, which a separate Vercel
+# project serves. It leaves `staging` itself, the live branch and the
+# Command Center alone. sync-staging.yml keeps `staging` level with `final`.
 
 on:
   schedule:
@@ -22,6 +27,8 @@ on:
     # says when the next refresh is due from REFRESH_SLOTS_IST in
     # build_command_center_data.py; that test keeps the two in step.
     - cron: "30 0,3,6,9,12,15,18,21 * * *"
+  push:
+    branches: [staging]
   workflow_dispatch: {}
 
 permissions:
@@ -35,12 +42,22 @@ concurrency:
 
 env:
   LIVE_URL: https://news-letter-cxo.vercel.app
+  # `final` publishes the live site; `staging` the test site.
+  DEPLOY_BRANCH: ${{ github.ref_name == 'staging' && 'staging-deploy' || 'signals-deploy' }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # Any other branch would publish its untested build to the live site.
+      - name: Build only final or staging
+        run: |
+          case "$GITHUB_REF_NAME" in
+            final|staging) ;;
+            *) echo "::error::Builds run on final (live site) or staging (test site), not $GITHUB_REF_NAME."; exit 1 ;;
+          esac
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -92,7 +109,10 @@ jobs:
       - name: Check the build before publishing
         run: python scripts/site_health.py gate
 
+      # The test site's build is not committed: `staging` keeps only source
+      # changes, so promoting it to `final` never clashes with the live builds.
       - name: Commit build to working branch
+        if: github.ref_name != 'staging'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -120,6 +140,7 @@ jobs:
       # maps /signals -> signals.html, matching the dashboard's nav links).
       - name: Publish to signals-deploy branch (Vercel source)
         run: |
+          # staging-deploy for a staging build: the same files, see the end.
           rm -rf /tmp/signals-deploy
           mkdir -p /tmp/signals-deploy/img
           cp public/command_center.html /tmp/signals-deploy/index.html
@@ -156,10 +177,13 @@ jobs:
           # Only this branch deploys. The vercel.json at the root of `final`
           # (and so of every branch cut from it) switches Vercel's Git
           # deployments off, which keeps the free plan's 100 deploys a day
-          # for the live site; this one switches them back on here.
+          # for the live site; this one switches them back on here. Each
+          # deploy branch is production for one project only, so the other
+          # project skips it rather than building a preview of it.
           cat > /tmp/signals-deploy/vercel.json <<'JSON'
           {
             "git": { "deploymentEnabled": { "signals-deploy": true } },
+            "ignoreCommand": "[ \"$VERCEL_ENV\" != production ]",
             "cleanUrls": true,
             "crons": [
               { "path": "/api/trigger-build", "schedule": "30 3 * * *" },
@@ -168,15 +192,22 @@ jobs:
           }
           JSON
           cd /tmp/signals-deploy
+          # The test site: no crons (they would start live builds), and
+          # deploys switched on for its own branch instead.
+          if [ "$DEPLOY_BRANCH" = staging-deploy ]; then
+            jq '{git: {deploymentEnabled: {"staging-deploy": true}}, ignoreCommand, cleanUrls}' vercel.json > vercel.tmp
+            mv vercel.tmp vercel.json
+          fi
           git init -q
-          git checkout -q -b signals-deploy
+          git checkout -q -b "$DEPLOY_BRANCH"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html command_center_data.json img signals.html signal.css signals.json brief.html archive.html snapshots search vercel.json api
           git commit -q -m "Signals rebuild: $(date -u +'%Y-%m-%d %H:%M UTC')"
-          git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" signals-deploy
+          git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" "$DEPLOY_BRANCH"
 
       - name: Publish to command-center-deploy branch (Vercel source)
+        if: github.ref_name != 'staging'
         run: |
           rm -rf /tmp/command-center-deploy
           mkdir /tmp/command-center-deploy
@@ -201,4 +232,5 @@ jobs:
       # Is Vercel serving this build? It redeploys on the signals-deploy push
       # within a minute or two. A failure means the site did not update.
       - name: Check the live site
+        if: github.ref_name != 'staging'
         run: python scripts/site_health.py deployed
