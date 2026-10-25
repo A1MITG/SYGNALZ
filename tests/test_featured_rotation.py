@@ -1,10 +1,11 @@
-"""Featured Analysis rotates: the pinned story, then the day's GCC stories.
+"""Featured Analysis rotates through the day's GCC stories, then others.
 
 2026-09-25: the section showed one card, the pinned Dell-Zinnov report, while
 the new GCC feeds brought in a day's worth of GCC stories. It now cycles
 through the pin and those stories like the tiles' headlines, each card naming
 its publisher and date, and only stories with a full-size picture qualify
-(ET's B2B feeds send 100x100 thumbnails).
+(ET's B2B feeds send 100x100 thumbnails). 2026-10-25: pins were removed;
+the rotation is only the day's identified stories.
 """
 import unittest
 from datetime import datetime, timezone
@@ -30,20 +31,13 @@ def _raw(*titles, image='https://example.com/p.jpg'):
     return {t: {'title': t, 'image': image, 'summary': f'About {t}.', 'date': _now()} for t in titles}
 
 
-PIN = {'title': 'Pinned report', 'url': 'https://press.example/pin', 'image': 'https://press.example/pin.jpg',
-       'summary': 'The pinned summary.', 'source': 'Example Press', 'date': '23 Sep',
-       'pinned': True, 'featured': True}
-
-
 class TestTheRotation(unittest.TestCase):
 
-    def test_the_pin_leads_then_gcc_stories_in_tile_order(self):
+    def test_gcc_stories_lead_in_tile_order(self):
         data = _engines(gcc=['g0', 'g1', 'g2'], insurance=['i0'], global_=['x0'])
-        data['gcc']['articles'].insert(0, dict(PIN))
         features = build_features(data, _raw('g0', 'g1', 'g2', 'i0'))
-        self.assertEqual([f['title'] for f in features], ['Pinned report', 'g0', 'g1', 'g2', 'i0'])
-        self.assertTrue(features[0]['pinned'])
-        self.assertNotIn('pinned', features[1])
+        self.assertEqual([f['title'] for f in features], ['g0', 'g1', 'g2', 'i0'])
+        self.assertNotIn('pinned', features[0])
 
     def test_at_most_six_cards(self):
         data = _engines(gcc=[f'g{i}' for i in range(9)])
@@ -71,11 +65,10 @@ class TestTheRotation(unittest.TestCase):
         card = build_features(data, raw)[0]
         self.assertEqual((card['source'], card['date'], card['label']), ('The Economic Times', '23 Sep', 'GCC'))
 
-    def test_a_pinned_story_is_not_repeated(self):
-        data = _engines(gcc=['Pinned report', 'g1'])
-        data['gcc']['articles'].insert(0, dict(PIN))
-        features = build_features(data, _raw('Pinned report', 'g1'))
-        self.assertEqual([f['title'] for f in features], ['Pinned report', 'g1'])
+    def test_a_story_in_two_tiles_is_one_card(self):
+        data = _engines(gcc=['g0'], insurance=['i0'])
+        data['insurance']['articles'][0]['url'] = data['gcc']['articles'][0]['url']
+        self.assertEqual([f['title'] for f in build_features(data, _raw('g0', 'i0'))], ['g0'])
 
     def test_the_live_endpoint_sends_the_rotation_and_its_first_card(self):
         data = _engines(gcc=['g0', 'g1'])

@@ -34,8 +34,7 @@ from app.scraper.store import get_articles, get_cache_date
 from app.scraper.article_images import fill_missing_images, fill_signal_images
 from app.analysis.signals import synthesize_signals
 from app.analysis.brief import build_brief, render_brief
-from app.analysis.command_center import (build_engine_data, build_features, build_people_rows,
-                                         load_pinned_moves, load_pinned_stories)
+from app.analysis.command_center import build_engine_data, build_features, build_people_rows
 from app.scraper.leader_quotes import get_leader_quotes
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
@@ -81,17 +80,16 @@ def main(refresh=False):
 
     by_title = {a.get('title'): a for a in articles}
     fill_signal_images(signals_data, by_title)
-    # Pins from config/pinned_stories.yaml lead their tile (and Featured,
-    # when marked) until they expire.
-    engine_data = build_engine_data(signals_data, by_title, pinned=load_pinned_stories())
+    # The people rows first: a story People Movers shows is left out of the
+    # tiles, so one move is not also a tech or GCC headline.
+    # The static build waits for a fresh quote set; the live API never does.
+    people = build_people_rows(articles, get_leader_quotes(block=True))
+    engine_data = build_engine_data(signals_data, by_title, exclude=people['_movers'])
     # The Featured Analysis rotation; _featured is its first card.
     features = build_features(engine_data, by_title)
     engine_data['_features'] = features
     engine_data['_featured'] = features[0] if features else None
-    # The static build waits for a fresh quote set; the live API never does.
-    # Pins from config/pinned_moves.yaml lead People Movers until they expire.
-    engine_data.update(build_people_rows(articles, get_leader_quotes(block=True),
-                                         pinned=load_pinned_moves()))
+    engine_data.update(people)
     # Each move card leads with its story's own picture.
     fill_missing_images(engine_data['_movers'])
     # The static page shows the same freshness stamp as the live one; without

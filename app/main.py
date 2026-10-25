@@ -6,7 +6,7 @@ from flask import Flask, jsonify, render_template
 from dotenv import load_dotenv
 
 from .analysis.brief import build_brief, render_brief
-from .analysis.command_center import build_engine_data, load_pinned_stories
+from .analysis.command_center import build_engine_data, build_mover_cards
 from .analysis.signals import synthesize_signals
 from .api.routes import api_blueprint
 from .scraper.store import (cache_age_minutes, get_cache_date, get_cached_articles,
@@ -52,9 +52,9 @@ def create_app():
         signals_data = synthesize_signals(articles, data_date=data_date,
                                           include_tile_signals=True)
         by_title = {a.get('title'): a for a in articles}
-        # Pins join a scan; with no cache at all the brief says so instead.
-        pins = load_pinned_stories() if articles else ()
-        sections = build_brief(build_engine_data(signals_data, by_title, pinned=pins), by_title)
+        # Same tiles as the page: People Movers' stories are left out.
+        movers = build_mover_cards(articles)
+        sections = build_brief(build_engine_data(signals_data, by_title, exclude=movers), by_title)
         age = cache_age_minutes()
         fetched = None if age is None else datetime.now(timezone.utc) - timedelta(minutes=age)
         return render_brief(sections, data_date, fetched)

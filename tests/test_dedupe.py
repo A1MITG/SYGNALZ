@@ -90,11 +90,6 @@ class TestKeepMostTrusted(unittest.TestCase):
                  _move('Mehli Mistry steps down from Tata trust', 'https://www.reuters.com/2')]
         self.assertEqual([i['url'] for i in keep_most_trusted(items)], ['https://www.reuters.com/2'])
 
-    def test_a_pin_always_wins(self):
-        items = [_move('Mehli Mistry steps down', 'https://www.reuters.com/1'),
-                 _move('Mehli Mistry steps down from trust', 'https://www.example-blog.com/2', pinned=True)]
-        self.assertTrue(keep_most_trusted(items)[0]['pinned'])
-
     def test_ties_go_to_the_copy_with_a_picture_then_the_newer(self):
         a = _move('Mehli Mistry steps down', 'https://www.livemint.com/1', image=None, ts=2)
         b = _move('Mehli Mistry steps down from trust', 'https://www.livemint.com/2', image='x.jpg', ts=1)
@@ -146,6 +141,27 @@ class TestTilesAndRecord(unittest.TestCase):
         engines = build_engine_data(data)
         titles = [a['title'] for e in engines.values() for a in e.get('articles', [])]
         self.assertEqual(titles, [ntpc])
+
+    def test_a_people_movers_story_leaves_the_tiles(self):
+        # 25 Oct 2026: the Honasa appointment was both an AI tile headline
+        # and a People Movers card.
+        honasa = 'Honasa Consumer elevates Vipul Maheshwari to chief product & technology officer'
+        url = 'https://economictimes.indiatimes.com/tech/startups/honasa/135167378.cms'
+        moonshot = "China's Moonshot AI launches Kimi K3.1 Pro"
+        data = {'signals': [{'name': 'Signal AI', 'articles': [
+            {'title': honasa, 'url': url},
+            {'title': moonshot, 'url': 'https://economictimes.indiatimes.com/tech/kimi.cms'}]}]}
+        movers = build_people_rows([_article(honasa, url)], {'quotes': [], 'leaders': []})['_movers']
+        self.assertEqual([m['title'] for m in movers], [honasa])
+        tiles = build_engine_data(data, exclude=movers)
+        self.assertEqual([a['title'] for a in tiles['ai']['articles']], [moonshot])
+
+    def test_another_outlets_copy_of_a_move_also_leaves_the_tiles(self):
+        move = _move('Mehli Mistry steps down from Tata Medical Center trust', 'https://a.example/1')
+        data = {'signals': [{'name': 'Signal Business', 'articles': [
+            {'title': MISTRY[2]['title'], 'url': MISTRY[2]['url']}]}]}
+        engines = build_engine_data(data, exclude=[move])
+        self.assertEqual([a for e in engines.values() for a in e.get('articles', [])], [])
 
     def test_the_same_quote_from_two_outlets_is_shown_once(self):
         quote = {'leader': 'Satya Nadella', 'quote': 'Copilot is the new UI for AI.', 'company': 'Microsoft', 'date': '', 'ts': 1}

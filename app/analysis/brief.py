@@ -102,9 +102,7 @@ def build_brief(engine_data, articles_by_title, per_section=PER_SECTION):
                 'title': article['title'],
                 'url': article['url'],
                 'source': source_name(article['url']),
-                # A pinned story may no longer be in the feeds; it carries
-                # its own summary (config/pinned_stories.yaml).
-                'summary': one_line(raw.get('summary') or article.get('summary'), article['title']),
+                'summary': one_line(raw.get('summary'), article['title']),
             })
         sections.append({'name': engine['name'], 'items': items})
     return sections
