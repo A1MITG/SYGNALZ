@@ -49,11 +49,10 @@ class TestDeployConfig(unittest.TestCase):
         self.assertIs(root['git']['deploymentEnabled'], False)
         self.assertIs(_vercel_json()['git']['deploymentEnabled']['signals-deploy'], True)
 
-    def test_each_deploy_branch_builds_only_as_production(self):
-        """Both projects watch the same repo: each deploy branch is
-        production for one of them, and the other skips it rather than
-        spending a deploy on a preview."""
-        self.assertEqual(_vercel_json()['ignoreCommand'], '[ "$VERCEL_ENV" != production ]')
+    def test_no_ignored_build_step(self):
+        """An ignoreCommand keyed on $VERCEL_ENV cancelled every production
+        deploy of the live site (25 Oct 2026). Nothing may skip its build."""
+        self.assertNotIn('ignoreCommand', _vercel_json())
 
     def test_the_crons_fire_on_refresh_slots(self):
         """Vercel's free plan runs a cron at most once a day, so these cover
@@ -184,7 +183,7 @@ class TestStagingBuild(unittest.TestCase):
         self.assertNotIn('crons', staging)
         self.assertEqual(staging['git']['deploymentEnabled'], {'staging-deploy': True})
         self.assertIs(staging['cleanUrls'], True)
-        self.assertEqual(staging['ignoreCommand'], _vercel_json()['ignoreCommand'])
+        self.assertNotIn('ignoreCommand', staging)
 
     def test_the_test_site_syncs_weekly_not_on_every_change(self):
         """Amit, 2026-10-25: the test site refreshes once a week (Sunday) or
