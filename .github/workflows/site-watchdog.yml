@@ -54,7 +54,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          busy=$(gh run list --workflow build-signals.yml --limit 5 --json status \
+          busy=$(gh run list --workflow build-signals.yml --branch "${{ github.event.repository.default_branch }}" --limit 5 --json status \
                  --jq '[.[] | select(.status != "completed")] | length')
           if [ "$busy" = "0" ]; then
             gh workflow run build-signals.yml --ref "${{ github.event.repository.default_branch }}"

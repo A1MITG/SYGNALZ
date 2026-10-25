@@ -13,6 +13,11 @@ name: Build Signals (static)
 # Python auto-detection (see README's Vercel section for why that matters).
 # No Vercel token or deploy hook is needed; the push itself triggers
 # Vercel's redeploy.
+#
+# The test site: a push to `staging` (or "Run workflow" on it) builds the
+# same way but publishes to `staging-deploy` only, which a separate Vercel
+# project serves. It leaves `staging` itself, the live branch and the
+# Command Center alone. sync-staging.yml keeps `staging` level with `final`.
 
 on:
   schedule:
@@ -22,7 +27,14 @@ on:
     # says when the next refresh is due from REFRESH_SLOTS_IST in
     # build_command_center_data.py; that test keeps the two in step.
     - cron: "30 0,3,6,9,12,15,18,21 * * *"
-  workflow_dispatch: {}
+  push:
+    branches: [staging]
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "Test site only: fetch fresh news too (normally it reuses the live site's data)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -35,12 +47,26 @@ concurrency:
 
 env:
   LIVE_URL: https://news-letter-cxo.vercel.app
+  # `final` publishes the live site; `staging` the test site.
+  DEPLOY_BRANCH: ${{ github.ref_name == 'staging' && 'staging-deploy' || 'signals-deploy' }}
+  # A test-site build normally reuses the live site's latest data and only
+  # rebuilds the pages from the code being tested: no news fetch, no NewsAPI
+  # calls taken from the live builds. "Run workflow" with full fetches fresh.
+  LIGHT_BUILD: ${{ github.ref_name == 'staging' && !inputs.full }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # Any other branch would publish its untested build to the live site.
+      - name: Build only final or staging
+        run: |
+          case "$GITHUB_REF_NAME" in
+            final|staging) ;;
+            *) echo "::error::Builds run on final (live site) or staging (test site), not $GITHUB_REF_NAME."; exit 1 ;;
+          esac
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -58,6 +84,7 @@ jobs:
       # that day's last build, and is filed as public/snapshots/YYYY-MM-DD.json
       # (scripts/archive_snapshot.py). Before the new build overwrites it.
       - name: File yesterday's last build in the archive
+        if: env.LIGHT_BUILD != 'true'
         run: python scripts/archive_snapshot.py
 
       # Archive search: each newly filed day's stories as sentence embeddings
@@ -66,23 +93,27 @@ jobs:
       # The model (~23 MB) is cached between runs. Never blocks the build: a
       # day missed here is indexed by the next run.
       - name: Cache the archive search model
+        if: env.LIGHT_BUILD != 'true'
         uses: actions/cache@v4
         with:
           path: ~/.cache/signal-search-model
           key: signal-search-model-all-MiniLM-L6-v2-q8
 
       - name: Index the archive for search
+        if: env.LIGHT_BUILD != 'true'
         continue-on-error: true
         run: |
           pip install -r requirements-search.txt
           python scripts/archive_search_index.py
 
       - name: Build static Signals page
+        if: env.LIGHT_BUILD != 'true'
         run: python scripts/build_static_signals.py
         env:
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
 
       - name: Build Command Center live data
+        if: env.LIGHT_BUILD != 'true'
         run: python scripts/build_command_center_data.py
         env:
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
@@ -90,9 +121,28 @@ jobs:
       # Is public/ fit to go live? An error stops the run here: the site keeps
       # the last good build, and GitHub emails the repo owner.
       - name: Check the build before publishing
+        if: env.LIGHT_BUILD != 'true'
         run: python scripts/site_health.py gate
 
+      # The test site's light build: the live site's data and archive, with
+      # this branch's pages. The data already passed the live build's check.
+      - name: Use the live site's data (test site)
+        if: env.LIGHT_BUILD == 'true'
+        run: |
+          git fetch -q --depth=1 origin signals-deploy
+          for f in command_center_data.json signals.json brief.html; do
+            git show "FETCH_HEAD:$f" > "public/$f"
+          done
+          git show FETCH_HEAD:signals.html > public/index.html
+          rm -rf public/snapshots public/search
+          git archive FETCH_HEAD snapshots search | tar -x -C public
+          cp app/static/command_center_source.html public/command_center.html
+          python -c "from pathlib import Path; from scripts.archive_snapshot import archived_dates, render_archive_page; Path('public/archive.html').write_text(render_archive_page(Path('app/static/command_center_source.html').read_text(encoding='utf-8'), archived_dates()), encoding='utf-8')"
+
+      # The test site's build is not committed: `staging` keeps only source
+      # changes, so promoting it to `final` never clashes with the live builds.
       - name: Commit build to working branch
+        if: github.ref_name != 'staging'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -120,6 +170,7 @@ jobs:
       # maps /signals -> signals.html, matching the dashboard's nav links).
       - name: Publish to signals-deploy branch (Vercel source)
         run: |
+          # staging-deploy for a staging build: the same files, see the end.
           rm -rf /tmp/signals-deploy
           mkdir -p /tmp/signals-deploy/img
           cp public/command_center.html /tmp/signals-deploy/index.html
@@ -156,10 +207,13 @@ jobs:
           # Only this branch deploys. The vercel.json at the root of `final`
           # (and so of every branch cut from it) switches Vercel's Git
           # deployments off, which keeps the free plan's 100 deploys a day
-          # for the live site; this one switches them back on here.
+          # for the live site; this one switches them back on here. Each
+          # deploy branch is production for one project only, so the other
+          # project skips it rather than building a preview of it.
           cat > /tmp/signals-deploy/vercel.json <<'JSON'
           {
             "git": { "deploymentEnabled": { "signals-deploy": true } },
+            "ignoreCommand": "[ \"$VERCEL_ENV\" != production ]",
             "cleanUrls": true,
             "crons": [
               { "path": "/api/trigger-build", "schedule": "30 3 * * *" },
@@ -168,15 +222,22 @@ jobs:
           }
           JSON
           cd /tmp/signals-deploy
+          # The test site: no crons (they would start live builds), and
+          # deploys switched on for its own branch instead.
+          if [ "$DEPLOY_BRANCH" = staging-deploy ]; then
+            jq '{git: {deploymentEnabled: {"staging-deploy": true}}, ignoreCommand, cleanUrls}' vercel.json > vercel.tmp
+            mv vercel.tmp vercel.json
+          fi
           git init -q
-          git checkout -q -b signals-deploy
+          git checkout -q -b "$DEPLOY_BRANCH"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html command_center_data.json img signals.html signal.css signals.json brief.html archive.html snapshots search vercel.json api
           git commit -q -m "Signals rebuild: $(date -u +'%Y-%m-%d %H:%M UTC')"
-          git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" signals-deploy
+          git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" "$DEPLOY_BRANCH"
 
       - name: Publish to command-center-deploy branch (Vercel source)
+        if: github.ref_name != 'staging'
         run: |
           rm -rf /tmp/command-center-deploy
           mkdir /tmp/command-center-deploy
@@ -201,4 +262,5 @@ jobs:
       # Is Vercel serving this build? It redeploys on the signals-deploy push
       # within a minute or two. A failure means the site did not update.
       - name: Check the live site
+        if: github.ref_name != 'staging'
         run: python scripts/site_health.py deployed

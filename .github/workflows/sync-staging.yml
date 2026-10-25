@@ -1,0 +1,69 @@
+name: Keep staging level with final
+
+# The test site is built from `staging`. Once a week, on Sunday, this
+# moves `staging` up to `final` and rebuilds the test site, so the two sites
+# run the same code again. In between, the test site rebuilds only when a
+# feature is pushed to `staging` for testing, or on "Run workflow" here.
+#
+# When nothing on `staging` is still waiting to be promoted (it is already
+# part of `final`, or its code matches `final` apart from public/, as after
+# a squash promote), it is set to `final`. When something is waiting, `final`
+# is merged into it instead, keeping that work; if the two clash, it is left
+# alone and the run says so.
+
+on:
+  schedule:
+    # Sundays 04:00 UTC (09:30 IST), clear of the live build slots.
+    - cron: "0 4 * * 0"
+  workflow_dispatch: {}
+
+permissions:
+  actions: write
+  contents: write
+
+concurrency:
+  group: sync-staging
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: final
+          fetch-depth: 0
+
+      - name: Move staging up to final
+        id: sync
+        run: |
+          if ! git ls-remote --exit-code --heads origin staging > /dev/null; then
+            echo "staging does not exist yet: creating it from final."
+          elif git merge-base --is-ancestor origin/staging origin/final; then
+            echo "staging is part of final: fast-forwarding it."
+          elif git diff --quiet origin/final origin/staging -- . ':(exclude)public'; then
+            echo "staging's code is all in final: resetting it to final."
+          else
+            echo "staging has changes not yet in final: merging final into it."
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git checkout -q -B staging origin/staging
+            if ! git merge -q --no-edit origin/final; then
+              echo "::warning::final and staging clash, so staging was left as it is. Merge final into staging by hand."
+              echo "moved=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            git push origin staging
+            echo "moved=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git push --force origin origin/final:refs/heads/staging
+          echo "moved=true" >> "$GITHUB_OUTPUT"
+
+      # The bot's push above doesn't start the staging build by itself.
+      - name: Rebuild the test site
+        if: steps.sync.outputs.moved == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run build-signals.yml --ref staging

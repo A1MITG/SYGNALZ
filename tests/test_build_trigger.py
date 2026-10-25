@@ -49,6 +49,12 @@ class TestDeployConfig(unittest.TestCase):
         self.assertIs(root['git']['deploymentEnabled'], False)
         self.assertIs(_vercel_json()['git']['deploymentEnabled']['signals-deploy'], True)
 
+    def test_each_deploy_branch_builds_only_as_production(self):
+        """Both projects watch the same repo: each deploy branch is
+        production for one of them, and the other skips it rather than
+        spending a deploy on a preview."""
+        self.assertEqual(_vercel_json()['ignoreCommand'], '[ "$VERCEL_ENV" != production ]')
+
     def test_the_crons_fire_on_refresh_slots(self):
         """Vercel's free plan runs a cron at most once a day, so these cover
         only some of REFRESH_SLOTS_IST — the hourly watchdog drives the rest.
@@ -138,3 +144,70 @@ class TestFunction(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class TestStagingBuild(unittest.TestCase):
+    """The test site: a staging build publishes to staging-deploy only."""
+
+    def setUp(self):
+        self.wf = yaml.safe_load(WORKFLOW.read_text(encoding='utf-8'))
+        self.steps = [step for job in self.wf['jobs'].values() for step in job['steps']]
+
+    def test_staging_pushes_start_a_build(self):
+        on = self.wf.get('on', self.wf.get(True))
+        self.assertEqual(on['push']['branches'], ['staging'])
+
+    def test_only_final_and_staging_build(self):
+        guard = self.steps[0]['run']
+        self.assertIn('final|staging)', guard)
+        self.assertIn('exit 1', guard)
+
+    def test_staging_publishes_to_its_own_branch(self):
+        self.assertIn("github.ref_name == 'staging' && 'staging-deploy' || 'signals-deploy'",
+                      WORKFLOW.read_text(encoding='utf-8'))
+        self.assertIn('"$DEPLOY_BRANCH"', _publish_step().split('git push')[-1])
+
+    def test_staging_leaves_live_branches_alone(self):
+        for name in ('Commit build to working branch', 'Publish to command-center-deploy branch (Vercel source)',
+                     'Check the live site'):
+            step = next(s for s in self.steps if s.get('name') == name)
+            self.assertEqual(step.get('if'), "github.ref_name != 'staging'", name)
+
+    @unittest.skipUnless(shutil.which('jq'), 'jq not installed')
+    def test_the_test_site_has_no_crons(self):
+        """Crons on the test site would start extra live builds."""
+        run = _publish_step()
+        jq_filter = re.search(r"jq '(.*?)' vercel.json", run).group(1)
+        out = subprocess.run(['jq', jq_filter], input=json.dumps(_vercel_json()),
+                             capture_output=True, text=True, check=True).stdout
+        staging = json.loads(out)
+        self.assertNotIn('crons', staging)
+        self.assertEqual(staging['git']['deploymentEnabled'], {'staging-deploy': True})
+        self.assertIs(staging['cleanUrls'], True)
+        self.assertEqual(staging['ignoreCommand'], _vercel_json()['ignoreCommand'])
+
+    def test_the_test_site_syncs_weekly_not_on_every_change(self):
+        """Amit, 2026-10-25: the test site refreshes once a week (Sunday) or
+        when a feature is pushed to staging, never with the news refreshes
+        or each merge into final."""
+        sync = yaml.safe_load((ROOT / '.github' / 'workflows' / 'sync-staging.yml').read_text(encoding='utf-8'))
+        on = sync.get('on', sync.get(True))
+        self.assertNotIn('push', on)
+        self.assertEqual(len(on['schedule']), 1)
+        minute, hour, dom, month, dow = on['schedule'][0]['cron'].split()
+        self.assertEqual((dom, month, dow), ('*', '*', '0'))
+
+    def test_test_site_builds_reuse_the_live_data(self):
+        """Amit, 2026-10-25: testing a change shouldn't refresh the whole
+        site. A staging build skips the news fetch and the data steps and
+        takes the live site's data, unless it is run with full."""
+        self.assertIn("LIGHT_BUILD: ${{ github.ref_name == 'staging' && !inputs.full }}",
+                      WORKFLOW.read_text(encoding='utf-8'))
+        heavy = [s for s in self.steps if 'NEWS_API_KEY' in str(s.get('env', {}))
+                 or 'archive_snapshot.py' in s.get('run', '') or 'site_health.py gate' in s.get('run', '')]
+        self.assertTrue(heavy)
+        for step in heavy:
+            self.assertEqual(step.get('if'), "env.LIGHT_BUILD != 'true'", step.get('name'))
+        light = next(s for s in self.steps if s.get('name') == "Use the live site's data (test site)")
+        self.assertEqual(light.get('if'), "env.LIGHT_BUILD == 'true'")
+        self.assertIn('origin signals-deploy', light['run'])
