@@ -114,6 +114,25 @@ def test_appointed_to_board_in_headline_is_an_appointment():
         "People: Hotaling's Dieppa Appointed to Florida Citizens Board of Governors")
 
 
+def test_appointed_director_in_headline_is_an_appointment():
+    """A director, VP or CHRO title used to need "joins ... as"; the passive
+    "Appointed Director" scored only the weight-2 'appointed', so this move
+    went to the GCC tile instead of People Movers (25 Oct 2026)."""
+    for title in (
+        "Bhuvanesh Devi Rajan Appointed Director – HR, India at Reveleer Global Capability Center",
+        "Caratlane's Sacheti appointed executive director",
+        "Priya Rao named Vice President, Engineering at Acme India",
+        "Acme promotes Ravi Kumar; Kumar promoted as country head",
+    ):
+        assert "EXECUTIVE_APPOINTMENT" in _types(title), title
+
+
+def test_past_director_appointment_in_summary_does_not_fire():
+    assert "EXECUTIVE_APPOINTMENT" not in _types(
+        "Reveleer expands its India centre",
+        "Rajan, who was appointed director in 2021, said hiring will double.")
+
+
 def test_past_appointment_in_summary_does_not_fire():
     """The headline passive is decisive only in a title. In body text it is
     usually background, and background must not promote the article."""
