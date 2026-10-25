@@ -29,7 +29,12 @@ on:
     - cron: "30 0,3,6,9,12,15,18,21 * * *"
   push:
     branches: [staging]
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "Test site only: fetch fresh news too (normally it reuses the live site's data)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -44,6 +49,10 @@ env:
   LIVE_URL: https://news-letter-cxo.vercel.app
   # `final` publishes the live site; `staging` the test site.
   DEPLOY_BRANCH: ${{ github.ref_name == 'staging' && 'staging-deploy' || 'signals-deploy' }}
+  # A test-site build normally reuses the live site's latest data and only
+  # rebuilds the pages from the code being tested: no news fetch, no NewsAPI
+  # calls taken from the live builds. "Run workflow" with full fetches fresh.
+  LIGHT_BUILD: ${{ github.ref_name == 'staging' && !inputs.full }}
 
 jobs:
   build:
@@ -75,6 +84,7 @@ jobs:
       # that day's last build, and is filed as public/snapshots/YYYY-MM-DD.json
       # (scripts/archive_snapshot.py). Before the new build overwrites it.
       - name: File yesterday's last build in the archive
+        if: env.LIGHT_BUILD != 'true'
         run: python scripts/archive_snapshot.py
 
       # Archive search: each newly filed day's stories as sentence embeddings
@@ -83,30 +93,50 @@ jobs:
       # The model (~23 MB) is cached between runs. Never blocks the build: a
       # day missed here is indexed by the next run.
       - name: Cache the archive search model
+        if: env.LIGHT_BUILD != 'true'
         uses: actions/cache@v4
         with:
           path: ~/.cache/signal-search-model
           key: signal-search-model-all-MiniLM-L6-v2-q8
 
       - name: Index the archive for search
+        if: env.LIGHT_BUILD != 'true'
         continue-on-error: true
         run: |
           pip install -r requirements-search.txt
           python scripts/archive_search_index.py
 
       - name: Build static Signals page
+        if: env.LIGHT_BUILD != 'true'
         run: python scripts/build_static_signals.py
         env:
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
 
       - name: Build Command Center live data
+        if: env.LIGHT_BUILD != 'true'
         run: python scripts/build_command_center_data.py
         env:
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
 
+      # The test site's light build: the live site's data and archive, with
+      # this branch's pages. The data already passed the live build's check.
+      - name: Use the live site's data (test site)
+        if: env.LIGHT_BUILD == 'true'
+        run: |
+          git fetch -q --depth=1 origin signals-deploy
+          for f in command_center_data.json signals.json brief.html; do
+            git show "FETCH_HEAD:$f" > "public/$f"
+          done
+          git show FETCH_HEAD:signals.html > public/index.html
+          rm -rf public/snapshots public/search
+          git archive FETCH_HEAD snapshots search | tar -x -C public
+          cp app/static/command_center_source.html public/command_center.html
+          python -c "from pathlib import Path; from scripts.archive_snapshot import archived_dates, render_archive_page; Path('public/archive.html').write_text(render_archive_page(Path('app/static/command_center_source.html').read_text(encoding='utf-8'), archived_dates()), encoding='utf-8')"
+
       # Is public/ fit to go live? An error stops the run here: the site keeps
       # the last good build, and GitHub emails the repo owner.
       - name: Check the build before publishing
+        if: env.LIGHT_BUILD != 'true'
         run: python scripts/site_health.py gate
 
       # The test site's build is not committed: `staging` keeps only source

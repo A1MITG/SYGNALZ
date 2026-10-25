@@ -196,3 +196,18 @@ class TestStagingBuild(unittest.TestCase):
         self.assertEqual(len(on['schedule']), 1)
         minute, hour, dom, month, dow = on['schedule'][0]['cron'].split()
         self.assertEqual((dom, month, dow), ('*', '*', '0'))
+
+    def test_test_site_builds_reuse_the_live_data(self):
+        """Amit, 2026-10-25: testing a change shouldn't refresh the whole
+        site. A staging build skips the news fetch and the data steps and
+        takes the live site's data, unless it is run with full."""
+        self.assertIn("LIGHT_BUILD: ${{ github.ref_name == 'staging' && !inputs.full }}",
+                      WORKFLOW.read_text(encoding='utf-8'))
+        heavy = [s for s in self.steps if 'NEWS_API_KEY' in str(s.get('env', {}))
+                 or 'archive_snapshot.py' in s.get('run', '') or 'site_health.py gate' in s.get('run', '')]
+        self.assertTrue(heavy)
+        for step in heavy:
+            self.assertEqual(step.get('if'), "env.LIGHT_BUILD != 'true'", step.get('name'))
+        light = next(s for s in self.steps if s.get('name') == "Use the live site's data (test site)")
+        self.assertEqual(light.get('if'), "env.LIGHT_BUILD == 'true'")
+        self.assertIn('origin signals-deploy', light['run'])
