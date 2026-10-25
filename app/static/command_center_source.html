@@ -145,6 +145,26 @@ a { color: inherit; }
 .wc-upd-next { font-size: 12px; color: var(--slate-light); }
 .wc-upd-next::before { content: '\00b7  '; }   /* two spaces: the escape eats the first */
 .wc-upd.delayed .wc-upd-next { color: #b45309; }
+/* The archive strip: a pale amber line under the clocks, the same band the
+   /archive page opens with, to open a past day or search past days by topic
+   (scripts/archive_snapshot.py). Shown once the build says which days the
+   archive holds. The label wears a red, blue and amber halo that keeps
+   running round it (still for readers who ask for reduced motion). */
+.arc-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px;
+             padding: 7px 16px; background: #fff7e0; border-bottom: 1px solid #ecd9a0; color: #4a3b0f; font-size: 13px; }
+.arc-strip[hidden] { display: none; }
+@property --arc-turn { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.arc-strip .arc-tag { display: inline-flex; align-items: center; gap: 5px; padding: 2px 10px; border-radius: 999px; border: 1.5px solid transparent;
+    font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #9a6b00;
+    background: linear-gradient(#fff7e0, #fff7e0) padding-box, conic-gradient(from var(--arc-turn), #e11d2e, #2f6fed, #f59e0b, #e11d2e) border-box;
+    box-shadow: 0 0 8px rgba(47,111,237,.25); }
+.arc-strip .arc-tag svg { width: 12px; height: 12px; }
+@media (prefers-reduced-motion: no-preference) { .arc-strip .arc-tag { animation: arc-halo 3s linear infinite; } }
+@keyframes arc-halo { to { --arc-turn: 360deg; } }
+.arc-strip-pick { display: inline-flex; align-items: center; gap: 6px; }
+.arc-strip input { font: inherit; padding: 4px 10px; border: 1px solid #d9c27a; border-radius: 6px; background: #fff; color: #0b1524; }
+.arc-strip-search { display: inline-flex; flex: 0 1 300px; min-width: 200px; }
+.arc-strip-search input { flex: 1; min-width: 0; border-radius: 999px; }
 /* Narrower: each city above its date and time. */
 @media (max-width: 1120px) {
     .wc-item { flex-direction: column; align-items: center; gap: 1px; padding: 6px 6px; }
@@ -753,8 +773,13 @@ a { color: inherit; }
         </div>
     </nav>
 </div>
-<!-- World-time line: Tokyo, New Delhi, Dubai, New York, then the last refresh. Filled by WorldTime. -->
+<!-- World-time line: Tokyo, New Delhi, Dubai, New York. Filled by WorldTime. Then the archive strip. -->
 <div class="wc-line" id="worldTime" role="group" aria-label="World time"></div>
+<div class="arc-strip" id="archiveStrip" hidden>
+    <span class="arc-tag"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3"/></svg>Archive</span>
+    <label class="arc-strip-pick">Open a past day <input type="date" aria-label="Open a past day"></label>
+    <form class="arc-strip-search" action="/archive" role="search"><input type="search" name="q" placeholder="Search past days by topic" aria-label="Search past days by topic"></form>
+</div>
 <div class="flyout" id="flyout"></div>
 
 <div class="wrap">
@@ -1502,6 +1527,18 @@ a { color: inherit; }
     })();
     const worldTime = WorldTime.mount(document.getElementById('worldTime'), document.getElementById('lastUpdate'));
 
+    // The archive strip, once the build says which days the archive holds
+    // (_meta.archive_first / archive_last). Picking a day opens /archive for
+    // it; a search opens /archive?q=, which runs it there.
+    function showArchiveStrip(m) {
+        const strip = document.getElementById('archiveStrip'), pick = strip.querySelector('input[type=date]');
+        const first = m && m.archive_first, last = m && m.archive_last;
+        strip.hidden = !(first && last);
+        if (strip.hidden) return;
+        pick.min = first; pick.max = last;
+        pick.onchange = () => { if (pick.value) location.href = '/archive?d=' + pick.value; };
+    }
+
     // ---------- Live data load: fetch real classified articles, then build the ticker + tile headlines ----------
     const flyout = document.getElementById('flyout');
     // Data source: the live API when served by Flask, the prebuilt snapshot on a
@@ -1524,6 +1561,7 @@ a { color: inherit; }
             renderPulseCards(_pulse || []);
             renderRecord(_record || { quotes: [], leaders: [] });
             worldTime.setMeta(CC_META);
+            showArchiveStrip(CC_META);
             initTileHeadlines();
             initTicker();
         })
