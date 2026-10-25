@@ -72,6 +72,11 @@ events:
       # text it is usually background ("named CEO in 2014"), so there the same
       # words are corroboration only (the next two patterns).
       - { rx: '\b(?:named|appointed)\b.{0,40}\b(?:ceo|cfo|coo|cio|cto|chief(?!\s+(?:minister|justice)\b)|president|managing director|chair(?:man|woman|person)?|head of|board)\b', weight: 3, where: title }
+      # The same passive with the wider role list the "joins as" patterns use:
+      # "Bhuvanesh Devi Rajan Appointed Director – HR, India at Reveleer GCC"
+      # matched only the weight-2 "appointed" below, which cannot fire alone,
+      # so the move went to the GCC tile instead of People Movers (25 Oct 2026).
+      - { rx: '\b(?:named|appointed|promoted|elevated)\s+(?:as\s+)?(?:(?:its|the|new|interim|acting|global|group|india|country|regional|senior|executive|associate|deputy|joint)\s+){0,3}(?:chro|cmo|cdo|ciso|vice president|vp|svp|evp|md|director|head|partner|country manager|general manager|country head|business head)\b', weight: 3, where: title }
       - { rx: '\b(?:appointed|appointment of|new chief executive|succeeds as)\b', weight: 2 }
       - { rx: '\bnamed\b.{0,40}\b(?:ceo|cfo|coo|cio|cto|chief(?!\s+(?:minister|justice)\b)|president|managing director|chair(?:man|woman|person)?|head of)\b', weight: 2 }
       - { rx: '\bpeople moves\b', weight: 1 }
