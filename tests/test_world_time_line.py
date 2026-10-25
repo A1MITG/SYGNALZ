@@ -1,6 +1,6 @@
 """The world-time line: local time in Tokyo, New Delhi, Dubai and New York,
-one thin line between the top navigation and the hero, ending in the site's
-last refresh.
+one thin line between the top navigation and the hero. The site's last
+refresh sits under the hero headline, so the line holds only the clocks.
 
 The refresh cell replaced the engine band's "Sources checked" stamp, which on
 the static site always said "moments ago": the static build can only write
@@ -37,6 +37,15 @@ def test_refresh_cell_replaces_the_sources_checked_stamp():
     assert 'id="freshStamp"' not in page
     assert 'Sources checked' not in page
     assert 'worldTime.setMeta(CC_META);' in page
+
+
+def test_line_holds_only_the_clocks():
+    """The refresh moved under the hero headline; the line keeps four cells."""
+    page = _page()
+    assert 'repeat(4, minmax(0, 1fr));' in page
+    hero = page[page.index('<section class="hero">'):page.index('</section>', page.index('<section class="hero">'))]
+    assert hero.index('class="hero-stage"') < hero.index('id="lastUpdate"') < hero.index('class="hero-sub')
+    assert "WorldTime.mount(document.getElementById('worldTime'), document.getElementById('lastUpdate'));" in page
 
 
 def test_static_page_is_built_from_the_source():

@@ -6,8 +6,7 @@ from ..scraper.store import get_articles, get_cache_date, cache_age_minutes
 from ..scraper.article_images import fill_missing_images, fill_signal_images
 from ..analysis.synthesis import synthesize_articles
 from ..analysis.signals import synthesize_signals
-from ..analysis.command_center import (build_engine_data, build_features, build_people_rows,
-                                       load_pinned_moves, load_pinned_stories)
+from ..analysis.command_center import build_engine_data, build_features, build_people_rows
 from ..scraper.leader_quotes import get_leader_quotes
 
 logger = logging.getLogger(__name__)
@@ -61,16 +60,16 @@ def get_command_center():
                                           include_tile_signals=True)
         by_title = {a.get('title'): a for a in scraped_articles}
         fill_signal_images(signals_data, by_title)
-        # Pins from config/pinned_stories.yaml lead their tile (and Featured,
-        # when marked) until they expire.
-        payload = build_engine_data(signals_data, by_title, pinned=load_pinned_stories())
+        # The people rows first: a story People Movers shows is left out of
+        # the tiles, so one move is not also a tech or GCC headline.
+        # Never blocks: a stale quote set refreshes in the background.
+        people = build_people_rows(scraped_articles, get_leader_quotes())
+        payload = build_engine_data(signals_data, by_title, exclude=people['_movers'])
         # The Featured Analysis rotation; _featured is its first card.
         features = build_features(payload, by_title)
         payload['_features'] = features
         payload['_featured'] = features[0] if features else None
-        # Never blocks: a stale quote set refreshes in the background.
-        payload.update(build_people_rows(scraped_articles, get_leader_quotes(),
-                                         pinned=load_pinned_moves()))
+        payload.update(people)
         # A move card leads with its story's picture; fill the ones the feed
         # left without from the article's own page (FETCH_ARTICLE_IMAGES).
         fill_missing_images(payload['_movers'])

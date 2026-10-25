@@ -12,10 +12,7 @@ intentionally unmapped: the Command Center layout has no tile for it.
 """
 import logging
 import re
-from datetime import date, datetime, timedelta, timezone
-from pathlib import Path
-
-import yaml
+from datetime import timedelta, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -353,93 +350,7 @@ def build_movers(current_articles, limit=8):
     return moves if limit is None else moves[:limit]
 
 
-PINNED_MOVES = Path(__file__).resolve().parents[2] / 'config' / 'pinned_moves.yaml'
 _IST = timezone(timedelta(hours=5, minutes=30))
-
-
-def load_pinned_moves(path=PINNED_MOVES, today=None):
-    """People Movers pins from config/pinned_moves.yaml that are still in date.
-
-    A pin keeps a reported move on the row past the 7-day window until its
-    `until` date (IST, inclusive), then it drops off by itself. The card keeps
-    the report's real date and carries pinned=True, which the page shows as
-    "Pinned", so an older story never passes as today's. An unreadable file or
-    an incomplete entry is skipped rather than failing the build.
-    """
-    from ..intelligence.normalize import publisher_for
-    try:
-        entries = (yaml.safe_load(Path(path).read_text(encoding='utf-8')) or {}).get('pins') or []
-    except (OSError, yaml.YAMLError):
-        logger.warning("Pinned moves unreadable: %s", path, exc_info=True)
-        return []
-    today = today or datetime.now(_IST).date()
-    labels = set(_MOVE_LABELS.values()) | {'Leadership change'}
-    pins = []
-    for entry in entries:
-        title = (entry.get('title') or '').strip()
-        url = (entry.get('url') or '').strip()
-        until, published = entry.get('until'), entry.get('published')
-        if not title or not url.startswith('http') or not isinstance(until, date) or until < today:
-            continue
-        label = entry.get('type') if entry.get('type') in labels else 'Appointed'
-        when = (datetime(published.year, published.month, published.day, tzinfo=timezone.utc)
-                if isinstance(published, date) else None)
-        pins.append({
-            'title': title,
-            'url': url,
-            'type': label,
-            'kind': 'exit' if label == 'Steps down' else 'appointment',
-            'source': entry.get('source') or publisher_for(url.split('/')[2]),
-            'date': when.strftime('%d %b') if when else '',
-            'ts': when.timestamp() if when else 0,
-            # Optional; without one, the surfaces fill it from the report's page.
-            'image': _article_image(entry),
-            'pinned': True,
-        })
-    return pins
-
-
-PINNED_STORIES = Path(__file__).resolve().parents[2] / 'config' / 'pinned_stories.yaml'
-
-
-def load_pinned_stories(path=PINNED_STORIES, today=None):
-    """Engine tile pins from config/pinned_stories.yaml that are still in date.
-
-    A pin keeps a published story at the front of its tile after the feeds
-    stop listing it, until its `until` date (IST, inclusive), then it drops
-    off by itself. It keeps the story's real date and carries pinned=True;
-    one marked featured is also the Featured Analysis card (build_featured).
-    An unreadable file or an incomplete entry is skipped rather than failing
-    the build.
-    """
-    from ..intelligence.normalize import publisher_for
-    try:
-        entries = (yaml.safe_load(Path(path).read_text(encoding='utf-8')) or {}).get('pins') or []
-    except (OSError, yaml.YAMLError):
-        logger.warning("Pinned stories unreadable: %s", path, exc_info=True)
-        return []
-    today = today or datetime.now(_IST).date()
-    engines = {engine_id for engine_id, _ in SIGNAL_TO_ENGINE.values()}
-    pins = []
-    for entry in entries:
-        title = (entry.get('title') or '').strip()
-        url = (entry.get('url') or '').strip()
-        until, published = entry.get('until'), entry.get('published')
-        if (not title or not url.startswith('http') or entry.get('engine') not in engines
-                or not isinstance(until, date) or until < today):
-            continue
-        pins.append({
-            'engine': entry['engine'],
-            'title': title,
-            'url': url,
-            'image': _article_image(entry),
-            'summary': (entry.get('summary') or '').strip(),
-            'source': entry.get('source') or publisher_for(url.split('/')[2]),
-            'date': published.strftime('%d %b') if isinstance(published, date) else '',
-            'featured': entry.get('featured') is True,
-            'pinned': True,
-        })
-    return pins
 
 
 def build_record(quote_set, movers):
@@ -464,19 +375,25 @@ def build_record(quote_set, movers):
     return record
 
 
-def build_people_rows(current_articles, quote_set, pulse_limit=8, pinned=(), movers_limit=8):
+def build_mover_cards(current_articles, limit=8):
+    """People Movers' cards: the scan's moves, each story once (dedupe.py)."""
+    from .dedupe import keep_most_trusted
+    return keep_most_trusted(build_movers(current_articles, limit=None))[:limit]
+
+
+def build_people_rows(current_articles, quote_set, pulse_limit=8, movers_limit=8):
     """The three people rows, each person shown once, in the most specific row.
 
     Precedence is People Movers > Leaders on Record > Executive Pulse: a move
     is a fact about the person, a quote is their own voice, and Pulse is the
     general "in the news" catch-all, so it takes whoever the others did not.
 
-    `pinned` (from load_pinned_moves) leads People Movers; a pinned story the
-    scan also found is shown once, as the pin. Any story several outlets
-    carry is shown once, from the most trusted of them (dedupe.py).
+    People Movers shows only moves the day's scan found; nothing is pinned.
+    Any story several outlets carry is shown once, from the most trusted of
+    them (dedupe.py).
     """
     from .dedupe import keep_most_trusted
-    movers = keep_most_trusted(list(pinned) + build_movers(current_articles, limit=None))[:movers_limit]
+    movers = build_mover_cards(current_articles, limit=movers_limit)
     record = build_record(quote_set, movers)
     pulse = build_pulse_cards(
         current_articles, limit=pulse_limit,
@@ -506,8 +423,8 @@ def build_features(engine_data, articles_by_title, limit=FEATURED_LIMIT):
     """The Featured Analysis rotation, in order.
 
     Was one hardcoded article (a July 2026 GCC office-leasing piece), then one
-    card. Stories pinned with `featured: true` (config/pinned_stories.yaml)
-    come first and say so. Then the current stories with a full-size picture
+    card, then led by hand-pinned stories (removed 2026-10-25). Now the
+    current stories with a full-size picture
     (a feed thumbnail does not count) in FEATURED_ORDER: GCC's first, then
     Insurance's, then the top Global Affairs stories, so a thin GCC day still
     fills the rotation. Every card names its publisher and date.
@@ -516,21 +433,8 @@ def build_features(engine_data, articles_by_title, limit=FEATURED_LIMIT):
     from ..scraper.article_images import is_thumbnail
 
     features = []
-    # 1. Pins: they carry their own picture, summary, publisher and date.
-    for engine_id, engine in engine_data.items():
-        if engine_id.startswith('_'):
-            continue
-        for pin in engine.get('articles') or []:
-            if pin.get('pinned') and pin.get('featured') and pin.get('image'):
-                features.append({
-                    'title': pin['title'], 'url': pin['url'], 'image': pin['image'],
-                    'summary': _clip(pin.get('summary') or '', FEATURED_SUMMARY),
-                    'label': engine.get('name', ''),
-                    'source': pin.get('source', ''), 'date': pin.get('date', ''),
-                    'pinned': True,
-                })
-    # 2. The day's stories with a full-size picture, GCC's first.
-    seen = {f['url'] for f in features} | {f['title'] for f in features}
+    # The day's stories with a full-size picture, GCC's first.
+    seen = set()
     for engine_id in FEATURED_ORDER:
         engine = engine_data.get(engine_id) or {}
         for article in engine.get('articles', []):
@@ -571,7 +475,7 @@ def _article_image(raw):
     return image if image.startswith('http') else None
 
 
-def build_engine_data(signals_data, articles_by_title=None, pinned=()):
+def build_engine_data(signals_data, articles_by_title=None, exclude=()):
     """Map a synthesize_signals() result onto the Command Center tile contract.
 
     ``articles_by_title`` is the raw corpus keyed by title, the same map the
@@ -582,15 +486,15 @@ def build_engine_data(signals_data, articles_by_title=None, pinned=()):
     that pin this contract) may omit it, and every article then reports no
     image, which the page renders as that domain's vector.
 
-    ``pinned`` (from load_pinned_stories) leads its engine's tile; a pinned
-    story the scan also found is shown once, as the pin. Pins count toward
-    the tile's MAX_PER_SIGNAL.
+    ``exclude`` is stories shown elsewhere on the page, People Movers' cards:
+    a tile drops any article that is the same story (dedupe.same_story), so
+    a leadership move shows once, as a move, not also in a tile.
 
     A story several outlets carry appears once on the page, in one tile, as
     its most trusted copy (dedupe.py); Featured and the Brief read these
     tiles, so they inherit it.
     """
-    from .dedupe import keep_most_trusted
+    from .dedupe import keep_most_trusted, same_story
     from .signals import MAX_PER_SIGNAL
     by_name = {s['name']: s for s in signals_data.get('signals', [])}
     by_title = articles_by_title or {}
@@ -603,12 +507,8 @@ def build_engine_data(signals_data, articles_by_title=None, pinned=()):
              'image': _article_image(by_title.get(a['title']))}
             for a in signal.get('articles', [])
         ]
-        pins = [{k: v for k, v in p.items() if k != 'engine'}
-                for p in pinned if p['engine'] == engine_id]
-        if pins:
-            seen = {p['url'] for p in pins} | {p['title'] for p in pins}
-            articles = (pins + [a for a in articles
-                                if a['url'] not in seen and a['title'] not in seen])[:MAX_PER_SIGNAL]
+        articles = [a for a in articles
+                    if not any(same_story(a, shown) for shown in exclude)][:MAX_PER_SIGNAL]
         engine_data[engine_id] = {'name': display_name, 'articles': articles}
 
     everything = [(engine_id, a) for engine_id, e in engine_data.items() for a in e['articles']]

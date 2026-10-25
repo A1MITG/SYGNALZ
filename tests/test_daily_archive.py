@@ -17,7 +17,7 @@ from pathlib import Path
 
 import yaml
 
-from scripts.archive_snapshot import (ARCHIVE_DIR, archived_dates, render_archive_page,
+from scripts.archive_snapshot import (ARCHIVE_DIR, ARCHIVE_INJECT, ARCHIVE_SEARCH, archived_dates, render_archive_page,
                                       slim, snapshot)
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -117,24 +117,37 @@ class TestArchivePage(unittest.TestCase):
             self.assertTrue(data['_meta']['built_at'], day)
 
 
-class TestPastDaysLink(unittest.TestCase):
-    """Amit chose option B (2026-10-24): a small link beside the
-    Updated stamp that opens a calendar, not a top-menu item."""
+class TestArchiveStrip(unittest.TestCase):
+    """Amit's pick (2026-10-25): the top line holds only the clocks; under it
+    a pale amber archive strip, like the /archive page's bar, with a day
+    picker and a topic search."""
 
     @classmethod
     def setUpClass(cls):
         cls.src = (ROOT / 'app' / 'static' / 'command_center_source.html').read_text(encoding='utf-8')
 
-    def test_the_link_sits_in_the_updated_cell_with_a_date_input(self):
-        cell = self.src[self.src.index('<span class="wc-upd" hidden>'):]
-        cell = cell[:cell.index('</span></div>')]
-        self.assertIn('<a class="wc-arc" href="/archive" hidden>', cell)
-        self.assertIn('<input type="date"', cell)
+    def test_the_strip_is_the_third_line_under_the_clocks(self):
+        src = self.src
+        self.assertLess(src.index('</nav>'), src.index('id="worldTime"'))
+        self.assertLess(src.index('id="worldTime"'), src.index('id="archiveStrip"'))
+        self.assertLess(src.index('id="archiveStrip"'), src.index('<section class="hero">'))
+        self.assertNotIn('wc-arc', src)
 
-    def test_it_reads_archive_with_a_running_three_colour_halo(self):
-        self.assertIn('</svg>Archive<input', self.src)
+    def test_it_holds_a_day_picker_and_a_search_that_open_the_archive(self):
+        strip = self.src[self.src.index('<div class="arc-strip" id="archiveStrip" hidden>'):]
+        strip = strip[:strip.index('</div>')]
+        self.assertIn('<input type="date"', strip)
+        self.assertIn('<form class="arc-strip-search" action="/archive" role="search"><input type="search" name="q"', strip)
+        self.assertIn("var asked = (new URLSearchParams(location.search).get('q') || '').trim();", ARCHIVE_SEARCH)
+
+    def test_its_label_wears_a_running_three_colour_halo(self):
+        self.assertIn('</svg>Archive</span>', self.src)
         self.assertIn('conic-gradient(from var(--arc-turn), #e11d2e, #2f6fed, #f59e0b, #e11d2e)', self.src)
-        self.assertIn('@media (prefers-reduced-motion: no-preference) { .wc-arc { animation:', self.src)
+        self.assertIn('@media (prefers-reduced-motion: no-preference) { .arc-strip .arc-tag { animation:', self.src)
+
+    def test_the_archive_page_puts_its_own_bar_there(self):
+        self.assertIn('#archiveStrip { display: none !important; }', ARCHIVE_INJECT)
+        self.assertIn('(clocks || nav).after(bar);', ARCHIVE_INJECT)
 
     def test_it_is_not_in_the_top_menu(self):
         self.assertNotIn('<a class="link" href="/archive">', self.src)

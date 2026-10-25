@@ -82,7 +82,7 @@ def snapshot(now=None, public_dir=PUBLIC_DIR):
 
 # Injected before </head> of the Command Center source to make
 # public/archive.html: the same page, reading one day's snapshot instead of
-# today's data, with a date bar under the nav. __DATES__ is the list of days
+# today's data, with a date bar under the world clocks. __DATES__ is the list of days
 # on file, written in at build time so the page needs no extra request.
 ARCHIVE_INJECT = """<meta name="robots" content="noindex">
 <script>
@@ -107,6 +107,8 @@ ARCHIVE_INJECT = """<meta name="robots" content="noindex">
     a[href="/brief"] { display: none !important; }
     /* The bar names the day; "Updated Thu 22:45" alone would read as this week. */
     .wc-upd { display: none !important; }
+    /* The bar below takes the main page's archive strip's place. */
+    #archiveStrip { display: none !important; }
     .arc-bar { position: sticky; z-index: 49; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; padding: 8px 16px; background: #fff7e0; border-bottom: 1px solid #ecd9a0; color: #4a3b0f; font-size: 13px; }
     .arc-tag { font-weight: 800; letter-spacing: .16em; font-size: 11px; color: #9a6b00; }
     .arc-pick { display: inline-flex; align-items: center; gap: 6px; }
@@ -118,7 +120,7 @@ ARCHIVE_INJECT = """<meta name="robots" content="noindex">
 </style>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var A = window.SIGNAL_ARCHIVE, nav = document.querySelector('.nav-wrap');
+        var A = window.SIGNAL_ARCHIVE, nav = document.querySelector('.nav-wrap'), clocks = document.getElementById('worldTime');
         var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         function nice(d) { var p = d.split('-'); return +p[2] + ' ' + MONTHS[p[1] - 1] + ' ' + p[0]; }
         var bar = document.createElement('div');
@@ -146,10 +148,11 @@ ARCHIVE_INJECT = """<meta name="robots" content="noindex">
                 go(pick || A.dates[0]);
             });
         }
-        if (nav) {
-            nav.after(bar);
+        // Under the world clocks, as on the main page; it sticks under the nav.
+        if (clocks || nav) {
+            (clocks || nav).after(bar);
             var place = function () { bar.style.top = nav.offsetHeight + 'px'; };
-            place(); window.addEventListener('resize', place);
+            if (nav) { place(); window.addEventListener('resize', place); }
         } else {
             document.body.prepend(bar);
         }
@@ -308,6 +311,9 @@ ARCHIVE_SEARCH = r"""<style>
             var q = input.value.trim();
             if (q.length > 1) search(q);
         });
+        // A search started from the main page's archive strip arrives as ?q=.
+        var asked = (new URLSearchParams(location.search).get('q') || '').trim();
+        if (asked.length > 1) { input.value = asked; search(asked); }
         // Warm the model as soon as the reader shows intent.
         input.addEventListener('focus', function () { getExtractor().catch(function () {}); getIndex(); }, { once: true });
         input.addEventListener('keydown', function (e) { if (e.key === 'Escape') panel.hidden = true; });

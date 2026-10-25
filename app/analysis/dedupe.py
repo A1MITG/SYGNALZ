@@ -10,7 +10,7 @@ trusted publisher (config/sources.yaml, via trust.resolve).
     keep_most_trusted(items)  -> items minus the less trusted retellings
 
 An item is any dict with `title` and `url`; `kind` (People Movers' exit or
-appointment), `pinned`, `image` and `ts` are used when present.
+appointment), `image` and `ts` are used when present.
 """
 import re
 import unicodedata
@@ -120,14 +120,13 @@ def _host(url):
 
 
 def trust_key(item):
-    """Sort key, higher = keep: pinned, publisher trust, then tie-breaks.
+    """Sort key, higher = keep: publisher trust, then tie-breaks.
 
     The tie-breaks, in order: the headline names a person (more specific),
     the item has a picture, the item is newer.
     """
     source = resolve(_host(item.get('url')))
     return (
-        bool(item.get('pinned')),
         source['authority'],
         bool(_people(item.get('title'))),
         bool(item.get('image')),
