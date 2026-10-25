@@ -1,11 +1,9 @@
 name: Keep staging level with final
 
-# The test site is built from `staging`. Whenever a change lands on `final`
-# (a merged PR, a promote from staging), this moves `staging` up to it and
-# rebuilds the test site, so the two sites run the same code. The live
-# builds' own commits to `final` don't start this (GitHub doesn't start
-# workflows from the bot's pushes), and the test site rebuilds its data
-# itself, so those don't need syncing.
+# The test site is built from `staging`. Once a week, on Sunday, this
+# moves `staging` up to `final` and rebuilds the test site, so the two sites
+# run the same code again. In between, the test site rebuilds only when a
+# feature is pushed to `staging` for testing, or on "Run workflow" here.
 #
 # When nothing on `staging` is still waiting to be promoted (it is already
 # part of `final`, or its code matches `final` apart from public/, as after
@@ -14,11 +12,9 @@ name: Keep staging level with final
 # alone and the run says so.
 
 on:
-  push:
-    branches: [final]
-    # The 3-hourly refreshes only rewrite public/, so even if one did start
-    # this, it is skipped: the test site rebuilds only for code changes.
-    paths-ignore: ['public/**']
+  schedule:
+    # Sundays 04:00 UTC (09:30 IST), clear of the live build slots.
+    - cron: "0 4 * * 0"
   workflow_dispatch: {}
 
 permissions:

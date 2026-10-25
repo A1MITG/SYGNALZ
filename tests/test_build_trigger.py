@@ -186,11 +186,13 @@ class TestStagingBuild(unittest.TestCase):
         self.assertIs(staging['cleanUrls'], True)
         self.assertEqual(staging['ignoreCommand'], _vercel_json()['ignoreCommand'])
 
-    def test_news_refreshes_do_not_rebuild_the_test_site(self):
-        """Only code changes on final move staging and spend a test-site
-        deploy; the scheduled refreshes, which only rewrite public/, don't."""
+    def test_the_test_site_syncs_weekly_not_on_every_change(self):
+        """Amit, 2026-10-25: the test site refreshes once a week (Sunday) or
+        when a feature is pushed to staging, never with the news refreshes
+        or each merge into final."""
         sync = yaml.safe_load((ROOT / '.github' / 'workflows' / 'sync-staging.yml').read_text(encoding='utf-8'))
         on = sync.get('on', sync.get(True))
-        self.assertEqual(on['push']['branches'], ['final'])
-        self.assertEqual(on['push']['paths-ignore'], ['public/**'])
-        self.assertNotIn('schedule', on)
+        self.assertNotIn('push', on)
+        self.assertEqual(len(on['schedule']), 1)
+        minute, hour, dom, month, dow = on['schedule'][0]['cron'].split()
+        self.assertEqual((dom, month, dow), ('*', '*', '0'))
