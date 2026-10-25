@@ -98,6 +98,15 @@ a { color: inherit; }
 .ticker-item .ic svg { width: 100%; height: 100%; overflow: visible; }
 /* The engine icons are drawn for white tiles; on the dark ticker, brighten their blues/greys and give the moving parts amber so the animation reads. */
 .ticker-item .ic { --blue: #4f8cff; --blue-bright: #8ab8ff; --amber: #f5a623; --slate: #9aa5b4; --slate-light: #b4bdc9; --navy: #f5a623; }
+/* Ticker only: bold blue lines, a blue arc circling every logo, and a bold amber part that moves or flashes, as on Energy. */
+.ticker-item .ic { position: relative; }
+.ticker-item .ic svg [stroke] { stroke-width: 1.7; }
+.ticker-item .ic .tk-orbit { position: absolute; left: -3px; top: -3px; width: 28px; height: 28px; pointer-events: none; }
+.ticker-item .ic .tk-orbit circle { stroke-width: 1.6; }
+.ticker-item .ai-core, .ticker-item .mk-marker, .ticker-item .cy-particle, .ticker-item .cl-drop { fill: var(--amber); }
+.ticker-item .def-sweep, .ticker-item .tc-ring { stroke: var(--amber); }
+.ticker-item .tc-ring { stroke-width: 1; }
+.ticker-item .bf-lock { animation: bf-lock-click 3.5s ease-in-out infinite, pulse-glow 2.4s ease-in-out infinite; }
 .ticker-item .lbl-text { transition: color .25s ease; }
 .ticker-item::after { content: ''; position: absolute; left: 18px; right: 18px; bottom: 6px; height: 1.5px; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
 .ticker-item:hover .ic, .ticker-item.pulse-awake .ic { transform: scale(1.18); }
@@ -1381,6 +1390,8 @@ a { color: inherit; }
             <circle class="cl-co2 b" cx="21" cy="26" r="1" fill="var(--slate-light)"/>
         </svg>`
     };
+    // Ticker only: a blue arc circling the logo, like the Energy ring (Energy draws its own).
+    const TICKER_ORBIT = `<svg class="tk-orbit" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="none" stroke="var(--blue)" opacity=".3" pathLength="100"/><circle class="en-ring-pulse" cx="16" cy="16" r="15" fill="none" stroke="var(--blue-bright)" pathLength="100"/></svg>`;
     const ENGINE_ORDER = ['global','economy','ai','gcc','insurance','banking','manufacturing','energy','defence','cyber','supplychain','healthcare','telecom','climate'];
 
     // ---------- Populate tile + hero-card icons from the same ENGINE_ICONS source ----------
@@ -1809,7 +1820,7 @@ a { color: inherit; }
             return ENGINE_ORDER.map(id => {
                 const eng = ENGINE_DATA[id];
                 if (!eng) return '';
-                return `<button class="ticker-item${eng.comingSoon ? ' soon-item' : ''}" data-id="${id}"><span class="ic">${ENGINE_ICONS[id]}</span><span class="lbl-text">${eng.name}</span></button>`;
+                return `<button class="ticker-item${eng.comingSoon ? ' soon-item' : ''}" data-id="${id}"><span class="ic">${ENGINE_ICONS[id]}${id === 'energy' ? '' : TICKER_ORBIT}</span><span class="lbl-text">${eng.name}</span></button>`;
             }).join('');
         }
         track.innerHTML = buildItems() + buildItems(); // duplicated once for a seamless loop
