@@ -152,8 +152,14 @@ jobs:
           # checks that.
           mkdir -p /tmp/signals-deploy/api
           cp deploy/api/trigger-build.js /tmp/signals-deploy/api/
+          #
+          # Only this branch deploys. The vercel.json at the root of `final`
+          # (and so of every branch cut from it) switches Vercel's Git
+          # deployments off, which keeps the free plan's 100 deploys a day
+          # for the live site; this one switches them back on here.
           cat > /tmp/signals-deploy/vercel.json <<'JSON'
           {
+            "git": { "deploymentEnabled": { "signals-deploy": true } },
             "cleanUrls": true,
             "crons": [
               { "path": "/api/trigger-build", "schedule": "30 3 * * *" },
@@ -178,12 +184,17 @@ jobs:
           cp public/command_center_data.json /tmp/command-center-deploy/command_center_data.json
           mkdir -p /tmp/command-center-deploy/img
           cp public/img/* /tmp/command-center-deploy/img/
+          # No Vercel project serves this branch, so keep its pushes from
+          # spending a deploy on each project.
+          cat > /tmp/command-center-deploy/vercel.json <<'VJSON'
+          { "git": { "deploymentEnabled": false } }
+          VJSON
           cd /tmp/command-center-deploy
           git init -q
           git checkout -q -b command-center-deploy
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html command_center_data.json img
+          git add index.html command_center_data.json img vercel.json
           git commit -q -m "Command Center rebuild: $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" command-center-deploy
 

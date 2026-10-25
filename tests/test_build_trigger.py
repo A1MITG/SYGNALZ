@@ -40,6 +40,15 @@ class TestDeployConfig(unittest.TestCase):
     def test_clean_urls_stay(self):
         self.assertIs(_vercel_json()['cleanUrls'], True)
 
+    def test_only_the_deploy_branch_deploys(self):
+        """The free plan allows 100 deploys a day across all three projects.
+        `final` and every branch cut from it carry a vercel.json that turns
+        Git deployments off; the deploy branch's own vercel.json turns them
+        back on, so only the live site spends deploys."""
+        root = json.loads((ROOT / 'vercel.json').read_text(encoding='utf-8'))
+        self.assertIs(root['git']['deploymentEnabled'], False)
+        self.assertIs(_vercel_json()['git']['deploymentEnabled']['signals-deploy'], True)
+
     def test_the_crons_fire_on_refresh_slots(self):
         """Vercel's free plan runs a cron at most once a day, so these cover
         only some of REFRESH_SLOTS_IST — the hourly watchdog drives the rest.
