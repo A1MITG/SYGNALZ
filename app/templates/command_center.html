@@ -116,7 +116,7 @@ a { color: inherit; }
    One thin full-width line between the sticky nav and the hero, in the
    slate-50 and hairline the page uses for quiet bands. Filled by WorldTime in the script. */
 .wc-line { background: var(--slate-50); border-bottom: 1px solid var(--slate-100); }
-.wc-line-inner { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+.wc-line-inner { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
                  max-width: 1560px; margin: 0 auto; padding: 0 44px; }   /* the .wrap gutter */
 .wc-item { display: flex; align-items: center; justify-content: center; gap: 10px;
            padding: 7px 12px; white-space: nowrap; }
@@ -131,10 +131,12 @@ a { color: inherit; }
 .wc-dt { display: inline-flex; align-items: baseline; gap: 5px; font-variant-numeric: tabular-nums; }
 .wc-dow, .wc-date { font-size: 12px; color: var(--slate-light); }
 .wc-time { font-size: 12.5px; font-weight: 700; color: var(--navy); margin-left: 3px; }
-/* The last refresh: a status, not a fifth clock. Green on schedule, amber
-   when a scheduled refresh is late. */
-.wc-upd { display: flex; align-items: baseline; gap: 7px; padding: 7px 0 7px 18px; white-space: nowrap;
-          border-left: 1px solid #e3e7ec; font-variant-numeric: tabular-nums; }
+/* The last refresh: a status, not a fifth clock, so it sits under the hero
+   headline and the line above keeps only the clocks. Green on schedule,
+   amber when a scheduled refresh is late. */
+.hero-upd { position: relative; z-index: 2; display: flex; justify-content: center; margin: 4px 0 2px; }
+.wc-upd { display: inline-flex; align-items: baseline; gap: 7px; flex-wrap: wrap; justify-content: center;
+          row-gap: 2px; font-variant-numeric: tabular-nums; }
 .wc-upd[hidden] { display: none; }
 .wc-upd::before { content: ''; align-self: center; width: 6px; height: 6px; border-radius: 50%; background: #16a34a; }
 .wc-upd.delayed::before { background: #d97706; }
@@ -143,10 +145,6 @@ a { color: inherit; }
 .wc-upd-next { font-size: 12px; color: var(--slate-light); }
 .wc-upd-next::before { content: '\00b7  '; }   /* two spaces: the escape eats the first */
 .wc-upd.delayed .wc-upd-next { color: #b45309; }
-/* Too narrow for five cells: the refresh drops to its own hairline row. */
-@media (max-width: 1380px) {
-    .wc-upd { grid-column: 1 / -1; justify-content: center; padding: 5px 0; border-left: 0; border-top: 1px solid #e3e7ec; }
-}
 /* Narrower: each city above its date and time. */
 @media (max-width: 1120px) {
     .wc-item { flex-direction: column; align-items: center; gap: 1px; padding: 6px 6px; }
@@ -761,7 +759,7 @@ a { color: inherit; }
     </nav>
 </div>
 <!-- World-time line: Tokyo, New Delhi, Dubai, New York, then the last refresh. Filled by WorldTime. -->
-<div class="wc-line" id="worldTime" role="group" aria-label="World time and last refresh"></div>
+<div class="wc-line" id="worldTime" role="group" aria-label="World time"></div>
 <div class="flyout" id="flyout"></div>
 
 <div class="wrap">
@@ -782,6 +780,7 @@ a { color: inherit; }
             <h1 class="hero-headline">Multiple Lenses</h1>
             <h1 class="hero-headline">Deeper Perspective</h1>
         </div>
+        <div class="hero-upd" id="lastUpdate"></div>
         <p class="hero-sub parked">SIGNAL continuously monitors trusted global sources and transforms them into decision-grade executive intelligence.</p>
         <div class="hero-cta parked">
             <a class="btn pri" href="#featured">Explore Today's Intelligence</a>
@@ -1444,18 +1443,20 @@ a { color: inherit; }
             return `${day}${pad(t.h)}:${pad(t.mi)} IST`;
         }
 
-        function mount(el) {
+        // el gets the clocks, updEl (under the hero headline) the last refresh.
+        function mount(el, updEl) {
             el.innerHTML = '<div class="wc-line-inner">' + ZONES.map(z => `
                 <span class="wc-item">
                     <span class="wc-country"><svg class="wc-flag" viewBox="0 0 30 20" aria-hidden="true">${FLAGS[z.flag]}</svg><span class="long">${z.label}</span><span class="short">${z.short}</span></span>
                     <span class="wc-dt"><span class="wc-dow"></span><span class="wc-date"></span><span class="wc-time"></span></span>
-                </span>`).join('') + `
+                </span>`).join('') + '</div>';
+            updEl.innerHTML = `
                 <span class="wc-upd" hidden>
                     <span class="wc-upd-label">Updated</span>
                     <span class="wc-upd-time"></span>
                     <span class="wc-upd-next"></span>
-                </span></div>`;
-            const items = el.querySelectorAll('.wc-item'), cell = el.querySelector('.wc-upd');
+                </span>`;
+            const items = el.querySelectorAll('.wc-item'), cell = updEl.querySelector('.wc-upd');
             let meta = null;
 
             function renderRefresh(now) {
@@ -1504,7 +1505,7 @@ a { color: inherit; }
         }
         return { mount };
     })();
-    const worldTime = WorldTime.mount(document.getElementById('worldTime'));
+    const worldTime = WorldTime.mount(document.getElementById('worldTime'), document.getElementById('lastUpdate'));
 
     // ---------- Live data load: fetch real classified articles, then build the ticker + tile headlines ----------
     const flyout = document.getElementById('flyout');
