@@ -1,0 +1,4 @@
+# Archive search index (scripts/archive_search_index.py), installed only by
+# the Build Signals workflow; the site and its tests do not need these.
+onnxruntime==1.19.2
+tokenizers==0.20.3

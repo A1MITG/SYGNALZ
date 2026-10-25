@@ -60,6 +60,23 @@ jobs:
       - name: File yesterday's last build in the archive
         run: python scripts/archive_snapshot.py
 
+      # Archive search: each newly filed day's stories as sentence embeddings
+      # (public/search/YYYY-MM-DD.json, scripts/archive_search_index.py), from
+      # the same small model the /archive page runs in the reader's browser.
+      # The model (~23 MB) is cached between runs. Never blocks the build: a
+      # day missed here is indexed by the next run.
+      - name: Cache the archive search model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/signal-search-model
+          key: signal-search-model-all-MiniLM-L6-v2-q8
+
+      - name: Index the archive for search
+        continue-on-error: true
+        run: |
+          pip install -r requirements-search.txt
+          python scripts/archive_search_index.py
+
       - name: Build static Signals page
         run: python scripts/build_static_signals.py
         env:
@@ -84,14 +101,16 @@ jobs:
           # the files the build writes are this run's to change.
           # Archive snapshots are only ever added, never rewritten (-n).
           BUILT="command_center_data.json command_center.html brief.html index.html signals.json signal.css archive.html"
-          mkdir -p /tmp/built/snapshots public/snapshots
+          mkdir -p /tmp/built/snapshots /tmp/built/search public/snapshots public/search
           for f in $BUILT; do cp "public/$f" /tmp/built/; done
           cp -r public/snapshots/. /tmp/built/snapshots/
+          cp -r public/search/. /tmp/built/search/
           git fetch -q origin "$GITHUB_REF_NAME"
           git reset -q --hard FETCH_HEAD
           for f in $BUILT; do cp "/tmp/built/$f" public/; done
-          mkdir -p public/snapshots
+          mkdir -p public/snapshots public/search
           cp -rn /tmp/built/snapshots/. public/snapshots/
+          cp -rn /tmp/built/search/. public/search/
           git add public/
           git diff --staged --quiet || git commit -m "Signals + Command Center rebuild: $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push origin "HEAD:$GITHUB_REF_NAME"
@@ -116,8 +135,9 @@ jobs:
           # /snapshots/YYYY-MM-DD.json. The snapshots live in the working
           # branch, since this branch is replaced on every build.
           cp public/archive.html /tmp/signals-deploy/archive.html
-          mkdir -p /tmp/signals-deploy/snapshots
+          mkdir -p /tmp/signals-deploy/snapshots /tmp/signals-deploy/search
           cp -r public/snapshots/. /tmp/signals-deploy/snapshots/
+          cp -r public/search/. /tmp/signals-deploy/search/
           # The build's own alarm clock (BP-56): GitHub starts this workflow's
           # schedule 4-7 hours late, so Vercel Cron calls /api/trigger-build,
           # and that function starts this workflow through GitHub's API. It
@@ -146,7 +166,7 @@ jobs:
           git checkout -q -b signals-deploy
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html command_center_data.json img signals.html signal.css signals.json brief.html archive.html snapshots vercel.json api
+          git add index.html command_center_data.json img signals.html signal.css signals.json brief.html archive.html snapshots search vercel.json api
           git commit -q -m "Signals rebuild: $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" signals-deploy
 

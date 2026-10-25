@@ -141,17 +141,24 @@ a { color: inherit; }
 .wc-upd-next { font-size: 12px; color: var(--slate-light); }
 .wc-upd-next::before { content: '\00b7  '; }   /* two spaces: the escape eats the first */
 .wc-upd.delayed .wc-upd-next { color: #b45309; }
-/* Past days: opens a calendar of the daily archive (scripts/archive_snapshot.py).
+/* Archive link: opens a calendar of the daily archive (scripts/archive_snapshot.py).
    The date input sits under the link, invisible, so the browser's own
    calendar opens right there. */
-.wc-arc { position: relative; display: inline-flex; align-items: center; gap: 4px; margin-left: 4px; font-size: 12px; font-weight: 600; color: #1f4fbf; text-decoration: none; }
+/* Archive: a pill whose border is a red, blue and amber halo that keeps
+   running round it (still for readers who ask for reduced motion). */
+@property --arc-turn { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.wc-arc { position: relative; display: inline-flex; align-items: center; gap: 5px; margin-left: 6px; padding: 2px 10px; border-radius: 999px; border: 1.5px solid transparent; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; color: var(--navy); text-decoration: none; white-space: nowrap;
+    background: linear-gradient(#fff, #fff) padding-box, conic-gradient(from var(--arc-turn), #e11d2e, #2f6fed, #f59e0b, #e11d2e) border-box;
+    box-shadow: 0 0 8px rgba(47,111,237,.25); }
+@media (prefers-reduced-motion: no-preference) { .wc-arc { animation: arc-halo 3s linear infinite; } }
+@keyframes arc-halo { to { --arc-turn: 360deg; } }
 .wc-arc[hidden] { display: none; }
-.wc-arc:hover { text-decoration: underline; }
-.wc-arc svg { width: 13px; height: 13px; }
+.wc-arc:hover { box-shadow: 0 0 12px rgba(225,29,46,.35); }
+.wc-arc svg { width: 12px; height: 12px; }
 .wc-arc input { position: absolute; left: 0; bottom: 0; width: 1px; height: 1px; opacity: 0; border: 0; padding: 0; pointer-events: none; }
 /* Too narrow for five cells: the refresh drops to its own hairline row. */
 @media (max-width: 1380px) {
-    .wc-upd { grid-column: 1 / -1; justify-content: center; padding: 5px 0; border-left: 0; border-top: 1px solid #e3e7ec; }
+    .wc-upd { grid-column: 1 / -1; justify-content: center; flex-wrap: wrap; row-gap: 4px; padding: 5px 0; border-left: 0; border-top: 1px solid #e3e7ec; }
 }
 /* Narrower: each city above its date and time. */
 @media (max-width: 1120px) {
@@ -712,7 +719,7 @@ a { color: inherit; }
     // Archive: draw the day named by ?d=YYYY-MM-DD (the newest day on file
     // when it is missing or not on file). Must precede the main script block.
     (function () {
-        var dates = ["2026-09-24", "2026-09-25", "2026-09-26", "2026-09-27", "2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23"];
+        var dates = ["2026-09-24", "2026-09-25", "2026-09-26", "2026-09-27", "2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24"];
         var asked = new URLSearchParams(location.search).get('d');
         // A day with no snapshot shows the nearest earlier day on file.
         var day = null;
@@ -776,6 +783,155 @@ a { color: inherit; }
         } else {
             document.body.prepend(bar);
         }
+    });
+</script>
+<style>
+    .arc-search { position: relative; display: inline-flex; align-items: center; gap: 6px; flex: 0 1 300px; min-width: 200px; }
+    .arc-search input { flex: 1; min-width: 0; font: inherit; padding: 5px 10px; border: 1px solid #d9c27a; border-radius: 999px; background: #fff; color: #0b1524; }
+    .arc-results { position: absolute; left: 50%; transform: translateX(-50%); top: 100%; margin-top: 6px; width: min(680px, calc(100vw - 24px)); max-height: 65vh; overflow-y: auto; background: #fff; color: #0b1524; border: 1px solid #e3e7ec; border-radius: 10px; box-shadow: 0 18px 40px -12px rgba(11,21,36,.35); padding: 6px 0; text-align: left; z-index: 95; }
+    .arc-results[hidden] { display: none; }
+    .arc-status { padding: 10px 16px; color: #5b6676; font-size: 13px; }
+    .arc-hit { display: block; padding: 9px 16px; border-top: 1px solid #f0f2f5; }
+    .arc-hit:first-of-type { border-top: 0; }
+    .arc-hit-meta { font-size: 11px; letter-spacing: .04em; color: #7a8494; margin-bottom: 2px; }
+    .arc-hit-meta a { color: #9a6b00; font-weight: 700; }
+    .arc-bar .arc-hit-title { display: block; color: #0b1524; font-weight: 600; font-size: 14px; line-height: 1.35; }
+    .arc-bar .arc-hit-title:hover { color: #1f4fbf; }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var A = window.SIGNAL_ARCHIVE, bar = document.querySelector('.arc-bar');
+        if (!A || !A.day || !bar) return;
+        var LIB = window.SIGNAL_SEARCH_LIB || 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js';
+        var MODEL = 'Xenova/all-MiniLM-L6-v2';
+        var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var SECTIONS = { _features: 'Featured Analysis', _featured: 'Featured Analysis', _movers: 'People Movers',
+                         _pulse: 'Executive Pulse', _record: 'On the Record' };
+        function nice(d) { var p = d.split('-'); return +p[2] + ' ' + MONTHS[p[1] - 1] + ' ' + p[0]; }
+        function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+        var box = document.createElement('form');
+        box.className = 'arc-search';
+        box.setAttribute('role', 'search');
+        box.innerHTML = '<input type="search" placeholder="Search past days by topic" aria-label="Search past days by topic">'
+            + '<div class="arc-results" hidden></div>';
+        bar.insertBefore(box, bar.lastElementChild);
+        var input = box.querySelector('input'), panel = box.querySelector('.arc-results');
+
+        var extractor = null, index = null, days = {};
+        function getExtractor() {
+            return extractor || (extractor = import(LIB).then(function (T) {
+                T.env.allowLocalModels = !!window.SIGNAL_SEARCH_MODELS;
+                if (window.SIGNAL_SEARCH_MODELS) {
+                    T.env.localModelPath = window.SIGNAL_SEARCH_MODELS;
+                    T.env.allowRemoteModels = false;
+                }
+                if (window.SIGNAL_SEARCH_WASM) T.env.backends.onnx.wasm.wasmPaths = window.SIGNAL_SEARCH_WASM;
+                return T.pipeline('feature-extraction', MODEL, { dtype: 'q8' });
+            }));
+        }
+        // Every day's file: headlines, where they sit, and 48 bytes of signs each.
+        function getIndex() {
+            return index || (index = Promise.all(A.dates.map(function (d) {
+                return fetch('./search/' + d + '.json').then(function (r) { return r.ok ? r.json() : null; })
+                    .catch(function () { return null; });
+            })).then(function (files) {
+                var items = [], chunks = [];
+                files.forEach(function (f, k) {
+                    if (!f || !f.s || !f.s.length) return;
+                    var raw = atob(f.v), bytes = new Uint8Array(raw.length);
+                    for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+                    f.s.forEach(function (s, i) { items.push({ title: s[0], where: s[1], day: A.dates[k], at: i, bytes: bytes }); });
+                });
+                return items;
+            }));
+        }
+        function getDay(d) {
+            return days[d] || (days[d] = fetch('./snapshots/' + d + '.json').then(function (r) { return r.json(); }));
+        }
+        function embed(texts) {
+            return getExtractor().then(function (ex) { return ex(texts, { pooling: 'mean', normalize: true }); })
+                .then(function (t) { return t.tolist(); });
+        }
+        function dot(a, b) { var s = 0; for (var i = 0; i < a.length; i++) s += a[i] * b[i]; return s; }
+
+        function show(html) { panel.innerHTML = html; panel.hidden = false; }
+        var seq = 0;
+        function search(q) {
+            var my = ++seq;
+            show('<div class="arc-status">' + (extractor ? 'Searching…'
+                : 'Loading search for the first time (about 25 MB, kept for next time)…') + '</div>');
+            Promise.all([embed([q]), getIndex()]).then(function (res) {
+                var qv = res[0][0], items = res[1];
+                if (my !== seq) return;
+                if (!items.length) return show('<div class="arc-status">No stories indexed yet.</div>');
+                // Sign vectors: a story scores the sum of the query's values where
+                // its sign is +, minus the rest. One table per byte keeps it fast.
+                var total = qv.reduce(function (s, x) { return s + x; }, 0), tables = [];
+                for (var p = 0; p < 48; p++) {
+                    var t = new Float32Array(256);
+                    for (var b = 0; b < 256; b++) {
+                        var s = 0;
+                        for (var bit = 0; bit < 8; bit++) if (b & (128 >> bit)) s += qv[p * 8 + bit];
+                        t[b] = 2 * s;
+                    }
+                    tables.push(t);
+                }
+                items.forEach(function (it) {
+                    var s = -total, o = it.at * 48;
+                    for (var p = 0; p < 48; p++) s += tables[p][it.bytes[o + p]];
+                    it.rough = s;
+                });
+                var top = items.slice().sort(function (a, b) { return b.rough - a.rough; }).slice(0, 40);
+                // Exact ranking: re-embed the shortlist's headlines on the device,
+                // with a nudge for headlines that contain the query's own words.
+                var words = q.toLowerCase().split(/\W+/).filter(function (w) { return w.length > 2; });
+                return embed(top.map(function (it) { return it.title; })).then(function (vecs) {
+                    top.forEach(function (it, i) {
+                        var t = it.title.toLowerCase();
+                        it.score = dot(vecs[i], qv) + 0.03 * words.filter(function (w) { return t.indexOf(w) >= 0; }).length;
+                    });
+                    top.sort(function (a, b) { return b.score - a.score; });
+                    var hits = top.filter(function (it) { return it.score > 0.25; }).slice(0, 10);
+                    if (my !== seq) return;
+                    if (!hits.length) return show('<div class="arc-status">No close matches in the archive.</div>');
+                    return Promise.all(hits.map(function (it) {
+                        return getDay(it.day).then(function (d) {
+                            var parts = it.where.split(':'), key = parts[0], i = +parts[1], item;
+                            if (key === '_record') item = ((d._record || {}).quotes || [])[i];
+                            else if (key === '_featured') item = d._featured;
+                            else if (key.charAt(0) === '_') item = (d[key] || [])[i];
+                            else item = ((d[key] || {}).articles || [])[i];
+                            return { it: it, item: item || {}, section: SECTIONS[key] || (d[key] || {}).name || key };
+                        }).catch(function () { return { it: it, item: {}, section: '' }; });
+                    })).then(function (rows) {
+                        if (my !== seq) return;
+                        show(rows.map(function (r) {
+                            var url = /^https?:\/\//i.test(r.item.url || '') ? r.item.url : '#';
+                            return '<div class="arc-hit"><div class="arc-hit-meta"><a href="?d=' + r.it.day + '">'
+                                + esc(nice(r.it.day)) + '</a> · ' + esc(r.section)
+                                + (r.item.source ? ' · ' + esc(r.item.source) : '') + '</div>'
+                                + '<a class="arc-hit-title" href="' + esc(url) + '" target="_blank" rel="noopener">'
+                                + esc(r.it.title) + '</a></div>';
+                        }).join(''));
+                    });
+                });
+            }).catch(function (err) {
+                console.error('Archive search failed:', err);
+                extractor = null; index = null;   // let the next try start afresh
+                if (my === seq) show('<div class="arc-status">Search could not load. Please try again.</div>');
+            });
+        }
+        box.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var q = input.value.trim();
+            if (q.length > 1) search(q);
+        });
+        // Warm the model as soon as the reader shows intent.
+        input.addEventListener('focus', function () { getExtractor().catch(function () {}); getIndex(); }, { once: true });
+        input.addEventListener('keydown', function (e) { if (e.key === 'Escape') panel.hidden = true; });
+        document.addEventListener('click', function (e) { if (!box.contains(e.target)) panel.hidden = true; });
     });
 </script>
 </head>
@@ -1500,7 +1656,7 @@ a { color: inherit; }
                     <span class="wc-upd-label">Updated</span>
                     <span class="wc-upd-time"></span>
                     <span class="wc-upd-next"></span>
-                    <a class="wc-arc" href="/archive" hidden><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3"/></svg>Past days<input type="date" tabindex="-1" aria-hidden="true"></a>
+                    <a class="wc-arc" href="/archive" hidden><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3"/></svg>Archive<input type="date" tabindex="-1" aria-hidden="true"></a>
                 </span></div>`;
             const items = el.querySelectorAll('.wc-item'), cell = el.querySelector('.wc-upd');
             let meta = null;
@@ -1528,7 +1684,7 @@ a { color: inherit; }
                 cell.title = title.join(' ');
             }
 
-            // Past days: shown once the build says which days the archive holds
+            // Archive: shown once the build says which days the archive holds
             // (_meta.archive_first / archive_last). A click opens the browser's
             // calendar over that range; picking a day opens /archive for it.
             // Without showPicker (older browsers) the link simply opens /archive.

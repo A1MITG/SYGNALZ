@@ -7,6 +7,7 @@ public/snapshots/YYYY-MM-DD.json. The workflow keeps those files in the
 working branch (signals-deploy is replaced on every build) and publishes them
 with archive.html.
 """
+import base64
 import json
 import re
 import tempfile
@@ -117,7 +118,7 @@ class TestArchivePage(unittest.TestCase):
 
 
 class TestPastDaysLink(unittest.TestCase):
-    """Amit chose option B (2026-10-24): a small "Past days" link beside the
+    """Amit chose option B (2026-10-24): a small link beside the
     Updated stamp that opens a calendar, not a top-menu item."""
 
     @classmethod
@@ -129,6 +130,11 @@ class TestPastDaysLink(unittest.TestCase):
         cell = cell[:cell.index('</span></div>')]
         self.assertIn('<a class="wc-arc" href="/archive" hidden>', cell)
         self.assertIn('<input type="date"', cell)
+
+    def test_it_reads_archive_with_a_running_three_colour_halo(self):
+        self.assertIn('</svg>Archive<input', self.src)
+        self.assertIn('conic-gradient(from var(--arc-turn), #e11d2e, #2f6fed, #f59e0b, #e11d2e)', self.src)
+        self.assertIn('@media (prefers-reduced-motion: no-preference) { .wc-arc { animation:', self.src)
 
     def test_it_is_not_in_the_top_menu(self):
         self.assertNotIn('<a class="link" href="/archive">', self.src)
@@ -174,6 +180,76 @@ class TestWorkflow(unittest.TestCase):
         add = next(line for line in run.splitlines() if line.strip().startswith('git add'))
         self.assertIn(' archive.html ', add)
         self.assertIn(' snapshots ', add)
+
+
+class TestSearchIndex(unittest.TestCase):
+    """public/search/YYYY-MM-DD.json: each day's new stories, as headline,
+    place in the snapshot, and 48 bytes of embedding signs."""
+
+    def setUp(self):
+        self.root = Path(tempfile.mkdtemp())
+        self.snaps, self.out = self.root / 'snapshots', self.root / 'search'
+        self.snaps.mkdir()
+
+    def day(self, name, data):
+        (self.snaps / f'{name}.json').write_text(json.dumps(data), encoding='utf-8')
+
+    @staticmethod
+    def fake_embed(texts):
+        return [[1.0 if (len(t) + i) % 3 else -1.0 for i in range(384)] for t in texts]
+
+    def test_stories_cover_every_section_once_with_their_place(self):
+        from scripts.archive_search_index import stories
+        data = {'global': {'name': 'Global Affairs', 'articles': [
+                    {'title': 'A', 'url': 'https://a'}, {'title': 'A again', 'url': 'https://a'},
+                    {'title': 'No link', 'url': 'javascript:x'}]},
+                '_features': [{'title': 'F', 'url': 'https://f', 'summary': 'S'}],
+                '_featured': {'title': 'F', 'url': 'https://f'},
+                '_movers': [{'title': 'M', 'url': 'https://m'}],
+                '_pulse': [{'title': 'P', 'url': 'https://p'}],
+                '_record': {'quotes': [{'quote': 'Q', 'leader': 'L', 'company': 'C', 'url': 'https://q'}]},
+                '_meta': {}}
+        self.assertEqual([s[:2] for s in stories(data)], [
+            ['A', 'global:0'], ['F', '_features:0'], ['M', '_movers:0'], ['P', '_pulse:0'],
+            ['\u201cQ\u201d \u2014 L, C', '_record:0']])
+
+    def test_a_story_is_indexed_on_its_first_day_only_and_files_are_never_rewritten(self):
+        from scripts.archive_search_index import build
+        self.day('2026-10-01', {'ai': {'name': 'AI', 'articles': [{'title': 'One', 'url': 'https://1'}]}})
+        self.day('2026-10-02', {'ai': {'name': 'AI', 'articles': [{'title': 'One', 'url': 'https://1'},
+                                                                  {'title': 'Two', 'url': 'https://2'}]}})
+        self.assertEqual(build(self.fake_embed, self.snaps, self.out), ['2026-10-01', '2026-10-02'])
+        second = json.loads((self.out / '2026-10-02.json').read_text(encoding='utf-8'))
+        self.assertEqual(second['s'], [['Two', 'ai:1']])
+        self.assertEqual(len(base64.b64decode(second['v'])), 48)
+        self.day('2026-10-03', {'ai': {'name': 'AI', 'articles': [{'title': 'Two', 'url': 'https://2'}]}})
+        before = (self.out / '2026-10-01.json').read_bytes()
+        self.assertEqual(build(self.fake_embed, self.snaps, self.out), ['2026-10-03'])
+        self.assertEqual(json.loads((self.out / '2026-10-03.json').read_text(encoding='utf-8'))['s'], [])
+        self.assertEqual((self.out / '2026-10-01.json').read_bytes(), before)
+
+    def test_signs_are_packed_eight_to_a_byte(self):
+        from scripts.archive_search_index import pack_signs
+        v = [[1.0] * 8 + [-1.0] * 376]
+        self.assertEqual(base64.b64decode(pack_signs(v)), bytes([255]) + bytes(47))
+
+    def test_every_archived_day_is_indexed(self):
+        from scripts.archive_search_index import SEARCH_DIR
+        self.assertEqual(sorted(p.stem for p in SEARCH_DIR.glob('*.json')), archived_dates())
+
+    def test_the_page_runs_the_same_model_the_index_was_built_with(self):
+        from scripts.archive_search_index import MODEL_ID
+        from scripts.archive_snapshot import ARCHIVE_SEARCH
+        self.assertIn(f"var MODEL = '{MODEL_ID}';", ARCHIVE_SEARCH)
+        self.assertIn("fetch('./search/' + d + '.json')", ARCHIVE_SEARCH)
+
+    def test_the_workflow_indexes_keeps_and_publishes_the_search_files(self):
+        steps = yaml.safe_load(WORKFLOW.read_text(encoding='utf-8'))['jobs']['build']['steps']
+        index = next(s for s in steps if 'archive_search_index.py' in s.get('run', ''))
+        self.assertTrue(index.get('continue-on-error'))
+        runs = '\n'.join(s.get('run', '') for s in steps)
+        self.assertIn('cp -rn /tmp/built/search/. public/search/', runs)
+        self.assertIn('cp -r public/search/. /tmp/signals-deploy/search/', runs)
 
 
 if __name__ == '__main__':

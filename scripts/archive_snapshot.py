@@ -158,9 +158,169 @@ ARCHIVE_INJECT = """<meta name="robots" content="noindex">
 </head>"""
 
 
+# The archive search, appended to ARCHIVE_INJECT. The reader's browser runs
+# the same small model scripts/archive_search_index.py used (transformers.js
+# from jsDelivr, the model from Hugging Face, both cached after the first
+# search), scores every indexed story against the query, re-embeds the best
+# few dozen headlines to rank them exactly, then reads link and source from
+# the snapshots of the days it shows. window.SIGNAL_SEARCH_LIB and
+# window.SIGNAL_SEARCH_MODELS can point both at local copies for testing.
+ARCHIVE_SEARCH = r"""<style>
+    .arc-search { position: relative; display: inline-flex; align-items: center; gap: 6px; flex: 0 1 300px; min-width: 200px; }
+    .arc-search input { flex: 1; min-width: 0; font: inherit; padding: 5px 10px; border: 1px solid #d9c27a; border-radius: 999px; background: #fff; color: #0b1524; }
+    .arc-results { position: absolute; left: 50%; transform: translateX(-50%); top: 100%; margin-top: 6px; width: min(680px, calc(100vw - 24px)); max-height: 65vh; overflow-y: auto; background: #fff; color: #0b1524; border: 1px solid #e3e7ec; border-radius: 10px; box-shadow: 0 18px 40px -12px rgba(11,21,36,.35); padding: 6px 0; text-align: left; z-index: 95; }
+    .arc-results[hidden] { display: none; }
+    .arc-status { padding: 10px 16px; color: #5b6676; font-size: 13px; }
+    .arc-hit { display: block; padding: 9px 16px; border-top: 1px solid #f0f2f5; }
+    .arc-hit:first-of-type { border-top: 0; }
+    .arc-hit-meta { font-size: 11px; letter-spacing: .04em; color: #7a8494; margin-bottom: 2px; }
+    .arc-hit-meta a { color: #9a6b00; font-weight: 700; }
+    .arc-bar .arc-hit-title { display: block; color: #0b1524; font-weight: 600; font-size: 14px; line-height: 1.35; }
+    .arc-bar .arc-hit-title:hover { color: #1f4fbf; }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var A = window.SIGNAL_ARCHIVE, bar = document.querySelector('.arc-bar');
+        if (!A || !A.day || !bar) return;
+        var LIB = window.SIGNAL_SEARCH_LIB || 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js';
+        var MODEL = 'Xenova/all-MiniLM-L6-v2';
+        var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var SECTIONS = { _features: 'Featured Analysis', _featured: 'Featured Analysis', _movers: 'People Movers',
+                         _pulse: 'Executive Pulse', _record: 'On the Record' };
+        function nice(d) { var p = d.split('-'); return +p[2] + ' ' + MONTHS[p[1] - 1] + ' ' + p[0]; }
+        function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+        var box = document.createElement('form');
+        box.className = 'arc-search';
+        box.setAttribute('role', 'search');
+        box.innerHTML = '<input type="search" placeholder="Search past days by topic" aria-label="Search past days by topic">'
+            + '<div class="arc-results" hidden></div>';
+        bar.insertBefore(box, bar.lastElementChild);
+        var input = box.querySelector('input'), panel = box.querySelector('.arc-results');
+
+        var extractor = null, index = null, days = {};
+        function getExtractor() {
+            return extractor || (extractor = import(LIB).then(function (T) {
+                T.env.allowLocalModels = !!window.SIGNAL_SEARCH_MODELS;
+                if (window.SIGNAL_SEARCH_MODELS) {
+                    T.env.localModelPath = window.SIGNAL_SEARCH_MODELS;
+                    T.env.allowRemoteModels = false;
+                }
+                if (window.SIGNAL_SEARCH_WASM) T.env.backends.onnx.wasm.wasmPaths = window.SIGNAL_SEARCH_WASM;
+                return T.pipeline('feature-extraction', MODEL, { dtype: 'q8' });
+            }));
+        }
+        // Every day's file: headlines, where they sit, and 48 bytes of signs each.
+        function getIndex() {
+            return index || (index = Promise.all(A.dates.map(function (d) {
+                return fetch('./search/' + d + '.json').then(function (r) { return r.ok ? r.json() : null; })
+                    .catch(function () { return null; });
+            })).then(function (files) {
+                var items = [], chunks = [];
+                files.forEach(function (f, k) {
+                    if (!f || !f.s || !f.s.length) return;
+                    var raw = atob(f.v), bytes = new Uint8Array(raw.length);
+                    for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+                    f.s.forEach(function (s, i) { items.push({ title: s[0], where: s[1], day: A.dates[k], at: i, bytes: bytes }); });
+                });
+                return items;
+            }));
+        }
+        function getDay(d) {
+            return days[d] || (days[d] = fetch('./snapshots/' + d + '.json').then(function (r) { return r.json(); }));
+        }
+        function embed(texts) {
+            return getExtractor().then(function (ex) { return ex(texts, { pooling: 'mean', normalize: true }); })
+                .then(function (t) { return t.tolist(); });
+        }
+        function dot(a, b) { var s = 0; for (var i = 0; i < a.length; i++) s += a[i] * b[i]; return s; }
+
+        function show(html) { panel.innerHTML = html; panel.hidden = false; }
+        var seq = 0;
+        function search(q) {
+            var my = ++seq;
+            show('<div class="arc-status">' + (extractor ? 'Searching…'
+                : 'Loading search for the first time (about 25 MB, kept for next time)…') + '</div>');
+            Promise.all([embed([q]), getIndex()]).then(function (res) {
+                var qv = res[0][0], items = res[1];
+                if (my !== seq) return;
+                if (!items.length) return show('<div class="arc-status">No stories indexed yet.</div>');
+                // Sign vectors: a story scores the sum of the query's values where
+                // its sign is +, minus the rest. One table per byte keeps it fast.
+                var total = qv.reduce(function (s, x) { return s + x; }, 0), tables = [];
+                for (var p = 0; p < 48; p++) {
+                    var t = new Float32Array(256);
+                    for (var b = 0; b < 256; b++) {
+                        var s = 0;
+                        for (var bit = 0; bit < 8; bit++) if (b & (128 >> bit)) s += qv[p * 8 + bit];
+                        t[b] = 2 * s;
+                    }
+                    tables.push(t);
+                }
+                items.forEach(function (it) {
+                    var s = -total, o = it.at * 48;
+                    for (var p = 0; p < 48; p++) s += tables[p][it.bytes[o + p]];
+                    it.rough = s;
+                });
+                var top = items.slice().sort(function (a, b) { return b.rough - a.rough; }).slice(0, 40);
+                // Exact ranking: re-embed the shortlist's headlines on the device,
+                // with a nudge for headlines that contain the query's own words.
+                var words = q.toLowerCase().split(/\W+/).filter(function (w) { return w.length > 2; });
+                return embed(top.map(function (it) { return it.title; })).then(function (vecs) {
+                    top.forEach(function (it, i) {
+                        var t = it.title.toLowerCase();
+                        it.score = dot(vecs[i], qv) + 0.03 * words.filter(function (w) { return t.indexOf(w) >= 0; }).length;
+                    });
+                    top.sort(function (a, b) { return b.score - a.score; });
+                    var hits = top.filter(function (it) { return it.score > 0.25; }).slice(0, 10);
+                    if (my !== seq) return;
+                    if (!hits.length) return show('<div class="arc-status">No close matches in the archive.</div>');
+                    return Promise.all(hits.map(function (it) {
+                        return getDay(it.day).then(function (d) {
+                            var parts = it.where.split(':'), key = parts[0], i = +parts[1], item;
+                            if (key === '_record') item = ((d._record || {}).quotes || [])[i];
+                            else if (key === '_featured') item = d._featured;
+                            else if (key.charAt(0) === '_') item = (d[key] || [])[i];
+                            else item = ((d[key] || {}).articles || [])[i];
+                            return { it: it, item: item || {}, section: SECTIONS[key] || (d[key] || {}).name || key };
+                        }).catch(function () { return { it: it, item: {}, section: '' }; });
+                    })).then(function (rows) {
+                        if (my !== seq) return;
+                        show(rows.map(function (r) {
+                            var url = /^https?:\/\//i.test(r.item.url || '') ? r.item.url : '#';
+                            return '<div class="arc-hit"><div class="arc-hit-meta"><a href="?d=' + r.it.day + '">'
+                                + esc(nice(r.it.day)) + '</a> · ' + esc(r.section)
+                                + (r.item.source ? ' · ' + esc(r.item.source) : '') + '</div>'
+                                + '<a class="arc-hit-title" href="' + esc(url) + '" target="_blank" rel="noopener">'
+                                + esc(r.it.title) + '</a></div>';
+                        }).join(''));
+                    });
+                });
+            }).catch(function (err) {
+                console.error('Archive search failed:', err);
+                extractor = null; index = null;   // let the next try start afresh
+                if (my === seq) show('<div class="arc-status">Search could not load. Please try again.</div>');
+            });
+        }
+        box.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var q = input.value.trim();
+            if (q.length > 1) search(q);
+        });
+        // Warm the model as soon as the reader shows intent.
+        input.addEventListener('focus', function () { getExtractor().catch(function () {}); getIndex(); }, { once: true });
+        input.addEventListener('keydown', function (e) { if (e.key === 'Escape') panel.hidden = true; });
+        document.addEventListener('click', function (e) { if (!box.contains(e.target)) panel.hidden = true; });
+    });
+</script>
+</head>"""
+
+
 def render_archive_page(source_html, dates):
     """The /archive page: the Command Center source drawing one archived day."""
     inject = ARCHIVE_INJECT.replace('__DATES__', json.dumps(dates))
+    inject = inject[:-len('</head>')] + ARCHIVE_SEARCH
     html = source_html.replace('</head>', inject, 1)
     # Search engines and link previews keep pointing at the live page.
     return html.replace('<link rel="canonical" href="https://news-letter-cxo.vercel.app/">',
