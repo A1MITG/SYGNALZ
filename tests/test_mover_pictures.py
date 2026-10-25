@@ -7,13 +7,12 @@ with the SIGNAL mark, never someone else's photo. The row's wording also
 changed to "Recent appointments and exits" (2026-09-25): there is not a
 move every day, and the row covers the week, not today.
 """
-import tempfile
 import unittest
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest import mock
 
-from app.analysis.command_center import build_movers, load_pinned_moves
+from app.analysis.command_center import build_movers
 from app.main import create_app
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,20 +35,10 @@ class TestMoveImages(unittest.TestCase):
             moves = build_movers([_article('Acme appoints Jane Rivera as chief executive officer', image=image)])
             self.assertIsNone(moves[0]['image'], image)
 
-    def test_a_pin_may_name_its_picture(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            path = Path(tmp) / 'pins.yaml'
-            path.write_text('pins:\n  - title: "Acme appoints Jane Rivera"\n    url: "https://press.example.com/a"\n'
-                            '    published: 2026-09-01\n    until: 2026-10-01\n'
-                            '    image: "https://press.example.com/rivera.png"\n', encoding='utf-8')
-            pins = load_pinned_moves(path, today=date(2026, 9, 25))
-        self.assertEqual(pins[0]['image'], 'https://press.example.com/rivera.png')
-
     def test_the_live_endpoint_fills_missing_pictures(self):
         story = _article('Acme appoints Jane Rivera as chief executive officer')
         with mock.patch('app.api.routes.get_articles', return_value=[story]), \
              mock.patch('app.api.routes.get_leader_quotes', return_value={'quotes': [], 'leaders': []}), \
-             mock.patch('app.api.routes.load_pinned_moves', return_value=[]), \
              mock.patch('app.api.routes.fill_missing_images') as fill:
             payload = create_app().test_client().get('/api/command-center').get_json()
         fill.assert_called_once()
