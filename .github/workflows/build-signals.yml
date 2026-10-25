@@ -207,13 +207,15 @@ jobs:
           # Only this branch deploys. The vercel.json at the root of `final`
           # (and so of every branch cut from it) switches Vercel's Git
           # deployments off, which keeps the free plan's 100 deploys a day
-          # for the live site; this one switches them back on here. Each
-          # deploy branch is production for one project only, so the other
-          # project skips it rather than building a preview of it.
+          # for the live site; this one switches them back on here.
+          #
+          # No ignoreCommand: one keyed on $VERCEL_ENV cancelled every
+          # production deploy (25 Oct 2026), so the variable is not what the
+          # docs promise at that step. The other project building a preview
+          # of this branch costs a deploy; skipping production costs the site.
           cat > /tmp/signals-deploy/vercel.json <<'JSON'
           {
             "git": { "deploymentEnabled": { "signals-deploy": true } },
-            "ignoreCommand": "[ \"$VERCEL_ENV\" != production ]",
             "cleanUrls": true,
             "crons": [
               { "path": "/api/trigger-build", "schedule": "30 3 * * *" },
@@ -225,7 +227,7 @@ jobs:
           # The test site: no crons (they would start live builds), and
           # deploys switched on for its own branch instead.
           if [ "$DEPLOY_BRANCH" = staging-deploy ]; then
-            jq '{git: {deploymentEnabled: {"staging-deploy": true}}, ignoreCommand, cleanUrls}' vercel.json > vercel.tmp
+            jq '{git: {deploymentEnabled: {"staging-deploy": true}}, cleanUrls}' vercel.json > vercel.tmp
             mv vercel.tmp vercel.json
           fi
           git init -q
