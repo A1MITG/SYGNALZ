@@ -16,6 +16,9 @@ name: Keep staging level with final
 on:
   push:
     branches: [final]
+    # The 3-hourly refreshes only rewrite public/, so even if one did start
+    # this, it is skipped: the test site rebuilds only for code changes.
+    paths-ignore: ['public/**']
   workflow_dispatch: {}
 
 permissions:

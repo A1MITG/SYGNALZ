@@ -185,3 +185,12 @@ class TestStagingBuild(unittest.TestCase):
         self.assertEqual(staging['git']['deploymentEnabled'], {'staging-deploy': True})
         self.assertIs(staging['cleanUrls'], True)
         self.assertEqual(staging['ignoreCommand'], _vercel_json()['ignoreCommand'])
+
+    def test_news_refreshes_do_not_rebuild_the_test_site(self):
+        """Only code changes on final move staging and spend a test-site
+        deploy; the scheduled refreshes, which only rewrite public/, don't."""
+        sync = yaml.safe_load((ROOT / '.github' / 'workflows' / 'sync-staging.yml').read_text(encoding='utf-8'))
+        on = sync.get('on', sync.get(True))
+        self.assertEqual(on['push']['branches'], ['final'])
+        self.assertEqual(on['push']['paths-ignore'], ['public/**'])
+        self.assertNotIn('schedule', on)
