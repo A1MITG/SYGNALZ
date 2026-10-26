@@ -721,6 +721,18 @@ a { color: inherit; }
     font-size: 20px; line-height: 1.6; color: #e8edf4; margin: 0;
     max-width: min(54ch, 100%);
 }
+.founder-link {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 28px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .12em;
+    text-transform: uppercase; color: #9dbcff; text-decoration: none;
+    border-bottom: 1px solid rgba(157,188,255,.35); padding-bottom: 4px;
+}
+.founder-link span { color: #5d6b82; text-transform: none; letter-spacing: .02em; }
+.founder-link:hover { border-bottom-color: #9dbcff; }
+.founder-link:focus-visible { outline: 2px solid #9dbcff; outline-offset: 4px; }
+.founder-link .arrow { display: inline-block; transition: transform .15s ease; }
+.founder-link:hover .arrow { transform: translate(2px, -2px); }
+@media (prefers-reduced-motion: reduce) { .founder-link .arrow { transition: none; } }
 
 @media (max-width: 860px) {
     .founder { padding: 64px 0; }
@@ -1212,6 +1224,7 @@ a { color: inherit; }
                 <p class="founder-roles">Builder &middot; Husband &middot; Father &middot; Dog Lover &middot; Corporate Survivor</p>
                 <hr class="founder-rule">
                 <p class="founder-statement">Restarting my journey of building things &mdash; one idea, a&nbsp;couple of weekends, and a&nbsp;million tokens at a time!</p>
+                <a class="founder-link" href="https://www.linkedin.com/in/a1mit/" target="_blank" rel="noopener">LinkedIn <span>linkedin.com/in/a1mit</span> <i class="arrow" aria-hidden="true">&#8599;</i></a>
             </div>
         </div>
     </div>
