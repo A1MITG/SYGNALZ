@@ -194,6 +194,7 @@ a { color: inherit; }
 .panel-item h4 a { color: var(--navy); text-decoration: none; }
 .panel-item h4 a:hover { color: var(--blue); text-decoration: underline; }
 .panel-where { font-size: 12px; color: var(--slate-500, #64748b); margin-top: -4px; }
+.panel-why { font-size: 12px; color: #92400e; background: #fef3c7; border-radius: 4px; padding: 2px 6px; margin-top: 4px; display: inline-block; }
 .panel-regions { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 0 12px; border-bottom: 1px solid var(--slate-100); }
 .region-chip { font: inherit; font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--slate-200, #e2e8f0); background: #fff; color: var(--navy); cursor: pointer; }
 .region-chip.on { background: var(--navy); border-color: var(--navy); color: #fff; }
@@ -1908,6 +1909,7 @@ a { color: inherit; }
                 <div class="panel-item" data-region="${esc(a.region || '')}">
                     <h4><a href="${safeUrl(a.url)}" target="_blank" rel="noopener">${esc(a.title)}</a></h4>
                     ${where ? `<div class="panel-where"${a.title_original ? ` title="${esc(a.title_original)}"` : ''}>${esc(where)}</div>` : ''}
+                    ${a.why ? `<div class="panel-why">Why it's here: ${esc(a.why)}</div>` : ''}
                 </div>`;
             }).join('');
             body.querySelectorAll('.region-chip').forEach(chip => chip.addEventListener('click', (e) => {

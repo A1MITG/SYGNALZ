@@ -42,6 +42,7 @@ Editing a rubric
   * Test the change: tests/test_<signal>_tile.py hold real headlines that
     must land, and lookalikes that must not.
 """
+import logging
 import re
 from dataclasses import dataclass
 from datetime import datetime
@@ -50,6 +51,8 @@ from ..intelligence.freshness import classify as classify_freshness
 from ..intelligence.normalize import normalize_text as _normalize
 from ..intelligence.normalize import parse_date
 from .gcc_rubric import GCC_TERM, MIN_SCORE as GCC_MIN_SCORE, gcc_means_gulf, gcc_vocabulary, score_gcc
+
+logger = logging.getLogger(__name__)
 
 
 # ═════════════════════════════════════════════════════════════════════════════
@@ -1173,7 +1176,7 @@ def synthesize_signals(articles, data_date=None, require_current=True, include_t
     (TILE_SIGNALS) to both the competition and the result. The Signals page
     leaves it off and keeps its six.
     """
-    from .geo_cap import select_capped, select_insurance
+    from .geo_cap import focus_region_slot, select_capped, select_insurance
     from .screen import screened_out
     from ..intelligence.geo import is_insurance_trade, story_country, story_region
 
@@ -1224,10 +1227,14 @@ def synthesize_signals(articles, data_date=None, require_current=True, include_t
             kept_tokens.append(tokens)
         # One country's share is capped (app/analysis/geo_cap.py); the
         # Insurance tile also ranks by what happened in each story.
+        candidates = kept
         if name == 'Signal Insurance':
-            kept = select_insurance(kept, MAX_PER_SIGNAL)
+            kept = select_insurance(candidates, MAX_PER_SIGNAL)
         else:
-            kept = select_capped(name, kept, MAX_PER_SIGNAL)
+            kept = select_capped(name, candidates, MAX_PER_SIGNAL)
+        kept, slot = focus_region_slot(name, kept, candidates)
+        if slot:
+            logger.info("Africa/LatAm slot, %s: %s", name, slot)
         for art in kept:
             art.pop('summary', None)
         grouped[name] = kept
