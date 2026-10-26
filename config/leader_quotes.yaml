@@ -14,45 +14,83 @@ max_chars: 280           # longer quotes are excerpted at a sentence, marked wit
 refresh_hours: 6         # how long a fetched set stays fresh
 
 leaders:
-  - { name: Sam Altman,         company: OpenAI }
-  - { name: Greg Brockman,      company: OpenAI }
-  - { name: Dario Amodei,       company: Anthropic }
-  - { name: Daniela Amodei,     company: Anthropic }
-  - { name: Mike Krieger,       company: Anthropic }
-  - { name: Sundar Pichai,      company: Google }
-  - { name: Demis Hassabis,     company: Google DeepMind }
-  - { name: Koray Kavukcuoglu,  company: Google }
-  - { name: Jensen Huang,       company: NVIDIA }
-  - { name: Lisa Su,            company: AMD }
-  - { name: Satya Nadella,      company: Microsoft }
-  - { name: Mustafa Suleyman,   company: Microsoft AI }
-  - { name: Kevin Scott,        company: Microsoft }
-  - { name: Mark Zuckerberg,    company: Meta }
-  - { name: Alexandr Wang,      company: Meta }
-  - { name: Liang Wenfeng,      company: DeepSeek }
-  - { name: Yang Zhilin,        company: Moonshot AI (Kimi) }
-  - { name: Arthur Mensch,      company: Mistral AI }
-  - { name: Aravind Srinivas,   company: Perplexity }
-  # 2026-09-27: India's business and GCC leaders, and the global CEOs the
-  # audience follows, so the row is not only AI labs. Names as the Indian
-  # press prints them ("N Chandrasekaran"; a dotted "N." also matches).
-  - { name: N Chandrasekaran,   company: Tata Sons }
-  - { name: K Krithivasan,      company: TCS }
-  - { name: Salil Parekh,       company: Infosys }
-  - { name: Nandan Nilekani,    company: Infosys }
-  - { name: C Vijayakumar,      company: HCLTech }
-  - { name: Srini Pallia,       company: Wipro }
-  - { name: Rishad Premji,      company: Wipro }
-  - { name: Mukesh Ambani,      company: Reliance Industries }
-  - { name: Anand Mahindra,     company: Mahindra Group }
-  - { name: Uday Kotak,         company: Kotak Mahindra Bank }
-  - { name: Rajesh Nambiar,     company: Nasscom }
-  - { name: Tim Cook,           company: Apple }
-  - { name: Andy Jassy,         company: Amazon }
-  - { name: Jamie Dimon,        company: JPMorgan Chase }
-  - { name: Arvind Krishna,     company: IBM }
-  - { name: Julie Sweet,        company: Accenture }
-  - { name: Marc Benioff,       company: Salesforce }
+  # One row per leader, grouped by the site domain their quotes matter to
+  # most (region and domain are for reference; matching uses name and
+  # company). Reviewed with Amit 2026-10-26; review periodically. The same
+  # list as a table: docs/LEADERS.md (scripts/leaders_table.py writes it).
+  - { name: Sam Altman,           company: OpenAI,              region: US,          domain: AI & Frontier Technology }
+  - { name: Greg Brockman,        company: OpenAI,              region: US,          domain: AI & Frontier Technology }
+  - { name: Dario Amodei,         company: Anthropic,           region: US,          domain: AI & Frontier Technology }
+  - { name: Daniela Amodei,       company: Anthropic,           region: US,          domain: AI & Frontier Technology }
+  - { name: Mike Krieger,         company: Anthropic,           region: US,          domain: AI & Frontier Technology }
+  - { name: Sundar Pichai,        company: Google,              region: US,          domain: AI & Frontier Technology }
+  - { name: Demis Hassabis,       company: Google DeepMind,     region: UK,          domain: AI & Frontier Technology }
+  - { name: Koray Kavukcuoglu,    company: Google,              region: US,          domain: AI & Frontier Technology }
+  - { name: Jensen Huang,         company: NVIDIA,              region: US,          domain: AI & Frontier Technology }
+  - { name: Lisa Su,              company: AMD,                 region: US,          domain: AI & Frontier Technology }
+  - { name: Satya Nadella,        company: Microsoft,           region: US,          domain: AI & Frontier Technology }
+  - { name: Mustafa Suleyman,     company: Microsoft AI,        region: US,          domain: AI & Frontier Technology }
+  - { name: Kevin Scott,          company: Microsoft,           region: US,          domain: AI & Frontier Technology }
+  - { name: Mark Zuckerberg,      company: Meta,                region: US,          domain: AI & Frontier Technology }
+  - { name: Alexandr Wang,        company: Meta,                region: US,          domain: AI & Frontier Technology }
+  - { name: Aravind Srinivas,     company: Perplexity,          region: US,          domain: AI & Frontier Technology }
+  - { name: Liang Wenfeng,        company: DeepSeek,            region: China,       domain: AI & Frontier Technology }
+  - { name: Yang Zhilin,          company: Moonshot AI (Kimi),  region: China,       domain: AI & Frontier Technology }
+  - { name: Arthur Mensch,        company: Mistral AI,          region: France,      domain: AI & Frontier Technology }
+  - { name: Elon Musk,            company: Tesla,               region: US,          domain: AI & Frontier Technology }
+  - { name: Brett Adcock,         company: Figure AI,           region: US,          domain: AI & Frontier Technology }
+  - { name: Bernt Børnich,        company: 1X Technologies,     region: Norway,      domain: AI & Frontier Technology }
+  - { name: Eddie Wu,             company: Alibaba,             region: China,       domain: AI & Frontier Technology }
+  - { name: Pony Ma,              company: Tencent,             region: China,       domain: AI & Frontier Technology }
+  - { name: Liang Rubo,           company: ByteDance,           region: China,       domain: AI & Frontier Technology }
+  - { name: Fabricio Bloisi,      company: Prosus,              region: Netherlands, domain: AI & Frontier Technology }
+  - { name: David Holz,           company: Midjourney,          region: US,          domain: AI & Frontier Technology }
+  - { name: Mati Staniszewski,    company: ElevenLabs,          region: UK,          domain: AI & Frontier Technology }
+  - { name: Mikey Shulman,        company: Suno,                region: US,          domain: AI & Frontier Technology }
+  - { name: Alex Mashrabov,       company: Higgsfield AI,       region: US,          domain: AI & Frontier Technology }
+  - { name: Cristóbal Valenzuela, company: Runway,              region: US,          domain: AI & Frontier Technology }
+  - { name: Robin Rombach,        company: Black Forest Labs,   region: Germany,     domain: AI & Frontier Technology }
+  - { name: Victor Riparbelli,    company: Synthesia,           region: UK,          domain: AI & Frontier Technology }
+  - { name: Joshua Xu,            company: HeyGen,              region: US,          domain: AI & Frontier Technology }
+  - { name: Demi Guo,             company: Pika,                region: US,          domain: AI & Frontier Technology }
+  - { name: Robert Playter,       company: Boston Dynamics,     region: US,          domain: Manufacturing }
+  - { name: Wang Xingxing,        company: Unitree Robotics,    region: China,       domain: Manufacturing }
+  - { name: C.C. Wei,             company: TSMC,                region: Taiwan,      domain: Manufacturing }
+  - { name: Roland Busch,         company: Siemens,             region: Germany,     domain: Manufacturing }
+  - { name: Stefan Hartung,       company: Bosch,               region: Germany,     domain: Manufacturing }
+  - { name: Kenji Yamaguchi,      company: FANUC,               region: Japan,       domain: Manufacturing }
+  - { name: Euisun Chung,         company: Hyundai Motor Group, region: Korea,       domain: Manufacturing }
+  - { name: Jay Y. Lee,           company: Samsung,             region: Korea,       domain: Manufacturing }
+  - { name: Lei Jun,              company: Xiaomi,              region: China,       domain: Manufacturing }
+  - { name: Wang Chuanfu,         company: BYD,                 region: China,       domain: Manufacturing }
+  - { name: Ola Källenius,        company: Mercedes-Benz,       region: Germany,     domain: Manufacturing }
+  - { name: Oliver Blume,         company: Volkswagen,          region: Germany,     domain: Manufacturing }
+  - { name: Christophe Fouquet,   company: ASML,                region: Netherlands, domain: Manufacturing }
+  - { name: N Chandrasekaran,     company: Tata Sons,           region: India,       domain: Economy, Business & Markets }
+  - { name: Mukesh Ambani,        company: Reliance Industries, region: India,       domain: Economy, Business & Markets }
+  - { name: Anand Mahindra,       company: Mahindra Group,      region: India,       domain: Economy, Business & Markets }
+  - { name: Tim Cook,             company: Apple,               region: US,          domain: Economy, Business & Markets }
+  - { name: Andy Jassy,           company: Amazon,              region: US,          domain: Economy, Business & Markets }
+  - { name: Jack Ma,              company: Alibaba,             region: China,       domain: Economy, Business & Markets }
+  - { name: Jamie Dimon,          company: JPMorgan Chase,      region: US,          domain: Banking }
+  - { name: Uday Kotak,           company: Kotak Mahindra Bank, region: India,       domain: Banking }
+  - { name: Christian Sewing,     company: Deutsche Bank,       region: Germany,     domain: Banking }
+  - { name: Pieter van der Does,  company: Adyen,               region: Netherlands, domain: Banking }
+  - { name: Steven van Rijswijk,  company: ING Group,           region: Netherlands, domain: Banking }
+  - { name: K Krithivasan,        company: TCS,                 region: India,       domain: India GCCs & Enterprise Tech }
+  - { name: Salil Parekh,         company: Infosys,             region: India,       domain: India GCCs & Enterprise Tech }
+  - { name: Nandan Nilekani,      company: Infosys,             region: India,       domain: India GCCs & Enterprise Tech }
+  - { name: C Vijayakumar,        company: HCLTech,             region: India,       domain: India GCCs & Enterprise Tech }
+  - { name: Srini Pallia,         company: Wipro,               region: India,       domain: India GCCs & Enterprise Tech }
+  - { name: Rishad Premji,        company: Wipro,               region: India,       domain: India GCCs & Enterprise Tech }
+  - { name: Rajesh Nambiar,       company: Nasscom,             region: India,       domain: India GCCs & Enterprise Tech }
+  - { name: Arvind Krishna,       company: IBM,                 region: US,          domain: India GCCs & Enterprise Tech }
+  - { name: Julie Sweet,          company: Accenture,           region: US,          domain: India GCCs & Enterprise Tech }
+  - { name: Marc Benioff,         company: Salesforce,          region: US,          domain: India GCCs & Enterprise Tech }
+  - { name: Christian Klein,      company: SAP,                 region: Germany,     domain: India GCCs & Enterprise Tech }
+  - { name: Robin Zeng,           company: CATL,                region: China,       domain: Energy }
+  - { name: Ren Zhengfei,         company: Huawei,              region: China,       domain: Telecom & Digital Infra }
+  - { name: Roy Jakobs,           company: Philips,             region: Netherlands, domain: Healthcare }
 
 # Company newsrooms and blogs: every recent post is read.
 newsrooms:
@@ -84,6 +122,15 @@ press:
   Business Standard: https://www.business-standard.com/rss/companies-101.rss
   BusinessLine: https://www.thehindubusinessline.com/companies/feeder/default.rss
   CNBC-TV18: https://www.cnbctv18.com/commonfeeds/v1/cne/rss/business.xml
+  # 2026-10-26: for the robotics, China, Germany and Netherlands leaders.
+  The Robot Report: https://www.therobotreport.com/feed/
+  IEEE Spectrum: https://spectrum.ieee.org/feeds/topic/robotics.rss
+  SCMP Business: https://www.scmp.com/rss/92/feed
+  SCMP Tech: https://www.scmp.com/rss/36/feed
+  Nikkei Asia: https://asia.nikkei.com/rss/feed/nar
+  DW Business: https://rss.dw.com/rdf/rss-en-bus
+  NL Times: https://nltimes.nl/rssfeed2
+  DutchNews: https://www.dutchnews.nl/feed/
 
 # Anthropic publishes no feed; its news page is read directly.
 anthropic_news: https://www.anthropic.com/news
