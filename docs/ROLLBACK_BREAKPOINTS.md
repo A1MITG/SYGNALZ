@@ -178,7 +178,7 @@ Changes are tried here before `final`. A push to `staging` builds the test site 
 
 | T | Commit on `staging` | Date (IST) | Stage | Change | Roll back with |
 |---|---|---|---|---|---|
-| T-04 | PR #22 (`claude/global-feeds`, `1af3d79`) | 2026-10-26 | PR open, into `staging` | Global feeds (36 tagged feeds: Amit's insurance sources, Nikkei Asia, SCMP, allAfrica, BNamericas, Google News in 7 more editions), native-language screen and Haiku translation, tighter Insurance rubric, per-country cap, Insurance region filter. Rollback point: `rollback/2026-10-26-before-global-feeds`. | `git revert -m 1 <merge commit>` on `staging`, push; or *Sync staging* to reset it to `final` |
+| T-04 | `e0e976f` (PR #22, squash) | 2026-10-26 | On `staging`, test build pending | Global feeds (36 tagged feeds: Amit's insurance sources, Nikkei Asia, SCMP, allAfrica, BNamericas, Google News in 7 more editions), native-language screen and Haiku translation, tighter Insurance rubric, per-country cap, Insurance region filter. Rollback point: `rollback/2026-10-26-before-global-feeds`. | `git revert e0e976f` on `staging`, push; or *Sync staging* to reset it to `final` |
 | T-03 | `05438d8` | 2026-10-26 | Test site | Ticker logos: blue outer lines on Energy and Insurance (PR #20) | `git revert 05438d8` on `staging`, push |
 | T-02 | `6ea8038` | 2026-10-26 | Test site | Ticker logos: each logo's own blue outline animates, bigger amber blobs (PR #19) | `git revert 6ea8038` on `staging`, push |
 | T-01 | `0bbe732` | 2026-10-26 | Test site | Ticker logos: bold blue lines, circling blue arc, amber mover (PR #18) | `git revert 0bbe732` on `staging`, push |
