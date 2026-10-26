@@ -17,3 +17,6 @@ PyYAML==6.0.3
 
 # Test runner (tests/test_sprint*.py use pytest fixtures/marks)
 pytest==9.1.1
+
+# Translation of non-English headlines to English (app/scraper/translate.py)
+anthropic==2.3.0
