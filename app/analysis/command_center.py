@@ -508,7 +508,7 @@ def build_engine_data(signals_data, articles_by_title=None, exclude=()):
              # Where the story is from, and its original headline when it
              # was translated: the panel labels it and the Insurance panel
              # filters by region.
-             **{k: a[k] for k in ('country', 'region', 'language', 'title_original') if a.get(k)}}
+             **{k: a[k] for k in ('country', 'region', 'language', 'title_original', 'why') if a.get(k)}}
             for a in signal.get('articles', [])
         ]
         articles = [a for a in articles

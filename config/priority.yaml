@@ -56,6 +56,18 @@ geo_cap:
   min_candidates_for_cap: 4
   exempt_signals: [Signal GCC]
 
+# One slot per tile for Africa or Latin America (Amit, 2026-10-26: "must be
+# decent and impactful, and explainable"). Used only when the tile has no
+# story from those regions and a candidate clears every bar below; it then
+# replaces the tile's weakest story. Each pick carries a one-line reason
+# shown on the site, and the build log says why a tile got none.
+focus_region_slot:
+  regions: [africa, latam]
+  min_event_significance: 3     # something happened (config/events.yaml, 1-5)
+  min_score_share: 0.5          # score at least half the tile's median score
+  allow_press_releases: false
+  exempt_signals: [Signal GCC]
+
 # The Insurance tile is the global insurance view, so it is stricter, and it
 # ranks by what happened (config/events.yaml) rather than keyword count.
 insurance_interest:
