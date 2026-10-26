@@ -1,0 +1,34 @@
+# Which language model each task uses (2026-10-26). Read by app/llm.py.
+#
+# No model or provider is written into the code: change it here, or for one
+# build without a commit, with these environment variables (GitHub > repo >
+# Settings > Secrets and variables > Actions > Variables):
+#
+#   SIGNAL_LLM_PROVIDER   anthropic | openai | none   (every task)
+#   SIGNAL_LLM_MODEL      the model id for that provider
+#   SIGNAL_LLM_EFFORT     low | medium | high          (where supported)
+#
+# A task-specific variable wins over the general one, e.g.
+# SIGNAL_TRANSLATE_PROVIDER / SIGNAL_TRANSLATE_MODEL for translation.
+#
+# Keys are never here: each provider reads its key from an Actions secret
+# (`key_env` below). Without the key the task is skipped and the build runs.
+#
+# Default = the cheapest model that does the job. Translation of a few
+# dozen headlines a build on Claude Haiku 5.5 ($0.10 in / $0.50 out per
+# million tokens) is well under a cent per build.
+
+providers:
+  anthropic:
+    key_env: ANTHROPIC_API_KEY
+  openai:
+    key_env: OPENAI_API_KEY
+    url: https://api.openai.com/v1/chat/completions
+
+tasks:
+  translate:
+    provider: anthropic
+    model: claude-haiku-5-5
+    effort: low
+    # For ChatGPT instead: provider: openai, and model: the OpenAI model id
+    # you want (its cheapest current "mini" model is the like-for-like).
