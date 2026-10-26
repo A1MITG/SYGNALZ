@@ -47,6 +47,34 @@ class TestRegistry:
         assert story['trade'] is True and story['press_release'] is False
 
 
+class TestScraperWiring:
+    def test_registry_feeds_are_scraped_and_tagged(self):
+        import asyncio
+        import os
+        from unittest import mock
+        from app.scraper import scraper
+
+        async def none(*args, **kwargs):
+            return []
+
+        async def feed(session, url, force_xml=False):
+            return [{'title': 'Seguradora lucra R$ 2 bilhões no trimestre', 'url': 'https://br/1',
+                     'date': '', 'summary': ''}] if 'revistaapolice' in url else []
+
+        one = [f for f in registry.feeds() if f['id'] == 'revistaapolice_seguros']
+        with mock.patch.object(scraper, 'TIER_1_SOURCES', {}), \
+             mock.patch.object(scraper, 'TIER_2_SOURCES', {}), \
+             mock.patch.object(scraper, 'scrape_source', feed), \
+             mock.patch.object(scraper, 'scrape_news_sitemap', none), \
+             mock.patch.object(scraper, 'scrape_news_search', none), \
+             mock.patch.object(scraper, 'registry_feeds', lambda: one), \
+             mock.patch.object(scraper, 'prepare_languages', lambda stories: stories), \
+             mock.patch.dict(os.environ, {'NEWS_API_KEY': ''}):
+            articles = asyncio.run(scraper.run_scraper())
+        assert [a['url'] for a in articles] == ['https://br/1']
+        assert articles[0]['source_country'] == 'BR' and articles[0]['language'] == 'pt'
+
+
 class TestCountry:
     @pytest.mark.parametrize('title, country', [
         ('SUSEP aprova novas regras para seguro de vida', 'BR'),
