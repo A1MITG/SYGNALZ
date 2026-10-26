@@ -31,4 +31,5 @@ tasks:
     model: claude-haiku-5-5
     effort: low
     # For ChatGPT instead: provider: openai, and model: the OpenAI model id
-    # you want (its cheapest current "mini" model is the like-for-like).
+    # you want. Cheapest as of 2026-10-26: gpt-6-luna ($0.10 / $0.50, same as
+    # Haiku 5.5).

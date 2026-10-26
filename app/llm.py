@@ -45,6 +45,10 @@ def settings(task):
     """The task's provider, model and effort, with environment overrides, and
     its provider's own settings (key_env, url)."""
     base = dict((_config().get("tasks") or {}).get(task) or {})
+    provider = _env(task, "PROVIDER")
+    if provider and provider.lower() != (base.get("provider") or "").lower():
+        # Another provider: the configured model and effort belong to the old one.
+        base = {}
     for field in ("provider", "model", "effort"):
         value = _env(task, field.upper())
         if value:

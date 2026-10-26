@@ -32,6 +32,10 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual((cfg["provider"], cfg["model"], cfg["key_env"]),
                          ("openai", "some-mini", "OPENAI_API_KEY"))
 
+    def test_switching_provider_drops_the_old_providers_effort(self):
+        with _env(SIGNAL_LLM_PROVIDER="openai", SIGNAL_LLM_MODEL="m"):
+            self.assertNotIn("effort", llm.settings("translate"))
+
     def test_task_override_beats_general_override(self):
         with _env(SIGNAL_LLM_MODEL="general", SIGNAL_TRANSLATE_MODEL="task"):
             self.assertEqual(llm.settings("translate")["model"], "task")
