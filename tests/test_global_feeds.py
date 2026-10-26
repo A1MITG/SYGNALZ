@@ -288,3 +288,11 @@ class TestFocusRegionSlot:
         assert geo_cap.focus_region_slot('Signal GCC', kept, kept + [good]) == (kept, None)
         covered = kept[:7] + [self._story('Chile lender IPO', 4, 'latam', 'CL')]
         assert geo_cap.focus_region_slot('Signal AI', covered, covered + [good])[1] == 'already has one'
+
+    def test_detector_knows_elections_profit_moves_and_new_laws(self):
+        from app.intelligence import events
+        for title, kind in [('Lula wins fourth term in dramatic Brazil election comeback', 'ELECTION'),
+                            ('Grupo Bradesco Seguros profit rises 18.2% to R$8.6 billion', 'EARNINGS'),
+                            ("Rwanda: What Rwanda's New Central Bank Law Really Changes", 'REGULATION')]:
+            assert kind in [e['type'] for e in events.detect(title, '')], title
+        assert events.detect('East Africa Has the Raw Materials but Lacks the Factories', '') == []

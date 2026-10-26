@@ -110,6 +110,7 @@ events:
     significance: 4
     patterns:
       - { rx: '\b(?:new rules|proposed rule|regulatory approval|compliance deadline|regulator(?:s)? (?:said|will|to))\b', weight: 3 }
+      - { rx: '\bnew (?:[\w-]+ ){0,3}(?:law|act|bill)\b', weight: 3 }
       - { rx: '\b(?:regulation|regulatory|legislation|antitrust|watchdog)\b', weight: 2 }
       - { rx: '\b(?:fined|penalt(?:y|ies))\b', weight: 2 }
 
@@ -180,6 +181,7 @@ events:
     significance: 3
     patterns:
       - { rx: '\b(?:general election|presidential election|election results|wins election|voted into)\b', weight: 3 }
+      - { rx: '\b(?:wins?|won|re-?elected (?:to|for))\b.{0,25}?\b(?:term|presidency|runoff)\b', weight: 3 }
       - { rx: '\b(?:election|electorate|ballot)\b', weight: 2 }
 
   EARNINGS:
@@ -189,4 +191,5 @@ events:
       # "reports preliminary Q2 net profit", not "reports profit".
       - { rx: '\b(?:quarterly results|q[1-4] (?:results|earnings)|earnings report)\b', weight: 3 }
       - { rx: '\b(?:reports|posts|announces)\b.{0,30}?\b(?:net\s+)?(?:profit|loss|earnings)\b', weight: 3 }
+      - { rx: '\b(?:net\s+)?(?:profit|earnings|revenue)s?\s+(?:rises?|jumps?|surges?|climbs?|falls?|drops?|slumps?|doubles?)\b', weight: 3 }
       - { rx: '\b(?:earnings|net profit|revenue rose|revenue fell)\b', weight: 2 }
