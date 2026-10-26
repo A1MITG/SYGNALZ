@@ -92,20 +92,32 @@ async def _fetch_all(urls):
         return await asyncio.gather(*(_fetch_one(session, sem, u) for u in urls))
 
 
-def fill_missing_images(articles, fetch=None):
+def fill_missing_images(articles, fetch=None, resolve=None):
     """Give each article dict without an http image its page's share image.
+
+    A Google News search link is first swapped for the publisher's own link
+    (news_search.resolve_links), so the card links to the article and its
+    photo can be read; one that cannot be resolved keeps its search link and
+    gets no image. ``resolve`` is injectable for tests; with an injected
+    ``fetch`` and no ``resolve``, links are left as they are.
 
     A feed thumbnail (is_thumbnail) counts as no image; it is kept when the
     page offers nothing better. Mutates ``articles`` in place and returns how
     many gained an image. ``fetch`` (urls -> [(url, image)]) is injectable
     for tests.
     """
+    from .news_search import is_search_link, resolve_links
     if fetch is None:
         if not enabled():
             return 0
         fetch = lambda urls: asyncio.run(_fetch_all(urls))
+        resolve = resolve or resolve_links
 
-    from .news_search import is_search_link
+    if resolve:
+        found = resolve([a['url'] for a in articles if is_search_link(a.get('url'))])
+        for a in articles:
+            if a.get('url') in found:
+                a['url'] = found[a['url']]
     # A news-search link opens a redirect page, whose share image is the
     # search engine's own card, not the story's.
     missing = [a for a in articles

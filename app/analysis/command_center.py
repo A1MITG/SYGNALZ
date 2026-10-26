@@ -20,7 +20,7 @@ SIGNAL_TO_ENGINE = {
     'Signal Global': ('global', 'Global Affairs'),
     'Signal Business': ('economy', 'Economy, Business & Markets'),
     'Signal AI': ('ai', 'AI, Technology & Innovation'),
-    'Signal GCC': ('gcc', 'GCC & Enterprise Technology'),
+    'Signal GCC': ('gcc', 'India GCCs & Enterprise Technology'),
     'Signal Insurance': ('insurance', 'Insurance & Financial Services'),
     # Tile-only signals (signals.TILE_SIGNALS): scored only for the Command
     # Center, which calls synthesize_signals(include_tile_signals=True).
