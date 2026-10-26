@@ -1,0 +1,56 @@
+# Native-language screening (2026-10-26), read by app/intelligence/language.py.
+#
+# A story not in English is screened in its own language before anything is
+# translated: an exclude word drops it; otherwise it must name insurance (or,
+# for a business feed, business or finance) in its headline -- or anywhere,
+# when it comes from an insurance trade outlet. Only what passes is sent for
+# translation, so the cost stays at a few dozen headlines a build.
+#
+# Matching is on lower-cased text. Latin-script words match whole words;
+# Japanese, Chinese and Korean terms match anywhere (no spaces between words,
+# or Korean endings joined to them).
+
+pt:
+  insurance: [seguro, seguros, seguradora, seguradoras, resseguro, resseguradora, apólice,
+              apólices, sinistro, sinistros, previdência, corretora de seguros, corretor de seguros,
+              susep, cnseg, fenaseg, plano de saúde, planos de saúde, ans, capitalização, prêmio, prêmios]
+  business: [bilhões, milhões, lucro, receita, aquisição, fusão, ipo, banco central, juros]
+  exclude: [como escolher, dicas, passo a passo, cotação online, simulador, webinar, inscrições,
+            prêmio de melhor, evento, palestra, live, horóscopo, receita de bolo, promoção]
+
+es:
+  insurance: [seguro, seguros, aseguradora, aseguradoras, reaseguro, reaseguradora, póliza, pólizas,
+              siniestro, siniestros, siniestralidad, corredor de seguros, correduría, mediador,
+              dgsfp, cnsf, unespa, amis, prima, primas, mutua, mutualidad, previsión social]
+  business: [millones, mil millones, beneficio, ingresos, adquisición, fusión, opv, banco central]
+  exclude: [cómo elegir, consejos, guía para, comparador, webinar, jornada, inscripciones,
+            premios, congreso, horóscopo, sorteo, oferta]
+
+it:
+  insurance: [assicurazione, assicurazioni, assicurativo, assicurativa, assicurativi, compagnia,
+              compagnie, riassicurazione, polizza, polizze, sinistro, sinistri, ivass, ania,
+              intermediari, broker, premi, rc auto, previdenza]
+  business: [milioni, miliardi, utile, ricavi, acquisizione, fusione]
+  exclude: [come scegliere, consigli, guida, webinar, convegno, evento, premio, iscrizioni]
+
+ja:
+  insurance: [保険, 損保, 生保, 再保険, 損害保険, 生命保険, 保険料, 保険金, 共済, 金融庁]
+  business: [億円, 兆円, 決算, 買収, 合併, 上場, 増益, 減益]
+  exclude: [キャンペーン, プレゼント, セミナー, ウェビナー, 占い, 開催のお知らせ, 募集]
+
+ko:
+  insurance: [보험, 보험사, 손해보험, 손보, 생명보험, 생보, 재보험, 보험료, 보험금, 금융감독원,
+              금감원, 금융위원회, 보험업]
+  business: [억원, 조원, 실적, 인수, 합병, 상장, 순이익]
+  exclude: [이벤트, 경품, 세미나, 운세, 모집, 할인]
+
+vi:
+  insurance: [bảo hiểm, tái bảo hiểm, phí bảo hiểm, doanh nghiệp bảo hiểm, bồi thường,
+              hợp đồng bảo hiểm, cục quản lý giám sát bảo hiểm]
+  business: [tỷ đồng, nghìn tỷ, lợi nhuận, doanh thu, ngân hàng, sáp nhập, mua lại, cổ phiếu]
+  exclude: [khuyến mãi, ưu đãi, hội thảo, tử vi, tuyển dụng, minigame]
+
+zh:
+  insurance: [保险, 再保险, 保费, 寿险, 财险, 险企, 保险公司, 理赔, 金融监管总局, 银保监]
+  business: [亿元, 万亿, 净利润, 营收, 收购, 并购, 上市]
+  exclude: [促销, 优惠, 研讨会, 星座, 招聘, 抽奖]

@@ -10,6 +10,8 @@ from bs4 import BeautifulSoup
 
 from .news_search import scrape_news_search
 from .news_sitemaps import scrape_news_sitemap
+from .registry import feeds as registry_feeds, scrape_feed
+from ..intelligence.language import prepare_languages
 from .sources import EXCLUDE_URL_PARTS, NEWS_SEARCHES, NEWS_SITEMAPS, TIER_1_SOURCES, TIER_2_SOURCES
 
 logger = logging.getLogger(__name__)
@@ -64,20 +66,26 @@ async def fetch_html(session, url):
         logger.warning("Error fetching %s: %s", url, e)
         return None
 
-async def scrape_source(session, url):
-    """Scrape a single source for article links and titles."""
+async def scrape_source(session, url, force_xml=False):
+    """Scrape a single source for article links and titles.
+
+    ``force_xml`` reads the response as a feed whatever its URL looks like
+    (registry feeds such as PR Times' index.rdf).
+    """
     html = await fetch_html(session, url)
     if not html:
         return []
 
     articles = []
-    if url.endswith('.rss') or url.endswith('.xml') or 'rss' in url.lower() or 'feed' in url.lower():
+    if force_xml or url.endswith('.rss') or url.endswith('.xml') or 'rss' in url.lower() or 'feed' in url.lower():
         # Parse as RSS/XML
         soup = BeautifulSoup(html, 'xml')
         for item in soup.find_all(['item', 'entry']):
             title_tag = item.find('title')
             link_tag = item.find('link')
-            date_tag = item.find('pubDate') or item.find('published') or item.find('updated')
+            # RDF feeds (PR Times, allAfrica) date their items with dc:date.
+            date_tag = (item.find('pubDate') or item.find('published') or item.find('updated')
+                        or item.find('date'))
             # The feed already carries a description; it was simply never read.
             # It is the summary the whole intelligence pipeline scores against.
             desc_tag = (item.find('description') or item.find('summary')
@@ -147,6 +155,11 @@ async def run_scraper(tier='all'):
             # GCC stories from news searches, last: a publisher's own copy of
             # the same story comes first and is the one kept.
             tasks += [scrape_news_search(session, url, fetch_html) for url in NEWS_SEARCHES]
+            # The global registry (config/feeds.yaml): insurance press from
+            # Latin America, Europe, the Middle East and Asia, world business
+            # feeds, and insurance searches in more Google News editions.
+            tasks += [scrape_feed(session, feed, fetch_html, scrape_source)
+                      for feed in registry_feeds()]
         # return_exceptions so one source's parse failure can't abort the
         # whole scrape — the rest of the sources still return their articles.
         results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -167,5 +180,10 @@ async def run_scraper(tier='all'):
 
     # Deduplicate articles by URL
     all_articles = list({article['url']: article for article in all_articles if article.get('url')}.values())
+
+    # Stories not in English: screened in their own language, then the
+    # survivors translated to English (app/intelligence/language.py). The
+    # rest of the pipeline reads English only.
+    all_articles = prepare_languages(all_articles)
 
     return all_articles

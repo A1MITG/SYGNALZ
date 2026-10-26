@@ -131,6 +131,7 @@ class TestWiring(unittest.TestCase):
         with mock.patch.object(scraper, 'scrape_source', no_rss), \
              mock.patch.object(scraper, 'scrape_news_sitemap', gcc_story), \
              mock.patch.object(scraper, 'scrape_news_search', no_search), \
+             mock.patch.object(scraper, 'registry_feeds', lambda: []), \
              mock.patch.dict(os.environ, {'NEWS_API_KEY': ''}):
             articles = _run(scraper.run_scraper())
         self.assertEqual([a['url'] for a in articles], ['https://www.moneycontrol.com/a-1.html'])
