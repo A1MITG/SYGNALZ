@@ -36,7 +36,9 @@ _TIMEOUT = aiohttp.ClientTimeout(total=10)
 _META_TAG = re.compile(r'<meta\b[^>]*>', re.I)
 _ATTR = re.compile(r'([\w:-]+)\s*=\s*["\']([^"\']*)["\']')
 _IMAGE_KEYS = ('og:image', 'og:image:url', 'og:image:secure_url', 'twitter:image', 'twitter:image:src')
-_GENERIC = re.compile(r'logo|default|placeholder|favicon|site-?icon|cropped-|fallback|/social/', re.I)
+# "-680x0-c-default" is a WordPress (Timber) resize suffix on a real photo,
+# The Loadstar's, not a default card (2026-10-26).
+_GENERIC = re.compile(r'logo|(?<!-c-)default|placeholder|favicon|site-?icon|cropped-|fallback|/social/', re.I)
 # Feed images that are thumbnails rather than pictures: ET's B2B sites (ET GCC,
 # HRWorld, Telecom, Manufacturing) send 100x100 crops in their feeds, while
 # the article page's share image is 1200x627. Treated as no image, so the

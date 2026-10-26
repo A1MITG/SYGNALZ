@@ -22,6 +22,8 @@ def test_publisher_logo_cards_are_generic():
     assert ai.is_generic('https://www.insurancejournal.com/img/social/opengraph/ij-social-default-1200x630.png')
     assert ai.is_generic('https://www.businessinsurance.com/wp-content/uploads/2023/03/cropped-BI-square-blue.png')
     assert not ai.is_generic('https://www.businessinsurance.com/wp-content/uploads/2026/09/Chubb-2.jpg')
+    # The Loadstar's resized photos end in "-c-default"; they are story photos.
+    assert not ai.is_generic('https://theloadstar.com/wp-content/uploads/32d57403416e8cfc09cfe872bbc9efbe-680x0-c-default.png')
 
 
 def test_fills_only_missing_and_drops_images_shared_across_stories():
