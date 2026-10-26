@@ -1016,6 +1016,17 @@ NEUTRALIZE = {name: re.compile(r'\b(?:' + '|'.join(r.ignore) + r')\b')
               for name, r in RUBRICS.items() if r.ignore}
 TITLE_REQUIRED = {name for name, r in RUBRICS.items() if r.headline_must_match}
 SIGNAL_FLOORS = {name: r.min_score for name, r in RUBRICS.items()}
+
+# 2026-10-26: Insurance's weak words ('policy', 'risk', 'claims', 'premium',
+# 'coverage', 'broker', 'liability') add points only beside a word that means
+# insurance on its own, so "premium smartphones" or "government policy on
+# rice" no longer reach the tile. Insurance trade press is exempt: there
+# "Beazley adds coverage for companies' own AI risks" is insurance news. And a general outlet's story needs 4, one
+# point more than an insurance trade outlet's (config/feeds.yaml `trade`).
+INSURANCE_ANCHORS = re.compile(r'\b(?:' + '|'.join(
+    re.escape(kw) for kw, points in INSURANCE.keywords.items()
+    if points >= 3 or kw in ('insurance', "lloyd's")) + r'|insured|insurance)\b')
+GENERAL_OUTLET_FLOORS = {'Signal Insurance': 4}
 _TILE_NAMES = {s['name'] for s in TILE_SIGNALS}
 
 _COMPILED = {
@@ -1052,8 +1063,12 @@ def _is_near_duplicate(tokens, kept_token_sets):
     return False
 
 
-def score_signals(title, summary=''):
-    """Return {signal name: evidence score} for one article."""
+def score_signals(title, summary='', insurance_trade=False):
+    """Return {signal name: evidence score} for one article.
+
+    ``insurance_trade`` marks a story from insurance trade press, which needs
+    no INSURANCE_ANCHORS word for Insurance's weaker words to count.
+    """
     title = _normalize(title)
     summary = _normalize(summary)
     scores = {}
@@ -1071,6 +1086,10 @@ def score_signals(title, summary=''):
                 total += weight
         scores[name] = total if in_title or name not in TITLE_REQUIRED else 0
 
+    if not insurance_trade and not (INSURANCE_ANCHORS.search(title)
+                                    or (summary and INSURANCE_ANCHORS.search(summary))):
+        scores['Signal Insurance'] = 0
+
     if gcc_means_gulf(f'{title} {summary}'):
         # "GCC" here is the Gulf Cooperation Council: score_gcc drops it, and
         # its evidence moves to Signal Global.
@@ -1087,7 +1106,8 @@ def score_signals(title, summary=''):
     return scores
 
 
-def classify_article(title, summary='', include_tile_signals=False):
+def classify_article(title, summary='', include_tile_signals=False, trade=True,
+                     insurance_trade=False):
     """Return (signal name, score), or None when nothing clears its floor.
 
     Each signal is tested against its own floor before the winner is picked,
@@ -1097,11 +1117,21 @@ def classify_article(title, summary='', include_tile_signals=False):
 
     Tile-only signals (TILE_SIGNALS) compete only when include_tile_signals is
     set, so the Signals page's six classify exactly as they did before.
+
+    ``trade=False`` marks a general outlet's story (a registry feed that is
+    not a sector specialist): it must clear GENERAL_OUTLET_FLOORS instead.
+    Stories from the older feeds keep the usual floors. ``insurance_trade``
+    is passed to score_signals.
     """
-    scores = score_signals(title, summary)
+    scores = score_signals(title, summary, insurance_trade)
+
+    def floor(name):
+        base = SIGNAL_FLOORS.get(name, THRESHOLD)
+        return base if trade else max(base, GENERAL_OUTLET_FLOORS.get(name, base))
+
     eligible = [name for name in PRIORITY
                 if (include_tile_signals or name not in _TILE_NAMES)
-                and scores[name] >= SIGNAL_FLOORS.get(name, THRESHOLD)]
+                and scores[name] >= floor(name)]
     if not eligible:
         return None
     # max() keeps the first maximum, so PRIORITY still breaks ties.
@@ -1143,11 +1173,16 @@ def synthesize_signals(articles, data_date=None, require_current=True, include_t
     (TILE_SIGNALS) to both the competition and the result. The Signals page
     leaves it off and keeps its six.
     """
+    from .geo_cap import select_capped, select_insurance
+    from .screen import screened_out
+    from ..intelligence.geo import is_insurance_trade, story_country, story_region
+
     listed = SIGNALS + (TILE_SIGNALS if include_tile_signals else [])
     seen_titles = set()
     grouped = {s['name']: [] for s in listed}
     unclassified = 0
     stale = 0
+    screened = {}
     for article in articles:
         title = article.get('title', '').strip()
         # Titles under 4 words are almost always scraped section headers
@@ -1158,13 +1193,26 @@ def synthesize_signals(articles, data_date=None, require_current=True, include_t
         if require_current and not _is_current(article):
             stale += 1
             continue
-        result = classify_article(title, article.get('summary', ''), include_tile_signals)
+        reason = screened_out(article)
+        if reason:
+            screened[reason] = screened.get(reason, 0) + 1
+            continue
+        result = classify_article(title, article.get('summary', ''), include_tile_signals,
+                                  trade=article.get('trade', True),
+                                  insurance_trade=is_insurance_trade(article))
         if result is None:
             unclassified += 1
             continue
         name, score = result
-        grouped[name].append({'title': title, 'url': article.get('url', ''),
-                              'score': score})
+        country = story_country(article)
+        entry = {'title': title, 'url': article.get('url', ''), 'score': score,
+                 'country': country, 'region': story_region(article, country)}
+        # Registry stories: the original headline and language for the page,
+        # and press releases, which the Insurance tile limits.
+        for key in ('title_original', 'language', 'press_release', 'summary'):
+            if article.get(key) and (key != 'language' or article[key] != 'en'):
+                entry[key] = article[key]
+        grouped[name].append(entry)
     for name in grouped:
         grouped[name].sort(key=lambda a: a['score'], reverse=True)
         kept, kept_tokens = [], []
@@ -1174,14 +1222,21 @@ def synthesize_signals(articles, data_date=None, require_current=True, include_t
                 continue  # same story, lower score — the bucket refills below
             kept.append(art)
             kept_tokens.append(tokens)
-            if len(kept) == MAX_PER_SIGNAL:
-                break
+        # One country's share is capped (app/analysis/geo_cap.py); the
+        # Insurance tile also ranks by what happened in each story.
+        if name == 'Signal Insurance':
+            kept = select_insurance(kept, MAX_PER_SIGNAL)
+        else:
+            kept = select_capped(name, kept, MAX_PER_SIGNAL)
+        for art in kept:
+            art.pop('summary', None)
         grouped[name] = kept
     return {
         'date': _display_date(data_date),
         'data_date': data_date,          # ISO, or None when unknown
         'unclassified': unclassified,
         'stale_excluded': stale,
+        'screened_out': screened,
         'signals': [
             {
                 'name': s['name'],
