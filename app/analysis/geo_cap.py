@@ -4,6 +4,8 @@
 
     select_capped(name, ranked, limit)   -> at most `limit` stories
     select_insurance(ranked, limit)      -> the Insurance tile's stories
+    focus_region_slot(name, kept, ranked)-> kept, with one Africa/LatAm story
+                                            swapped in when one is good enough
 
 `ranked` is a tile's candidates, best first, near-duplicates already
 removed; each carries `country` and `region` (app/intelligence/geo.py).
@@ -139,3 +141,55 @@ def select_insurance(ranked, limit):
     kept = _refill(kept, waiting, limit, fits)
     order = {id(s): i for i, s in enumerate(by_interest)}
     return sorted(kept, key=lambda s: order[id(s)])
+
+
+REGION_LABELS = {'africa': 'Africa', 'latam': 'Latin America'}
+
+
+def focus_settings():
+    return _config().get('focus_region_slot') or {}
+
+
+def _focus_bar(story, median, cfg):
+    """(passes, why): the story against the slot's bars, in words."""
+    if story.get('press_release') and not cfg.get('allow_press_releases', False):
+        return False, 'press release'
+    found = events.detect(story.get('title', ''), story.get('summary', ''))
+    top = max(found, key=lambda e: e['significance'], default=None)
+    need = cfg.get('min_event_significance', 3)
+    if top is None or top['significance'] < need:
+        return False, 'no major event (commentary or background)'
+    floor = median * cfg.get('min_score_share', 0.5)
+    if story.get('score', 0) < floor:
+        return False, f"score {story.get('score', 0):g} below {floor:g}"
+    event = top['type'].replace('_', ' ').capitalize()
+    region = REGION_LABELS.get(story.get('region'), story.get('region'))
+    return True, (f"{region} slot: {event} (impact {top['significance']} of 5), "
+                  f"relevance {story.get('score', 0):g} vs tile median {median:g}")
+
+
+def focus_region_slot(name, kept, ranked):
+    """The tile's stories, with its weakest swapped for the best Africa or
+    LatAm candidate that clears the bars, when it has none from there. The
+    pick carries `why`; the second value says what happened, for the log."""
+    cfg = focus_settings()
+    regions = set(cfg.get('regions') or [])
+    if not regions or not kept or name in (cfg.get('exempt_signals') or []):
+        return kept, None
+    if any(s.get('region') in regions for s in kept):
+        return kept, 'already has one'
+    scores = sorted(s.get('score', 0) for s in kept)
+    median = scores[len(scores) // 2]
+    rejected = []
+    for story in ranked:
+        if story in kept or story.get('region') not in regions:
+            continue
+        ok, why = _focus_bar(story, median, cfg)
+        if ok:
+            story['why'] = why
+            weakest = min(kept, key=lambda s: s.get('score', 0))
+            return [s for s in kept if s is not weakest] + [story], why
+        rejected.append(f"{story.get('title', '')[:60]!r}: {why}")
+    if not rejected:
+        return kept, 'no Africa/LatAm candidates'
+    return kept, 'none good enough; best: ' + '; '.join(rejected[:2])

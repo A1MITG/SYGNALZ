@@ -244,3 +244,47 @@ class TestEndToEnd:
         data = synthesize_signals([{'title': 'Best car insurance quotes for October 2026',
                                     'url': 'https://a/2'}], require_current=False)
         assert data['screened_out'] == {'consumer_advice': 1}
+
+
+class TestFocusRegionSlot:
+    """One Africa/LatAm slot per tile: only a decent, impactful story, with its reason."""
+
+    def _story(self, title, score, region, country='XX', **kw):
+        return {'title': title, 'score': score, 'region': region, 'country': country, **kw}
+
+    def _tile(self):
+        return [self._story(f'India bank story {i}', 10 - i, 'south_asia', 'IN') for i in range(8)]
+
+    def test_impactful_story_takes_the_weakest_slot_with_a_reason(self):
+        kept = self._tile()
+        africa = self._story('Equity Group to acquire Rwandan lender', 5, 'africa', 'KE')
+        out, why = geo_cap.focus_region_slot('Signal Banking', kept, kept + [africa])
+        assert africa in out
+        assert len(out) == 8
+        assert kept[-1] not in out
+        assert 'Africa slot: Acquisition' in africa['why']
+        assert 'impact 4 of 5' in africa['why']
+
+    def test_commentary_is_not_impactful_enough(self):
+        kept = self._tile()
+        op_ed = self._story("Why Tanzania's fuel price transparency matters", 9, 'africa', 'TZ')
+        out, why = geo_cap.focus_region_slot('Signal Energy', kept, kept + [op_ed])
+        assert out == kept
+        assert 'no major event' in why
+        assert 'why' not in op_ed
+
+    def test_weak_story_is_not_decent_enough(self):
+        kept = self._tile()
+        weak = self._story('Brazil insurer to acquire small broker', 1, 'latam', 'BR')
+        out, why = geo_cap.focus_region_slot('Signal Insurance', kept, kept + [weak])
+        assert out == kept
+        assert 'below' in why
+
+    def test_press_release_and_gcc_and_covered_tiles_are_left_alone(self):
+        kept = self._tile()
+        release = self._story('Mexican insurer to acquire rival', 9, 'latam', 'MX', press_release=True)
+        assert geo_cap.focus_region_slot('Signal AI', kept, kept + [release])[0] == kept
+        good = self._story('Nigeria bank to acquire rival', 9, 'africa', 'NG')
+        assert geo_cap.focus_region_slot('Signal GCC', kept, kept + [good]) == (kept, None)
+        covered = kept[:7] + [self._story('Chile lender IPO', 4, 'latam', 'CL')]
+        assert geo_cap.focus_region_slot('Signal AI', covered, covered + [good])[1] == 'already has one'
