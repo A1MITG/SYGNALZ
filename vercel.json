@@ -1,0 +1,8 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "staging-deploy": true
+    }
+  },
+  "cleanUrls": true
+}

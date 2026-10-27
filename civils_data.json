@@ -1,0 +1,425 @@
+{
+ "built_at": "2026-10-27T16:49:21.708429+00:00",
+ "freshness_hours": 48,
+ "tiles": [
+  {
+   "id": "polity",
+   "name": "Polity & Governance",
+   "paper": "GS II",
+   "stories": [
+    {
+     "title": "Form 6, voter roll deletions: What Election Commission told the Supreme Court",
+     "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPV3BFQ3JQZ1FwMG9LTXBCU0VXWVlmOUEyWG93b2lSQUVvSl9BS2d4SDRCem4wMkUtZWJRbWtRQmd3bW5Kbi1RWWsyeVBUbXBGYlhBcUEtYlJnS0JYZS02SUVzMFBpLTZ5UUFiNnBOenRMdTF6Q1NRMl8wbU5lWUx6UjRzLW05bExxa1lHSGtybW83YXVZLVpmWm1PR2V5OUdlWUQxTFAzaF9RcmRGcDVtSy1R0gGyAUFVX3lxTE9XcEVDclBnUXAwb0tNcEJTRVdZWWY5QTJYb3dvaVJBRW9KX0FLZ3hINEJ6bjAyRS1lYlFta1FCZ3dtbkpuLVFZazJ5UFRtcEZiWEFxQS1iUmdLQlhlLTZJRXMwUGktNnlRQWI2cE56dEx1MXpDU1EyXzBtTmVZTHpSNHMtbTlsTHFrWUdIa3JtbzdhdVktWmZabU9HZXk5R2VZRDFMUDNoX1FyZEZwNW1LLVE?oc=5",
+     "source": "The Indian Express",
+     "date": "2026-10-27T08:33:30+00:00",
+     "why": [
+      "supreme court",
+      "election commission",
+      "election"
+     ],
+     "score": 5,
+     "origin": "feed"
+    },
+    {
+     "title": "Contemplating law against child pornography, Centre tells Supreme Court",
+     "url": "https://www.thehindu.com/news/national/contemplating-law-against-child-pornography-centre-tells-supreme-court/article71632394.ece",
+     "source": "The Hindu",
+     "date": "2026-10-27T21:31:29+05:30",
+     "why": [
+      "supreme court"
+     ],
+     "score": 2,
+     "origin": "feed"
+    },
+    {
+     "title": "Explained: Why the Supreme Court may be hearing too many Special Leave Petitions",
+     "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQanh1N09Ma1VUTkY5SEZQMGtKWG9pNG5CMkotN0RmSzg2WnBVMmplUUd0a0JwaGhOVnY4b2tqZnlPZkFmQjQ3dERkdTJfbjl5aUEybVJ2clF1MWx6bVFnVXJZV3dUb2lON3MyMVN1ZXFqeUlCM0hQc3pnN1lmV001RzdJSF9WdlQ0UTctdnJNUEtIaGJKNFU1VG1qSGhHcHJidnFrTjF3TFnSAa8BQVVfeXFMUEFPODJlUXJCS0pYMnhpWnRNLXFSNWVWdGVPaWoxbGc2dENXUkxwbmt5b042Z1hsb1E1eE02X2d6RkRIM2FxSTFITzFuSWdsY1U5dWx4VFllZ3VRX1Azdm9lUUUyNFBsWUl4UGo2czRGTjRRbnpibXRqU2E1dEhsVzVKYmx2cmJGZ3NoRmV3VEtnTmdmNFBDMlM1Z2RnUnl2cWtmeUswQzFidlcya1NGZw?oc=5",
+     "source": "The Indian Express",
+     "date": "2026-10-26T12:34:17+00:00",
+     "why": [
+      "supreme court"
+     ],
+     "score": 2,
+     "origin": "feed"
+    },
+    {
+     "title": "Kerala Pradesh Congress Committe apologises to CJI for post on X",
+     "url": "https://www.thehindu.com/news/national/kerala/kerala-pradesh-congress-committe-apologises-to-cji-for-post-on-x/article71632905.ece",
+     "source": "The Hindu",
+     "date": "2026-10-27T22:03:48+05:30",
+     "why": [
+      "cji"
+     ],
+     "score": 1,
+     "origin": "feed"
+    }
+   ]
+  },
+  {
+   "id": "schemes",
+   "name": "Schemes & Policy",
+   "paper": "GS II",
+   "stories": [
+    {
+     "title": "Harish Rao suggests govt. to sell rice lying in godowns to pay ration dealers’ dues",
+     "url": "https://www.thehindu.com/news/national/telangana/harish-rao-suggests-govt-to-sell-rice-lying-in-godowns-to-pay-ration-dealers-dues/article71632844.ece",
+     "source": "The Hindu",
+     "date": "2026-10-27T21:48:51+05:30",
+     "why": [
+      "ration"
+     ],
+     "score": 1,
+     "origin": "feed"
+    },
+    {
+     "title": "protein sovereignty index",
+     "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFA4QWJTWUFZS0JIRTdpdUZ2cGVSNFZ5VlpzQVZFdmZGSlBCRmF2RUtfUnlnZld1c2RyTWwyZTNfdENuTVNrSTdTRkxFWkFWWTBhMUoxZnBfNG1tS2dWQzIzTWJfcS0tcEZLbzZnOHNLSQ?oc=5",
+     "source": "Down To Earth",
+     "date": "2026-10-26T11:12:13+00:00",
+     "why": [
+      "index"
+     ],
+     "score": 1,
+     "origin": "feed"
+    }
+   ]
+  },
+  {
+   "id": "ir",
+   "name": "International Relations",
+   "paper": "GS II",
+   "stories": [
+    {
+     "title": "Jaishankar to travel to U.S. for G20 Foreign Ministers’ meet, Quad this week",
+     "url": "https://www.thehindu.com/news/national/jaishankar-to-travel-to-us-for-g20-foreign-ministers-meet-quad-this-week/article71632365.ece",
+     "source": "The Hindu",
+     "date": "2026-10-27T22:15:11+05:30",
+     "why": [
+      "foreign ministers",
+      "quad",
+      "g20"
+     ],
+     "score": 4,
+     "origin": "feed"
+    },
+    {
+     "title": "Melania or the pope: Who brokered Russia-Ukraine ceasefire in Oleshky?",
+     "url": "https://www.aljazeera.com/news/2026/10/27/melania-or-the-pope-who-brokered-russia-ukraine-ceasefire-in-oleshky?traffic_source=rss",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "ceasefire",
+      "ukraine",
+      "russia"
+     ],
+     "score": 3,
+     "origin": "signal"
+    },
+    {
+     "title": "Norway’s PM defends rare call with Putin on Ukraine despite doubts among European leaders – Europe live",
+     "url": "https://www.theguardian.com/world/live/2026/oct/27/russia-ukraine-oleshky-serbia-france-europe-latest-news-updates",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "ukraine",
+      "putin",
+      "europe"
+     ],
+     "score": 3,
+     "origin": "signal"
+    },
+    {
+     "title": "US bans vehicles from China’s BYD at Japan military base, calling them ‘unacceptable’ risk",
+     "url": "https://www.theguardian.com/world/2026/oct/27/us-bans-byd-electric-vehicles-kadena-military-base",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "china",
+      "US",
+      "japan"
+     ],
+     "score": 3,
+     "origin": "signal"
+    },
+    {
+     "title": "Government of India Provides US $ 51 million to Sri Lanka",
+     "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOYW9DVkxSMFpLdE5fMnlRR1puX2tXSVpBel9XU2NsT3lhU3FzSDgzM1RuVE0wQVlqQ2lXc05ZZDNhZVJBOWJWYXNpVzZoVlhjX1ZkRElNX3luOXZEQTdTWmdPNklXN2FfNWlsVnJKWHR1cXR1RlJqNXRkSnp0dk5wS2k5NlJ5Y0dmNVVIVWJUNnc0Q3RBWjZhQVJ0WmhydFhrQUNYMkJn?oc=5",
+     "source": "Ministry of External Affairs",
+     "date": "2026-10-26T06:51:01+00:00",
+     "why": [
+      "sri lanka",
+      "US"
+     ],
+     "score": 3,
+     "origin": "feed"
+    },
+    {
+     "title": "Netanyahu reportedly pressured military to attack Iran in run-up to election",
+     "url": "https://www.theguardian.com/world/2026/oct/26/netanyahu-reportedly-pressured-israel-military-attack-iran-runup-to-election",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "iran",
+      "netanyahu"
+     ],
+     "score": 2,
+     "origin": "signal"
+    },
+    {
+     "title": "What does Israel's election mean for Gaza and the wider world?",
+     "url": "https://www.bbc.co.uk/news/videos/ck240dg5n4gjo?at_medium=RSS&at_campaign=rss",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "gaza",
+      "israel"
+     ],
+     "score": 2,
+     "origin": "signal"
+    },
+    {
+     "title": "Russia strikes Kyiv ahead of localised ceasefire in Oleshky",
+     "url": "https://www.aljazeera.com/video/newsfeed/2026/10/27/russia-strikes-kyiv-ahead-of-localised-ceasefire-in-oleshky?traffic_source=rss",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "ceasefire",
+      "russia"
+     ],
+     "score": 2,
+     "origin": "signal"
+    }
+   ]
+  },
+  {
+   "id": "economy",
+   "name": "Economy",
+   "paper": "GS III",
+   "stories": [
+    {
+     "title": "French Banks to Face Investor Scrutiny Over Risks from Turmoil",
+     "url": "https://www.insurancejournal.com/news/international/2026/10/27/890417.htm",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "banks"
+     ],
+     "score": 1,
+     "origin": "signal"
+    }
+   ]
+  },
+  {
+   "id": "environment",
+   "name": "Environment & Ecology",
+   "paper": "GS III",
+   "stories": [
+    {
+     "title": "Telangana declares 365 mandals drought-affected, of which 111 severely drought-affected",
+     "url": "https://www.thehindu.com/news/national/telangana/telangana-declares-365-mandals-drought-affected-of-which-111-severely-drought-affected/article71632836.ece",
+     "source": "The Hindu",
+     "date": "2026-10-27T22:10:36+05:30",
+     "why": [
+      "drought"
+     ],
+     "score": 1,
+     "origin": "feed"
+    },
+    {
+     "title": "Congress-induced drought, not forced by nature: KTR",
+     "url": "https://www.thehindu.com/news/national/telangana/congress-induced-drought-not-forced-by-nature-ktr/article71632731.ece",
+     "source": "The Hindu",
+     "date": "2026-10-27T21:43:18+05:30",
+     "why": [
+      "drought"
+     ],
+     "score": 1,
+     "origin": "feed"
+    },
+    {
+     "title": "Flash floods, falling trees and tornadoes: How does auto insurance respond to extreme weather emergencies?",
+     "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxOWFNkcktFNlprQzBKYTQ4TjRxTHVJS1oyWThKMUZOem40UVhTZkFUUm9lcEY4eHVzS1BweC1pRjNDTjBmV2FrLWhKemVTa2M5b0VySVdDb29WT2tkSGd5a3E3VGlkR2pZY1U1Q0I0bEFBVWtuX3d0SlNYeFhtejBPUWlvLUYwMHJNcTF4R0lNVmVHVUpzQVBpWGR5eWdMQmJ0Vm1OT0htVXg5d0U2V21Pd205djBrRmwxRlFvanBZTU9WY2VFSFF0dno5WnJlVkl3MXFrcjBESmpnY2VFeklVd2hSMVdRZGhYMW5DVGx3?oc=5",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "floods"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "India Braces for Cyclone as El Niño Upends Global Storm Seasons",
+     "url": "https://www.claimsjournal.com/news/national/2026/10/27/340926.htm",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "cyclone"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "HCLTech expands Climate Action Grant to 24 countries, to give $1.25 million to four NPOs",
+     "url": "https://www.thehindubusinessline.com/info-tech/hcltech-expands-climate-action-grant-to-24-countries-to-give-125-million-to-four-npos/article71631161.ece",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "climate"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "Texas Hill Country Floods Inspire New Law for Emergency Weather Alerts",
+     "url": "https://www.insurancejournal.com/news/southcentral/2026/10/26/890322.htm",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "floods"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "Cyclone Arnab Tracker live: Current location",
+     "url": "https://economictimes.indiatimes.com/news/new-updates/cyclone-arnab-tracker-live-when-and-where-will-the-very-severe-cyclonic-storm-make-the-landfall-and-how-strong-will-it-be/articleshow/135223847.cms",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "cyclone"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "Aioi Nissay Dowa Insurance Maps Flooding Risks at 4,577 Road Locations Nationwide, Releases ‘Sonaeru Flood Map’ for Free",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE56dkM3ZUNVUVl2a0xBVi1NaUlYV1dpYWU3TUxiLVM4QkYySmpuNng0ZmRFVDNTVE5ZTjhxV2NpN3pfdllUNXJSYXNXc0NKV2dfZk9ZN0tmSDhUcWpIVmRv?oc=5",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "flood"
+     ],
+     "score": 1,
+     "origin": "signal"
+    }
+   ]
+  },
+  {
+   "id": "scitech",
+   "name": "Science & Tech",
+   "paper": "GS III",
+   "stories": [
+    {
+     "title": "GOVERNMENT OF INDIA INDIAN SPACE RESEARCH ORGANISATION BENGALURU TA CLAIM OF THE CANDIDATES CALLED FOR INTERVIEW FOR THE POST OF",
+     "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQUmhWanZsY0lKWVFvT01zZUJhVUwyOUZkTGo2dTBzS3JFQmE2M01hRGstcWoyc2M2elBneHhPQy03Y29yb0dKazFCVE44NVhTYlNrTVBKSlVSZ2Fmck5nOGxmanZmNlNBS082V3k5RVNNV3ExY3RBckN0dmZBMEJKR3RFSVNZZ2dRTEwxNC1RTVlGeEY1TlNQamRhaw?oc=5",
+     "source": "ISRO",
+     "date": "2026-10-27T05:42:54+00:00",
+     "why": [
+      "space",
+      "research"
+     ],
+     "score": 2,
+     "origin": "feed"
+    },
+    {
+     "title": "UP Cabinet okays Rs 104-cr project for cybersecurity, IIT Kanpur to manage ops for 3 years",
+     "url": "https://economictimes.indiatimes.com/tech/technology/up-cabinet-okays-rs-104-cr-project-for-cybersecurity-iit-kanpur-to-manage-ops-for-3-years/articleshow/135229790.cms",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "iit"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "To, Sr./Administrative Officer, ISRO Headquarters, Bengaluru महोदय/महोदया/Sir/Madam, वषय/Sub : Under",
+     "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxObExnUy1XSV9rSnVCU3BER2J2ampxdVU1VDRmLVFXS1B2cHg0UU1jWFZ5SUduS1RfSXZLTjE5WlRvUWJvZjNUR21qellueDVkYkUwWkNBWWt4cE5qNVBnZmotTXpzZDl0NUIwYnhDTGVRNXFTandleTRaSEgxbTFCQ1g5dGhWNm5lMWxndk1raVI1VFhwRXdET3V1dW9MMEVQcEtn?oc=5",
+     "source": "ISRO",
+     "date": "2026-10-27T11:43:31+00:00",
+     "why": [
+      "isro"
+     ],
+     "score": 1,
+     "origin": "feed"
+    }
+   ]
+  },
+  {
+   "id": "security",
+   "name": "Security",
+   "paper": "GS III",
+   "stories": [
+    {
+     "title": "Jordan attacks militants in Syria in retaliation for church attack",
+     "url": "https://www.theguardian.com/world/2026/oct/26/jordan-attacks-militants-syria-retaliation-for-last-week-church-attack",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "militants"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "Cert-In and states rush to patch PHP flaws across govt portals",
+     "url": "https://economictimes.indiatimes.com/tech/technology/cert-in-and-states-rush-to-patch-php-flaws-across-govt-portals/articleshow/135216600.cms",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "cert-in"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "Ransomware Attacks Rise 50% in Q3, Says NordLayer",
+     "url": "https://www.insurancejournal.com/news/national/2026/10/27/890350.htm",
+     "source": "",
+     "date": "2026-10-27T15:38:53+00:00",
+     "why": [
+      "ransomware"
+     ],
+     "score": 1,
+     "origin": "signal"
+    }
+   ]
+  },
+  {
+   "id": "social",
+   "name": "Social Issues",
+   "paper": "GS I & II",
+   "stories": [
+    {
+     "title": "Increase women’s representation in Police force, says Bengaluru Police Commissioner",
+     "url": "https://www.thehindu.com/news/national/karnataka/increase-womens-representation-in-police-force-says-city-police-commissioner/article71632863.ece",
+     "source": "The Hindu",
+     "date": "2026-10-27T21:45:35+05:30",
+     "why": [
+      "women"
+     ],
+     "score": 1,
+     "origin": "feed"
+    },
+    {
+     "title": "Census 2027: Can private teachers or citizens be forced to do Census duty?",
+     "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPRG5BTUVBUC1wYVdlRjBldGdtUHhCSkhGUXBQRE9HQUw3am1tY3NWR0lkMzlkYVhEZGdIZHpNbzJyUVJ1WDdXeV9Bb2Vjb1ZheTZPZXBQcVZQak5DZlVnYkJMODJWaHdQcVJrYjBBSVAyUXEzQlh0VlF5RVFvcktQZkNUZXhyMWhzX2ZycEJwTFp5SWh0cGVPMVhuejZBOUhoQWNaWW9tZTM1ZTM5azBlM0JzNkN6YTFGZGlKTmRn0gHEAUFVX3lxTFBRLU9DSHlXaF8wVUJfc1ZlOTVTcjhHT00zd190WlFFR21WYVlBM3RtcGM4cTBYQTE3WGJjMGRqZDJNUF8xc1BNaXFEYjhZZkF5NWx3ZmUwSjljRXRFWXdYcVh0bVFHZE9PLUtDcXV0MlREcHR6YmlSSUZ4aEhON2JYcjZIQkcxalJyNGJqMGRsdnVHQU9adkdoX3N3WlhzazNhS09NZUVjay1MaGV3dWZRMzkxb3FKbDExaFlQUGw2clB1X3k?oc=5",
+     "source": "The Indian Express",
+     "date": "2026-10-26T14:31:00+00:00",
+     "why": [
+      "census"
+     ],
+     "score": 1,
+     "origin": "feed"
+    }
+   ]
+  }
+ ],
+ "stats": {
+  "read": 168,
+  "placed": 31,
+  "excluded_or_unmatched": 108,
+  "stale": 3,
+  "duplicate": 0
+ }
+}
