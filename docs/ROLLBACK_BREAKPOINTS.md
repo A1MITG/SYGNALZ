@@ -14,6 +14,8 @@ live), and the exact command to roll it back.
 
 | Point | Branch | Commit | Saved (IST) | What it holds | Roll back with |
 |---|---|---|---|---|---|
+| Before Civils (live) | `rollback/2026-10-27-before-civils-live` | `b305323` | 2026-10-27 20:45 | `final` as of the 11:05 UTC build, before any Signal Civils (/civils) work. Live site at that moment: `signals-deploy` `ffc9f57`. | Revert the Civils commits on `final`, push; the next scheduled build ships it. Fastest for the live site: Vercel *Instant Rollback* to the deployment before Civils. |
+| Before Civils (test) | `rollback/2026-10-27-before-civils-test` | `cba0275` | 2026-10-27 20:45 | `staging` with T-01 to T-07 and PR #32, before Signal Civils. Test site at that moment: `staging-deploy` `558b7e3`. | `git push --force origin rollback/2026-10-27-before-civils-test:refs/heads/staging`, or revert the Civils commit on `staging`; or *Sync staging* to reset it to `final`. |
 | Before global feeds | `rollback/2026-10-26-before-global-feeds` | `ae39a46` | 2026-10-26 22:00 | `final` as of the 15:37 UTC build: BP-70 and everything before it, before the global feeds and insurance sources work. Live site at that moment: `signals-deploy` `b625258`. | Revert the global-feeds commits on `final` (or `git diff ae39a46 origin/final -- app config scripts` to see them), push, then *Run workflow*. Fastest for the live site: Vercel dashboard > news-letter-cxo > Deployments > the 15:37 UTC deployment > *Instant Rollback*. |
 
 
