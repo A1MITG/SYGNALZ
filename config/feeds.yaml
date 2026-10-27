@@ -1,0 +1,425 @@
+# The global feed registry (2026-10-26): insurance publications from
+# Amit's "News sources" sheet, world business feeds for Asia, Africa and
+# Latin America, and Google News insurance searches in more countries than
+# India. Read by app/scraper/registry.py; the older feeds in
+# app/scraper/sources.py are unchanged and get their country from
+# `host_countries` below.
+#
+# Every entry carries where it reports from and in what language, so the
+# ranker can cap one country's share of a tile (config/priority.yaml,
+# geo_cap) and non-English stories go through the native-language gate and
+# translation (app/intelligence/language.py, app/scraper/translate.py).
+#
+#   method   rss      the publisher's own feed (headline, teaser, picture)
+#            search   a Google News search; `site:` limits it to one
+#                     publisher. Used where the site has no feed a scraper
+#                     can read. Gives headline, publisher and date only.
+#   fallback a search run only when the rss returns nothing, so a feed that
+#            moves or blocks the bot still yields that publisher's stories.
+#   country  ISO 3166 alpha-2, or null for a feed that covers many countries
+#            (the story's own country then comes from its headline).
+#   trade    true for a sector specialist: its stories need not name the
+#            sector in the headline, only pass the exclude list.
+#
+# Not added from the sheet: NATE (nate.com) and Sohu (m.sohu.com) are
+# portals reposting other outlets' stories; News1 and Korea Insurance News,
+# and China Daily, cover the same ground at the source. Revista Apolice
+# Health repeated the Insurance row's URL; its health section is used. Segs
+# and "Segs Insurance" overlapped; only the insurance section is read.
+#
+# None of these could be checked from the planning session (its network
+# blocks them). The build logs each feed's count ("feed <id>: N stories"),
+# so a feed that comes back empty shows in the Actions log.
+
+regions:
+  americas_n: [US, CA]
+  latam: [MX, BR, AR, CL, CO, PE, UY, PY, BO, EC, VE, PA, CR, GT, DO, PR, CU, HN, SV, NI]
+  europe: [GB, IE, FR, DE, ES, IT, PT, NL, BE, CH, AT, SE, NO, DK, FI, PL, CZ, GR, HU, RO, UA, RU, TR, LU]
+  mena: [AE, SA, QA, KW, BH, OM, IL, IR, IQ, JO, LB, EG, MA, DZ, TN, LY, YE, SY]
+  africa: [NG, ZA, KE, GH, ET, TZ, UG, RW, SN, CI, CM, ZW, ZM, AO, MZ, BW, NA, SD, CD]
+  south_asia: [IN, PK, BD, LK, NP]
+  apac: [CN, HK, TW, JP, KR, SG, MY, ID, TH, VN, PH, AU, NZ, MM, KH]
+
+feeds:
+  # ---- Brazil: insurance trade press (pt) ----
+  - id: insurancecorp
+    name: Insurance Corp
+    url: https://insurancecorp.com.br/pt/feed/
+    fallback: 'site:insurancecorp.com.br'
+    country: BR
+    language: pt
+    sectors: [insurance]
+    trade: true
+  - id: revistaapolice_seguros
+    name: Revista Apólice
+    url: https://revistaapolice.com.br/categoria/noticias/seguros/feed/
+    fallback: 'site:revistaapolice.com.br seguro'
+    country: BR
+    language: pt
+    sectors: [insurance]
+    trade: true
+  - id: revistaapolice_saude
+    name: Revista Apólice
+    url: https://revistaapolice.com.br/categoria/noticias/saude/feed/
+    country: BR
+    language: pt
+    sectors: [insurance]
+    trade: true
+  - id: segs_seguros
+    name: Segs
+    url: https://www.segs.com.br/seguros?format=feed&type=rss
+    fallback: 'site:segs.com.br seguros'
+    country: BR
+    language: pt
+    sectors: [insurance]
+    trade: true
+  - id: revistacobertura_vida
+    name: Revista Cobertura
+    url: https://www.revistacobertura.com.br/categoria/noticias/vida-previdencia-e-ap/feed/
+    fallback: 'site:revistacobertura.com.br'
+    country: BR
+    language: pt
+    sectors: [insurance]
+    trade: true
+  - id: revistacobertura_saude
+    name: Revista Cobertura
+    url: https://www.revistacobertura.com.br/categoria/noticias/saude-e-odonto-noticias/feed/
+    country: BR
+    language: pt
+    sectors: [insurance]
+    trade: true
+
+  # ---- Mexico and Latin America ----
+  - id: mexiconewsdaily
+    name: Mexico News Daily
+    url: https://mexiconewsdaily.com/category/news/feed/
+    country: MX
+    language: en
+    sectors: [business, world]
+    trade: false
+  - id: elimparcial
+    name: El Imparcial
+    search: 'site:elimparcial.com (seguro OR aseguradora OR seguros)'
+    country: MX
+    language: es
+    sectors: [insurance]
+    trade: false
+  - id: latinoinsurance
+    name: LatinoInsurance
+    search: 'site:latinoinsurance.com'
+    country: null
+    region: latam
+    language: es
+    sectors: [insurance]
+    trade: true
+  - id: bnamericas
+    name: BNamericas
+    search: 'site:bnamericas.com'
+    edition: en-US
+    country: null
+    region: latam
+    language: en
+    sectors: [business, energy, banking]
+    trade: false
+
+  # ---- Spain (es) ----
+  - id: grupoaseguranza
+    name: Grupo Aseguranza
+    search: 'site:grupoaseguranza.com'
+    country: ES
+    language: es
+    sectors: [insurance]
+    trade: true
+  - id: mutuas_seguros
+    name: Mutuas & Seguros
+    url: https://mutuas-seguros.es/category/seguros/feed/
+    fallback: 'site:mutuas-seguros.es'
+    country: ES
+    language: es
+    sectors: [insurance]
+    trade: true
+  - id: inese
+    name: Inese
+    url: https://www.inese.es/feed/
+    fallback: 'site:inese.es'
+    country: ES
+    language: es
+    sectors: [insurance]
+    trade: true
+  - id: segurosnews
+    name: Seguros News
+    url: https://segurosnews.com/feed
+    fallback: 'site:segurosnews.com'
+    country: ES
+    language: es
+    sectors: [insurance]
+    trade: true
+  - id: eleconomista_seguros
+    name: El Economista
+    search: 'site:eleconomista.es (seguros OR aseguradora OR aseguradoras)'
+    country: ES
+    language: es
+    sectors: [insurance]
+    trade: false
+
+  # ---- Italy (it) ----
+  - id: assinews
+    name: Assinews
+    url: https://www.assinews.it/feed/
+    fallback: 'site:assinews.it'
+    country: IT
+    language: it
+    sectors: [insurance]
+    trade: true
+
+  # ---- Middle East (en) ----
+  - id: meinsurancereview
+    name: Middle East Insurance Review
+    search: 'site:meinsurancereview.com'
+    edition: en-AE
+    country: null
+    region: mena
+    language: en
+    sectors: [insurance]
+    trade: true
+  - id: zawya_insurance
+    name: Zawya
+    search: 'site:zawya.com (insurance OR insurer OR takaful OR reinsurance)'
+    edition: en-AE
+    country: null
+    region: mena
+    language: en
+    sectors: [insurance, business]
+    trade: false
+    press_releases: true
+
+  # ---- Japan (ja) ----
+  - id: shinnihon
+    name: Shinnihon
+    search: 'site:shinnihon-ins.co.jp'
+    country: JP
+    language: ja
+    sectors: [insurance]
+    trade: true
+  - id: prtimes
+    name: PR Times
+    url: https://prtimes.jp/index.rdf
+    country: JP
+    language: ja
+    sectors: [insurance, business]
+    trade: false
+    press_releases: true
+
+  # ---- Vietnam (vi) ----
+  - id: vneconomy
+    name: VnEconomy
+    url: https://vneconomy.vn/tai-chinh.rss
+    fallback: 'site:vneconomy.vn bảo hiểm'
+    country: VN
+    language: vi
+    sectors: [business, banking, insurance]
+    trade: false
+  - id: tinnhanhchungkhoan
+    name: Tin nhanh chứng khoán
+    search: 'site:tinnhanhchungkhoan.vn bảo hiểm'
+    country: VN
+    language: vi
+    sectors: [insurance, banking]
+    trade: false
+
+  # ---- Korea (ko) ----
+  - id: news1_finance
+    name: News1
+    search: 'site:news1.kr 보험'
+    country: KR
+    language: ko
+    sectors: [insurance, banking]
+    trade: false
+  - id: insnews
+    name: Korea Insurance News
+    url: https://www.insnews.co.kr/rss/allArticle.xml
+    fallback: 'site:insnews.co.kr'
+    country: KR
+    language: ko
+    sectors: [insurance]
+    trade: true
+
+  # ---- China (zh) ----
+  - id: chinadaily_cn
+    name: China Daily
+    search: 'site:chinadaily.com.cn 保险'
+    country: CN
+    language: zh
+    sectors: [insurance, business]
+    trade: false
+
+  # ---- World business: Asia, Africa ----
+  - id: nikkei_asia
+    name: Nikkei Asia
+    url: https://asia.nikkei.com/rss/feed/nar
+    country: null
+    region: apac
+    language: en
+    sectors: [business, world]
+    trade: false
+  - id: scmp_business
+    name: South China Morning Post
+    url: https://www.scmp.com/rss/92/feed
+    country: null
+    region: apac
+    language: en
+    sectors: [business]
+    trade: false
+  - id: scmp_china
+    name: South China Morning Post
+    url: https://www.scmp.com/rss/4/feed
+    country: CN
+    language: en
+    sectors: [world, business]
+    trade: false
+  - id: allafrica_business
+    name: allAfrica
+    url: https://allafrica.com/tools/headlines/rdf/business/headlines.rdf
+    country: null
+    region: africa
+    language: en
+    sectors: [business]
+    trade: false
+
+  # ---- Google News insurance searches, one per edition ----
+  # The India edition stays on for the GCC searches in sources.py; these add
+  # the rest of the world. Each keeps its 20 newest results.
+  - id: gnews_insurance_us
+    search: '(insurer OR reinsurance OR insurtech OR underwriting)'
+    edition: en-US
+    country: null
+    region: americas_n
+    language: en
+    sectors: [insurance]
+    trade: false
+  - id: gnews_insurance_gb
+    search: '(insurer OR reinsurance OR insurtech OR "Lloyd''s")'
+    edition: en-GB
+    country: null
+    region: europe
+    language: en
+    sectors: [insurance]
+    trade: false
+  - id: gnews_insurance_sg
+    search: '(insurer OR reinsurance OR insurtech OR takaful)'
+    edition: en-SG
+    country: null
+    region: apac
+    language: en
+    sectors: [insurance]
+    trade: false
+  - id: gnews_insurance_za
+    search: '(insurer OR reinsurance OR insurtech OR "short-term insurance")'
+    edition: en-ZA
+    country: null
+    region: africa
+    language: en
+    sectors: [insurance]
+    trade: false
+  - id: gnews_insurance_br
+    search: '(seguradora OR resseguro OR SUSEP)'
+    edition: pt-BR
+    country: BR
+    language: pt
+    sectors: [insurance]
+    trade: false
+  - id: gnews_insurance_mx
+    search: '(aseguradora OR reaseguro OR CNSF)'
+    edition: es-MX
+    country: MX
+    language: es
+    sectors: [insurance]
+    trade: false
+  - id: gnews_insurance_jp
+    search: '(損保 OR 生保 OR 再保険)'
+    edition: ja-JP
+    country: JP
+    language: ja
+    sectors: [insurance]
+    trade: false
+
+# Google News editions: (hl, gl, ceid) per edition key.
+editions:
+  en-US: [en-US, US, 'US:en']
+  en-GB: [en-GB, GB, 'GB:en']
+  en-SG: [en-SG, SG, 'SG:en']
+  en-ZA: [en-ZA, ZA, 'ZA:en']
+  en-AE: [en, AE, 'AE:en']
+  pt-BR: [pt-BR, BR, 'BR:pt-419']
+  es-MX: [es-419, MX, 'MX:es-419']
+  es-ES: [es, ES, 'ES:es']
+  it-IT: [it, IT, 'IT:it']
+  ja-JP: [ja, JP, 'JP:ja']
+  ko-KR: [ko, KR, 'KR:ko']
+  vi-VN: [vi, VN, 'VN:vi']
+  zh-CN: [zh-CN, CN, 'CN:zh-Hans']
+
+# A search with no `edition` uses its language's home edition.
+default_edition:
+  en: en-US
+  pt: pt-BR
+  es: es-ES
+  it: it-IT
+  ja: ja-JP
+  ko: ko-KR
+  vi: vi-VN
+  zh: zh-CN
+
+# Insurance trade press among the older feeds: their stories need no
+# "insurance" word for the Insurance rubric's weaker words to count
+# (app/analysis/signals.py INSURANCE_ANCHORS).
+insurance_trade_hosts:
+  - insurancejournal.com
+  - businessinsurance.com
+  - claimsjournal.com
+  - reinsurancene.ws
+  - propertycasualty360.com
+  - insurancebusinessmag.com
+  - nationalunderwriter.com
+  - thinkadvisor.com
+
+# Where the older feeds (app/scraper/sources.py) and NewsAPI's outlets
+# report from: the publisher's home country, used when a headline names no
+# country of its own. Matched on the host and its parent domains.
+host_countries:
+  economictimes.indiatimes.com: IN
+  timesofindia.indiatimes.com: IN
+  indiatimes.com: IN
+  livemint.com: IN
+  business-standard.com: IN
+  thehindubusinessline.com: IN
+  moneycontrol.com: IN
+  hrkatha.com: IN
+  analyticsindiamag.com: IN
+  insurancejournal.com: US
+  businessinsurance.com: US
+  propertycasualty360.com: US
+  claimsjournal.com: US
+  insurancebusinessmag.com: US
+  nationalunderwriter.com: US
+  thinkadvisor.com: US
+  reinsurancene.ws: GB
+  bbc.co.uk: GB
+  bbci.co.uk: GB
+  bbc.com: GB
+  theguardian.com: GB
+  aljazeera.com: QA
+  rcrwireless.com: US
+  mobileworldlive.com: GB
+  supplychaindive.com: US
+  theloadstar.com: GB
+  freightwaves.com: US
+  manufacturingdive.com: US
+  nzherald.co.nz: NZ
+  scoop.co.nz: NZ
+  punchng.com: NG
+  vanguardngr.com: NG
+  reuters.com: GB
+  ft.com: GB
+  wsj.com: US
+  bloomberg.com: US

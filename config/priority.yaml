@@ -39,3 +39,50 @@ developments:
 hard_ignore:
   not_current: true        # failed the §3 freshness gate
   no_domain: true          # cleared no domain's evidence bar in §4
+
+# 2026-10-26 — One country's share of a tile (app/analysis/geo_cap.py).
+#
+# The geo-bias check of 26 Oct found 45% of stories about India and 89% from
+# Indian, UK or US outlets, with Banking and Economy about 90% Indian. A soft
+# cap: past `max_country_share` of a tile's slots, a country's further
+# stories wait; slots left empty are then refilled from them, best first, so
+# the cap never empties a tile and never promotes a story below its floor.
+# One slot is kept for the best story from outside the tile's top two
+# countries when one qualifies. GCC is India by design; People Movers and
+# Executive Pulse are built elsewhere and are not capped.
+geo_cap:
+  max_country_share: 0.5
+  reserved_other_region_slots: 1
+  min_candidates_for_cap: 4
+  exempt_signals: [Signal GCC]
+
+# One slot per tile for Africa or Latin America (Amit, 2026-10-26: "must be
+# decent and impactful, and explainable"). Used only when the tile has no
+# story from those regions and a candidate clears every bar below; it then
+# replaces the tile's weakest story. Each pick carries a one-line reason
+# shown on the site, and the build log says why a tile got none.
+focus_region_slot:
+  regions: [africa, latam]
+  min_event_significance: 3     # something happened (config/events.yaml, 1-5)
+  min_score_share: 0.5          # score at least half the tile's median score
+  allow_press_releases: false
+  exempt_signals: [Signal GCC]
+
+# The Insurance tile is the global insurance view, so it is stricter, and it
+# ranks by what happened (config/events.yaml) rather than keyword count.
+insurance_interest:
+  max_per_country: 2
+  min_regions: 3
+  max_press_releases: 1
+  no_event_weight: 0.8
+  event_weights:
+    REGULATION: 1.5
+    NATURAL_DISASTER: 1.5
+    ACQUISITION: 1.4
+    MERGER: 1.4
+    IPO: 1.4
+    EARNINGS: 1.3
+    FUNDING: 1.2
+    PRODUCT_LAUNCH: 1.2
+    EXECUTIVE_APPOINTMENT: 1.1
+    EXECUTIVE_EXIT: 1.1

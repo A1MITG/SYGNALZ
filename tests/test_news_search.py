@@ -132,6 +132,7 @@ class TestWiring(unittest.TestCase):
              mock.patch.object(scraper, 'scrape_source', feed), \
              mock.patch.object(scraper, 'scrape_news_sitemap', no_sitemap), \
              mock.patch.object(scraper, 'scrape_news_search', search), \
+             mock.patch.object(scraper, 'registry_feeds', lambda: []), \
              mock.patch.dict(os.environ, {'NEWS_API_KEY': ''}):
             articles = _run(scraper.run_scraper())
         self.assertEqual(articles[0]['url'], 'https://www.livemint.com/acme')
