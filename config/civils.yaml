@@ -1,0 +1,148 @@
+# Signal Civils (/civils, 2026-10-27): current affairs by the UPSC syllabus.
+#
+# Read only by app/civils.py and scripts/build_civils.py. The main site's
+# tiles, feeds and scoring never read this file, and nothing here changes
+# them. No AI step: every story is placed by the keyword rules below, and
+# the page shows which words placed it ("why").
+#
+# A story goes to the tile whose terms it matches best. A term of one word
+# scores 1, a phrase of two or more words scores 2 (it is more specific).
+# A story that matches an `exclude` term is left out whatever else it
+# matches: results, share moves, deals and hires are business news the
+# exam does not test. A feed's `tile` only breaks a tie, or places a story
+# from that feed that matched at least one term somewhere.
+#
+# A headline that names another country (`foreign`) cannot go to a tile
+# marked india_only, and each such name adds half a point to International
+# Relations once that tile matched a term of its own (a foreign name alone
+# places nothing). A term in capitals (US, UK, EU) matches only in capitals.
+#
+# Checked by tests/test_civils_harness.py against data/civils_gold.jsonl.
+
+per_tile: 8
+freshness_hours: 48     # government sources post less often than newsrooms
+
+# Main-site tiles whose stories are business news the exam does not test.
+skip_signal_tiles: [gcc, insurance, telecom, supplychain, manufacturing]
+
+tiles:
+  - id: polity
+    india_only: true
+    name: Polity & Governance
+    paper: GS II
+    terms: [parliament, lok sabha, rajya sabha, bill, amendment, constitution, constitutional,
+            supreme court, high court, sc bench, constitution bench, election commission, assembly polls,
+            governor, assent, ordinance, president promulgates, panchayat, municipal, federalism,
+            lokpal, cag, upsc, standing committee, judiciary, judge, collegium, chief justice,
+            act, rules under, notifies rules, reservation, delimitation, sedition, fundamental right,
+            article 370, tribunal, cji, election, polls, by-election, model code]
+  - id: schemes
+    india_only: true
+    name: Schemes & Policy
+    paper: GS II
+    terms: [scheme, yojana, mission, abhiyan, cabinet approves, pm-kisan, pmay, ayushman bharat,
+            jal jeevan, niti aayog, index, sdg, national policy, ministry launches, centre launches,
+            government extends, crore farmers, beneficiaries, welfare, subsidy, msp, ration,
+            mgnrega, swachh, digital india, startup india, pli scheme, scheme for]
+  - id: ir
+    name: International Relations
+    paper: GS II
+    terms: [mea, bilateral, summit, 2+2, foreign minister, foreign ministers, foreign secretary, treaty, un,
+            united nations, general assembly, security council, brics, quad, g20, sco, asean, saarc,
+            nato, eu, imf, wto, sanctions, ceasefire, gaza, ukraine, putin, israel, iran, pakistan,
+            china, bangladesh, nepal, sri lanka, maldives, bhutan, afghanistan, indo-pacific,
+            diplomatic, embassy, envoy, visa, free movement, sudan, peace talks, netanyahu]
+  - id: economy
+    india_only: true
+    name: Economy
+    paper: GS III
+    terms: [rbi, repo rate, inflation, cpi, wpi, gdp, nso, fiscal deficit, current account,
+            gst, gst council, budget, monetary policy, interest rates, rate cut, rate hike, bps,
+            banking, banks, sebi, rupee, forex, exports, imports, trade deficit, iip, pmi,
+            unemployment, tax, disinvestment, economy, economic survey, msme, agriculture,
+            kharif, rabi, ethanol blending, coal india, ongc]
+  - id: environment
+    name: Environment & Ecology
+    paper: GS III
+    terms: [cyclone, flood, floods, earthquake, landslide, heatwave, drought, monsoon, disaster,
+            ndma, evacuates, evacuation, climate, cop31, cop30, unfccc, emissions, net zero,
+            biodiversity, wildlife, tiger, cheetah, elephant, species, national park, sanctuary,
+            protected areas, wetland, ramsar, forest, mangrove, glacier, glaciers, pollution,
+            air quality, aqi, stubble burning, grap, ngt, sewage, yamuna, ganga, plastic, el nino,
+            typhoon, conservation, eco-sensitive, mines, mining ban]
+  - id: scitech
+    name: Science & Tech
+    paper: GS III
+    terms: [isro, pslv, gslv, sample return, space mission, gaganyaan, chandrayaan, aditya, satellite, space, launch vehicle,
+            drdo test, semiconductor, chip, quantum, qubit, iisc, iit, icmr, gene therapy, crispr,
+            vaccine, biotech, nuclear reactor, research, discoveries, mathematics, physics,
+            ai mission, supercomputer, 5g, 6g, dpi, upi, aadhaar]
+  - id: security
+    name: Security
+    paper: GS III
+    terms: [defence, dac, procurement, navy, army, air force, iaf, commissions, frigate, submarine,
+            missile, exercise, maoist, maoists, naxal, encounter, terror, terrorist, nia, afspa,
+            insurgency, border, loc, lac, infiltration, cyber attack, cyberattacks, cert-in,
+            ransomware, drone strike, militants, howitzer, military, security forces, bsf, crpf]
+  - id: social
+    india_only: true
+    name: Social Issues
+    paper: GS I & II
+    terms: [nfhs, stunting, malnutrition, anaemia, maternal mortality, infant mortality, srs,
+            literacy, school, dropout, udise, aser, education report, learning gaps, women,
+            gender, child marriage, labour force, female participation, manual scavenging,
+            caste, tribal, scheduled tribes, disability, elderly, poverty, migrants, census,
+            health survey, sex ratio]
+
+exclude: [quarterly, results, reinsurance, insurers, ai army, profit, profits, revenue, ipo, shares, share price, stock,
+          stocks, valuation, brokerage, earnings, appoints, names, acquisition, takeover, buyout,
+          listing, ebitda, investors, shareholders, mou, mous, market cap, sensex, nifty, deal,
+          capex, raises, funding round, tariff recovery, conflict of interest, court ruling over]
+
+foreign: [US, UK, EU, USA, america, american, britain, british, tories, labour party, israel, netanyahu,
+          gaza, iran, china, chinese, pakistan, russia, putin, ukraine, japan, japanese, korea, brazil, lula,
+          france, germany, saudi, syria, jordan, sudan, texas, florida, california, europe, finnish,
+          norwegian, australia, canada, trump]
+
+# About 8 public-interest sources, read only for this page. Each publisher's
+# feed first; a Google News search of the same site when the feed is empty
+# or blocked. None could be fetched from the planning session (its network
+# blocks them): the build log shows each feed's count ("civils feed <id>: N").
+feeds:
+  - id: civ_pib
+    name: Press Information Bureau
+    url: https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3
+    fallback: 'site:pib.gov.in'
+    tile: schemes
+  - id: civ_prs
+    name: PRS Legislative Research
+    search: 'site:prsindia.org'
+    tile: polity
+  - id: civ_mea
+    name: Ministry of External Affairs
+    search: 'site:mea.gov.in'
+    tile: ir
+  - id: civ_hindu_national
+    name: The Hindu
+    url: https://www.thehindu.com/news/national/feeder/default.rss
+    fallback: 'site:thehindu.com/news/national'
+    tile: null
+  - id: civ_ie_explained
+    name: Indian Express Explained
+    url: https://indianexpress.com/section/explained/feed/
+    fallback: 'site:indianexpress.com/article/explained'
+    tile: null
+  - id: civ_down_to_earth
+    name: Down To Earth
+    url: https://www.downtoearth.org.in/rss
+    fallback: 'site:downtoearth.org.in'
+    tile: environment
+  - id: civ_isro
+    name: ISRO
+    search: 'ISRO OR site:isro.gov.in'
+    tile: scitech
+  - id: civ_sc_observer
+    name: Supreme Court Observer
+    url: https://www.scobserver.in/feed/
+    fallback: 'site:scobserver.in'
+    tile: polity
