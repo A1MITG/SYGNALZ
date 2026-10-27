@@ -4,10 +4,21 @@ A breakpoint (BP) is a commit you can safely return to. This register lists ever
 one, what it changed, how far it has travelled (local → committed → pushed →
 live), and the exact command to roll it back.
 
-*Last updated: 2026-09-28 (BP-25 to BP-30, BP-32 and BP-33 live; BP-34 to BP-36 live; BP-31 pushed; BP-37 to BP-56 live; BP-57 pushed) · working branch `final` (GitHub default) · repo `A1MITG/NewsLetter-CXO`
-(GitHub now redirects it to `A1MITG/SYGNALZ`).*
+*Last updated: 2026-10-26 22:10 IST (BP-58 to BP-70 recorded; all live except BP-69, a workflow-only change; test site T-01 to T-03 recorded) · working branch `final` (GitHub default) · test branch `staging` · repo `A1MITG/SYGNALZ`.*
+
+**Kept for both sites from 2026-10-26.** Every change that reaches the live site gets a BP row below and a line in *Live site*; every change tested on the test site gets a T row in *Test site*. Before a risky change, a rollback point is saved as a `rollback/<date>-<what>` branch (tag pushes are refused from Claude's cloud sessions, so branches stand in for tags; `final`'s `vercel.json` turns Vercel off for every branch, so these never deploy).
 
 ---
+
+## Rollback points
+
+| Point | Branch | Commit | Saved (IST) | What it holds | Roll back with |
+|---|---|---|---|---|---|
+| Before global feeds (live) | `rollback/2026-10-27-before-global-feeds-live` | `b305323` | 2026-10-27 20:45 | `final` just before PR #27 (same commit as Before Civils (live)). | `git revert c37d8d2` on `final`, push, rebuild; or reset `final` to this branch |
+| Before Civils (live) | `rollback/2026-10-27-before-civils-live` | `b305323` | 2026-10-27 20:45 | `final` as of the 11:05 UTC build, before any Signal Civils (/civils) work. Live site at that moment: `signals-deploy` `ffc9f57`. | Revert the Civils commits on `final`, push; the next scheduled build ships it. Fastest for the live site: Vercel *Instant Rollback* to the deployment before Civils. |
+| Before Civils (test) | `rollback/2026-10-27-before-civils-test` | `cba0275` | 2026-10-27 20:45 | `staging` with T-01 to T-07 and PR #32, before Signal Civils. Test site at that moment: `staging-deploy` `558b7e3`. | `git push --force origin rollback/2026-10-27-before-civils-test:refs/heads/staging`, or revert the Civils commit on `staging`; or *Sync staging* to reset it to `final`. |
+| Before global feeds | `rollback/2026-10-26-before-global-feeds` | `ae39a46` | 2026-10-26 22:00 | `final` as of the 15:37 UTC build: BP-70 and everything before it, before the global feeds and insurance sources work. Live site at that moment: `signals-deploy` `b625258`. | Revert the global-feeds commits on `final` (or `git diff ae39a46 origin/final -- app config scripts` to see them), push, then *Run workflow*. Fastest for the live site: Vercel dashboard > news-letter-cxo > Deployments > the 15:37 UTC deployment > *Instant Rollback*. |
+
 
 ## Stages
 
@@ -27,7 +38,21 @@ label in their commit message. BP-07 and BP-08 are assigned here.
 
 | BP | Commit | Date (IST) | Stage | Change | What it did | Roll back with |
 |---|---|---|---|---|---|---|
-| BP-57 | `8034e76` | 2026-09-29 | Pushed | MoversSources | More same-day moves for People Movers from sources we may read (LinkedIn is not scraped: its terms forbid it). HRKatha's feed; Analytics India Magazine through its news sitemap; news sitemaps keep leadership moves (up to 8) besides GCC stories. The move detector learned the Indian press's phrasings (joins X as CHRO, brings in, takes charge, elevated to, quits as): 11 more moves in 740 headlines, none wrong. Party leadership races and "PM" are politics; market roundups are not moves. On 29 Sep the row went from 4 cards to 8. Google News move searches tested and left out (mostly small firms). Tests: `tests/test_movers_sources.py` (9). | `git revert 8034e76`, then rebuild and republish |
+| BP-71 | `c37d8d2` (PR #27, squash) | 2026-10-27 | **Live** | GlobalFeeds | Test rows T-04 to T-07 shipped together: 36 tagged global feeds (Amit's insurance sources, Nikkei Asia, SCMP, allAfrica, BNamericas), native-language screen and translation (gpt-6-luna via Actions variables), tighter Insurance rubric, per-country cap, Insurance region filter, one Africa/LatAm slot per tile with "Why it's here", event detector patterns. Live from the 15:30 UTC build (`signals-deploy` `da2b89e`). | `git revert c37d8d2` on `final`, push, rebuild |
+| BP-70 | `8428bd9` | 2026-10-26 | **Live** | LiveDeploysFix (PR #17) | Removes PR #16's Vercel `ignoreCommand`, which had cancelled the live production deploys of `signals-deploy` (live stuck on the 25 Oct 11:54 UTC build). Live from the 19:37 UTC build on 25 Oct. | `git revert 8428bd9`, then rebuild (do not: it brings the cancelled deploys back) |
+| BP-69 | `8af9d0f` | 2026-10-25 | Pushed (workflow only) | TestSite (PR #16) | `staging` branch builds the test site into `staging-deploy` (news-letter-cxo-sj8j); light builds reuse live data; `sync-staging.yml` moves `staging` up to `final` on Sundays 04:00 UTC or by hand. No change to the live pages. | `git revert 8af9d0f` |
+| BP-68 | `de20691` | 2026-10-25 | **Live** | VercelLiveOnly (PR #14) | Vercel deploys only `signals-deploy`; branch and preview deploys off (the free plan's 100 deploys a day had been hit). | `git revert de20691`, then rebuild |
+| BP-67 | `67aff6f` | 2026-10-25 | **Live** | DailyArchive (PR #7) | Each build files the previous IST day's last build as `public/snapshots/YYYY-MM-DD.json`; `/archive` page with a date bar and in-browser MiniLM search. | `git revert -m 1 67aff6f`, then rebuild |
+| BP-66 | `1ff2330` | 2026-10-25 | **Live** | UpdatedUnderHero (PR #10) | Updated time under the hero headline; archive strip under the clocks. | `git revert -m 1 1ff2330`, then rebuild |
+| BP-65 | `4e3c90a` | 2026-10-25 | **Live** | TickerIcons (PR #13) | All 14 ticker icons' animation visible on the dark ticker (blue and amber contrast). | `git revert 4e3c90a`, then rebuild |
+| BP-64 | `455a34b` | 2026-10-25 | **Live** | DefenceIcon (PR #12) | Animated Defence icon in the running ticker. | `git revert 455a34b`, then rebuild |
+| BP-63 | `39abe14` | 2026-10-25 | **Live** | EnergyIcon (PR #11) | Animated Energy icon in the running ticker. | `git revert 39abe14`, then rebuild |
+| BP-62 | `27d952d` | 2026-10-25 | **Live** | WholePictures (PR #9) | People Movers and Executive Pulse pictures shown whole; a lone card laid on its side. | `git revert 27d952d`, then rebuild |
+| BP-61 | `5237de6` | 2026-10-25 | **Live** | NoPins (PR #8) | Pinned stories and moves removed; a People Movers story shows only there. | `git revert 5237de6`, then rebuild |
+| BP-60 | `898c1d3` | 2026-10-11 | **Live** | LayoutTips (PR #4) | Engine tips row right-aligned again. | `git revert -m 1 898c1d3`, then rebuild |
+| BP-59 | `e8e79a1` | 2026-10-11 | **Live** | UITweaks (PR #3) | Showcase closing tagline; Today's Brief back in the nav with a glow; floating Main page and scroll-to-top buttons; ticker pill and source count removed. | `git revert -m 1 e8e79a1`, then rebuild |
+| BP-58 | `6c3518f` | 2026-10-04 | **Live** | Every3Hours | Refresh every 3 hours on the IST grid, driven by the hourly watchdog. | `git revert 6c3518f`, then rebuild |
+| BP-57 | `8034e76` | 2026-09-29 | **Live** | MoversSources | More same-day moves for People Movers from sources we may read (LinkedIn is not scraped: its terms forbid it). HRKatha's feed; Analytics India Magazine through its news sitemap; news sitemaps keep leadership moves (up to 8) besides GCC stories. The move detector learned the Indian press's phrasings (joins X as CHRO, brings in, takes charge, elevated to, quits as): 11 more moves in 740 headlines, none wrong. Party leadership races and "PM" are politics; market roundups are not moves. On 29 Sep the row went from 4 cards to 8. Google News move searches tested and left out (mostly small firms). Tests: `tests/test_movers_sources.py` (9). | `git revert 8034e76`, then rebuild and republish |
 | BP-56 | `a616aba` | 2026-09-29 | **Live** | VercelTrigger | GitHub started every scheduled build 4-7 h late (25-28 Sep) and ran the hourly watchdog 3 times in ~22 h. Vercel Cron now calls `/api/trigger-build` at 03:30 and 13:30 UTC (09:00/19:00 IST, within the hour on the free plan); `deploy/api/trigger-build.js` starts the workflow through GitHub's API. Fails closed without `CRON_SECRET` and `GITHUB_DISPATCH_TOKEN` in the Vercel project (the user adds both); refuses callers without the secret; skips when a build is running. The publish step writes `vercel.json` (cleanUrls + crons) and copies `api/`. GitHub's schedule and the watchdog stay as backups. Tests: `tests/test_build_trigger.py` (7). Deployed 29 Sep 12:51 IST; at 13:52 IST, after the user's second run, `/api/trigger-build` still answered 503 (variables not visible to the Production deployment). | `git revert a616aba`, then rebuild and republish |
 | BP-55 | `6fff55d` | 2026-09-28 | **Live** | SiteGuard | Feed headlines and links are escaped on every page (two raw sinks in the Command Center, one on /signals); every link from data goes through `safeUrl()` (web addresses only). `scripts/site_health.py`: `gate` before publishing (files, fresh data, at least 3 tiles with a story, web links only; an error keeps the last good build live), `deployed` after publishing (Vercel serves this build; /, /brief, /signals answer), `watchdog` hourly via `.github/workflows/site-watchdog.yml` (data over an hour late for a slot: start a build, fail). A failed run is GitHub's email to the repo owner. `build-signals.yml`: one build at a time, output committed on the branch as it is at the end of the run. Tests: `tests/test_site_guard.py` (17). | `git revert 6fff55d`, then rebuild and republish |
 | BP-54 | `44c4975` | 2026-09-28 | **Live** | GCCEvidence | The GCC rubric consolidated as the GCC engine's Evidence layer: seven sections (geography, meaning, entity, facets, not evidence, story type, reading) and one `read_gcc()` pass. 11 branches in three dimensions (new: Global mandate, Research); capability-area and sector tables whose terms are the facets' terms; the Greater Chennai Corporation and the GNU compiler as other meanings of "GCC"; city tags (core or emerging); story type (event, research, analysis, profile, commentary, opinion). The same 20 GCC stories qualify before and after on 1,013 real headlines. Tests: `tests/test_gcc_rubric.py` (48). Known: `test_single_keyword_rate_is_low_on_live_corpus` fails locally on the 28 Sep corpus (13%), on the code before BP-52 too; CI skips it. | `git revert 44c4975`, then rebuild and republish |
@@ -114,7 +139,8 @@ The workflow force-pushes this branch on every build (twice a day from BP-26), s
 
 | Live state | Commit | Published | What visitors saw |
 |---|---|---|---|
-| **Current** | `2bc6ab8` | 2026-09-29 13:13 | *Run workflow* by hand at 13:12 IST on `bb326f1` (`final` rebuild `aed7c1f`), the second after BP-56's push (the first, 12:50 IST, deployed `d089361`). Carries BP-46 to BP-56: `/api/trigger-build` is deployed but answers 503, its Vercel variables not yet visible to it. |
+| **Current** | `b625258` | 2026-10-26 21:07 | Scheduled build of 15:37 UTC on `final` `ae39a46`. Carries BP-57 to BP-70. Saved as the *Before global feeds* rollback point (this commit is replaced by the next build; use Vercel's Instant Rollback to return to it). |
+| Earlier | `2bc6ab8` | 2026-09-29 13:13 | *Run workflow* by hand at 13:12 IST on `bb326f1` (`final` rebuild `aed7c1f`), the second after BP-56's push (the first, 12:50 IST, deployed `d089361`). Carries BP-46 to BP-56: `/api/trigger-build` is deployed but answers 503, its Vercel variables not yet visible to it. |
 | Previous | `a456b59` | 2026-09-29 08:36 | Re-run by hand at 08:36 IST of the 28 Sep 21:55 IST run (`final` rebuild `94a0ba4`). Carries BP-46 to BP-55 (BP-55's `safeUrl` verified on the live page). Scheduled builds of 28 Sep started 6 h 36 min and 6 h 42 min late. |
 | Earlier | `f4134e2` | 2026-09-28 10:26 | *Run workflow* by hand at 10:25 IST on `d6c6c68` (`final` rebuild commit `0a199e8`), after the user's *Run workflow* at 10:02 IST (`final` rebuild `8d00d3c`; corrected 29 Sep: not the scheduled build, which ran at 15:36 IST) had published BP-46 to BP-50. Carries BP-46 to BP-51, verified on the live site: the 2400px card (`?v=3`), the analytics tag, the Leaders on Record intro, the visit counter, Mehli Mistry once and no Vučić in People Movers. |
 | Earlier | `d51ffff` | 2026-09-27 08:59 | *Run workflow* by hand at 08:58 IST on `a572f1e` (`final` rebuild commit `89a55d9`), the last of three that morning: 08:24 IST on `64a1812` published BP-43 (the new About the Builder line), 08:45 IST on `973177f` published BP-44 (the LinkedIn/X tags and card). Carries BP-37 to BP-44. |
@@ -150,6 +176,28 @@ Also revert the matching code breakpoint (for example BP-07). Otherwise the next
 
 ---
 
+## Test site (`staging` → `staging-deploy` → news-letter-cxo-sj8j.vercel.app)
+
+Changes are tried here before `final`. A push to `staging` builds the test site (light build: live data, this branch's pages); *Run workflow* on `staging` with *full* fetches fresh news. `sync-staging.yml` resets `staging` to `final` on Sundays, so anything still only on `staging` must be merged to `final` or re-applied before then.
+
+| T | Commit on `staging` | Date (IST) | Stage | Change | Roll back with |
+|---|---|---|---|---|---|
+| T-04 | `e0e976f` (PR #22, squash) | 2026-10-26 | **Live** as BP-71 (2026-10-27) | Global feeds (36 tagged feeds: Amit's insurance sources, Nikkei Asia, SCMP, allAfrica, BNamericas, Google News in 7 more editions), native-language screen and Haiku translation, tighter Insurance rubric, per-country cap, Insurance region filter. Rollback point: `rollback/2026-10-26-before-global-feeds`. | `git revert e0e976f` on `staging`, push; or *Sync staging* to reset it to `final` |
+| T-05 | `d3670f9` (PR #24, squash) | 2026-10-26 | **Live** as BP-71 (2026-10-27) | LLM made swappable: `app/llm.py` + `config/llm.yaml`; provider/model set by Actions variables `SIGNAL_LLM_PROVIDER` / `SIGNAL_LLM_MODEL` (anthropic, openai or none). Default Claude Haiku 5.5. | `git revert d3670f9` on `staging`, push |
+| T-06 | `65c5914` (PR #25, squash) | 2026-10-26 | **Live** as BP-71 (2026-10-27) | One Africa/LatAm slot per tile: only a story with a real event (significance ≥3) and score ≥ half the tile median, no press releases, GCC exempt; pick shows "Why it's here". | `git revert 65c5914` on `staging`, push |
+| T-07 | `99e31d3` (PR #26, squash) | 2026-10-26 | **Live** as BP-71 (2026-10-27) | Event detector learns election wins, profit rises/falls and new laws. | `git revert 99e31d3` on `staging`, push |
+| T-03 | `05438d8` | 2026-10-26 | Test site | Ticker logos: blue outer lines on Energy and Insurance (PR #20) | `git revert 05438d8` on `staging`, push |
+| T-02 | `6ea8038` | 2026-10-26 | Test site | Ticker logos: each logo's own blue outline animates, bigger amber blobs (PR #19) | `git revert 6ea8038` on `staging`, push |
+| T-01 | `0bbe732` | 2026-10-26 | Test site | Ticker logos: bold blue lines, circling blue arc, amber mover (PR #18) | `git revert 0bbe732` on `staging`, push |
+
+| Test site state | Commit | Published | What it shows |
+|---|---|---|---|
+| **Current** | `b32ab86` | 2026-10-26 01:29 | First test-site build after PR #16 and #17. Later `staging` pushes (T-01 to T-03) build on top of it. |
+
+**Roll the test site back:** revert on `staging` and push (that rebuilds it), or run *Sync staging* to reset it to `final`.
+
+---
+
 ## Rollback recipes
 
 **Look at a breakpoint without changing anything**
@@ -177,3 +225,5 @@ Only for **Committed** (unpushed) work. For pushed work it needs a force-push th
 1. Commit with the next ID in the subject, e.g. `BP-09 HeroAnimation: …`.
 2. Add a row to the top of the breakpoints table, with its stage and rollback command.
 3. When it's pushed, and again when it's live, update the **Stage** column.
+4. A change tried on the test site first gets a T row under *Test site*; when it reaches `final`, it gets its BP row too.
+5. Before a risky change, save a rollback point: `git push origin <commit>:refs/heads/rollback/<date>-<what>` and add it to *Rollback points*.
