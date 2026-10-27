@@ -193,6 +193,11 @@ a { color: inherit; }
 .panel-item h4 { font-family: var(--serif); font-weight: 400; font-size: 15.5px; line-height: 1.4; margin-bottom: 8px; }
 .panel-item h4 a { color: var(--navy); text-decoration: none; }
 .panel-item h4 a:hover { color: var(--blue); text-decoration: underline; }
+.panel-where { font-size: 12px; color: var(--slate-500, #64748b); margin-top: -4px; }
+.panel-why { font-size: 12px; color: #92400e; background: #fef3c7; border-radius: 4px; padding: 2px 6px; margin-top: 4px; display: inline-block; }
+.panel-regions { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 0 12px; border-bottom: 1px solid var(--slate-100); }
+.region-chip { font: inherit; font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--slate-200, #e2e8f0); background: #fff; color: var(--navy); cursor: pointer; }
+.region-chip.on { background: var(--navy); border-color: var(--navy); color: #fff; }
 .panel-empty { padding: 30px 0; text-align: center; color: var(--slate-light); font-style: italic; font-size: 13.5px; }
 
 /* ---------- Band 1: Hero (~30% viewport) ---------- */
@@ -2104,6 +2109,19 @@ a { color: inherit; }
     }
 
     // ---------- Engine panel: top-5 real articles, per engine ----------
+    const REGION_NAMES = { all: 'All', americas_n: 'North America', latam: 'Latin America', europe: 'Europe',
+        mena: 'Middle East', africa: 'Africa', south_asia: 'South Asia', apac: 'Asia-Pacific' };
+    const LANGUAGE_NAMES = { pt: 'Portuguese', es: 'Spanish', it: 'Italian', ja: 'Japanese',
+        ko: 'Korean', vi: 'Vietnamese', zh: 'Chinese' };
+    const COUNTRY_NAMES = { IN: 'India', US: 'United States', GB: 'United Kingdom', CA: 'Canada',
+        BR: 'Brazil', MX: 'Mexico', AR: 'Argentina', CL: 'Chile', CO: 'Colombia', PE: 'Peru',
+        ES: 'Spain', IT: 'Italy', FR: 'France', DE: 'Germany', CH: 'Switzerland', NL: 'Netherlands',
+        IE: 'Ireland', RU: 'Russia', UA: 'Ukraine', TR: 'Türkiye', AE: 'UAE', SA: 'Saudi Arabia',
+        QA: 'Qatar', IL: 'Israel', IR: 'Iran', EG: 'Egypt', NG: 'Nigeria', ZA: 'South Africa',
+        KE: 'Kenya', GH: 'Ghana', ET: 'Ethiopia', CN: 'China', HK: 'Hong Kong', TW: 'Taiwan',
+        JP: 'Japan', KR: 'South Korea', SG: 'Singapore', MY: 'Malaysia', ID: 'Indonesia',
+        TH: 'Thailand', VN: 'Vietnam', PH: 'Philippines', AU: 'Australia', NZ: 'New Zealand',
+        PK: 'Pakistan', BD: 'Bangladesh', LK: 'Sri Lanka' };
     function openEnginePanel(id) {
         const eng = ENGINE_DATA[id];
         if (!eng) return;
@@ -2115,10 +2133,32 @@ a { color: inherit; }
         } else if (!eng.articles || !eng.articles.length) {
             body.innerHTML = `<div class="panel-empty">No story in the last 24 hours.</div>`;
         } else {
-            body.innerHTML = eng.articles.map(a => `
-                <div class="panel-item">
+            // Each story says where it is from, and the language it was
+            // translated from. The Insurance panel filters by region.
+            const regions = [...new Set(eng.articles.map(a => a.region).filter(Boolean))];
+            const chips = (id === 'insurance' && regions.length > 1)
+                ? `<div class="panel-regions" role="group" aria-label="Filter by region">` +
+                  ['all', ...regions].map(r => `<button type="button" class="region-chip${r === 'all' ? ' on' : ''}" data-region="${esc(r)}">${esc(REGION_NAMES[r] || r)}</button>`).join('') +
+                  `</div>`
+                : '';
+            body.innerHTML = chips + eng.articles.map(a => {
+                const where = [COUNTRY_NAMES[a.country] || '', a.language ? `translated from ${LANGUAGE_NAMES[a.language] || a.language}` : '']
+                    .filter(Boolean).join(' · ');
+                return `
+                <div class="panel-item" data-region="${esc(a.region || '')}">
                     <h4><a href="${safeUrl(a.url)}" target="_blank" rel="noopener">${esc(a.title)}</a></h4>
-                </div>`).join('');
+                    ${where ? `<div class="panel-where"${a.title_original ? ` title="${esc(a.title_original)}"` : ''}>${esc(where)}</div>` : ''}
+                    ${a.why ? `<div class="panel-why">Why it's here: ${esc(a.why)}</div>` : ''}
+                </div>`;
+            }).join('');
+            body.querySelectorAll('.region-chip').forEach(chip => chip.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const r = chip.dataset.region;
+                body.querySelectorAll('.region-chip').forEach(c => c.classList.toggle('on', c === chip));
+                body.querySelectorAll('.panel-item').forEach(item => {
+                    item.style.display = (r === 'all' || item.dataset.region === r) ? '' : 'none';
+                });
+            }));
         }
         document.getElementById('panelBackdrop').classList.add('open');
     }
