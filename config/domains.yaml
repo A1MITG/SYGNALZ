@@ -100,7 +100,7 @@ domains:
   gcc:
     signal: Signal GCC
     engine: gcc
-    display: GCC & Enterprise Technology
+    display: India GCCs & Enterprise Technology
   insurance:
     signal: Signal Insurance
     engine: insurance

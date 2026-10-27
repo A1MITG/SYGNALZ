@@ -715,6 +715,18 @@ a { color: inherit; }
     font-size: 20px; line-height: 1.6; color: #e8edf4; margin: 0;
     max-width: min(54ch, 100%);
 }
+.founder-link {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 28px;
+    font-family: var(--mono); font-size: 14px; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: #9dbcff; text-decoration: none;
+    border-bottom: 1px solid rgba(157,188,255,.35); padding-bottom: 4px;
+}
+.founder-link span { color: #c9d6ee; text-transform: none; letter-spacing: .02em; }
+.founder-link:hover { border-bottom-color: #9dbcff; }
+.founder-link:focus-visible { outline: 2px solid #9dbcff; outline-offset: 4px; }
+.founder-link .arrow { display: inline-block; transition: transform .15s ease; }
+.founder-link:hover .arrow { transform: translate(2px, -2px); }
+@media (prefers-reduced-motion: reduce) { .founder-link .arrow { transition: none; } }
 
 @media (max-width: 860px) {
     .founder { padding: 64px 0; }
@@ -859,7 +871,7 @@ a { color: inherit; }
         <div class="tile live fade-up" data-id="gcc" draggable="true" onclick="if(!event.target.closest('.tile-controls')) openEnginePanel('gcc')">
             <svg class="tile-vector" viewBox="0 0 240 224" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M40 178H200" class="vln"/><rect x="56" y="104" width="34" height="74" class="vbar"/><rect x="98" y="66" width="38" height="112" class="vbar"/><rect x="144" y="90" width="32" height="88" class="vbar"/><g class="vwin"><circle cx="65" cy="118" r="2"/><circle cx="65" cy="134" r="2"/><circle cx="65" cy="150" r="2"/><circle cx="74" cy="118" r="2"/><circle cx="74" cy="134" r="2"/><circle cx="74" cy="150" r="2"/><circle cx="83" cy="118" r="2"/><circle cx="83" cy="134" r="2"/><circle cx="83" cy="150" r="2"/><circle cx="108" cy="82" r="2"/><circle cx="108" cy="100" r="2"/><circle cx="108" cy="118" r="2"/><circle cx="108" cy="136" r="2"/><circle cx="117" cy="82" r="2"/><circle cx="117" cy="100" r="2"/><circle cx="117" cy="118" r="2"/><circle cx="117" cy="136" r="2"/><circle cx="126" cy="82" r="2"/><circle cx="126" cy="100" r="2"/><circle cx="126" cy="118" r="2"/><circle cx="126" cy="136" r="2"/><circle cx="153" cy="106" r="2"/><circle cx="153" cy="124" r="2"/><circle cx="153" cy="142" r="2"/><circle cx="162" cy="106" r="2"/><circle cx="162" cy="124" r="2"/><circle cx="162" cy="142" r="2"/></g></svg>
             <div class="tile-body">
-                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="gcc"></span>GCC &amp; Enterprise Tech</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
+                <div class="tile-top"><span class="tile-cat"><span class="tcat-ic" data-icon="gcc"></span>India GCCs &amp; Enterprise Tech</span><span class="tile-controls"><button class="tile-ctrl pin-btn" title="Pin">⭐</button><button class="tile-ctrl hide-btn" title="Hide">👁</button></span></div>
                 <div class="tile-headline-cycle" data-cycle>
                     <h4 class="tile-headline"></h4>
                     <h4 class="tile-headline"></h4>
@@ -1155,7 +1167,7 @@ a { color: inherit; }
                 <p>Today, Signal gathers news from many sources and shows it through different lenses. <strong>That&rsquo;s Phase One.</strong></p>
                 <p>The goal is to turn that information, step by step, into intelligence:</p>
                 <ul class="mf-flow" aria-label="What happened to Why it matters to Who it affects to What to watch to What to do"><li><span class="step">What happened</span></li><li><span class="to" aria-hidden="true">&rarr;</span><span class="step">Why it matters</span></li><li><span class="to" aria-hidden="true">&rarr;</span><span class="step">Who it affects</span></li><li><span class="to" aria-hidden="true">&rarr;</span><span class="step">What to watch</span></li><li><span class="to" aria-hidden="true">&rarr;</span><span class="step">What to do</span></li></ul>
-                <p>Read, above all, for what it means for India, Indians and Indian businesses.</p>
+                <p>Read, above all, for what it means for the people and businesses it touches, wherever they are.</p>
             </div>
         </article>
         <article class="mf-chapter">
@@ -1201,6 +1213,7 @@ a { color: inherit; }
                 <p class="founder-roles">Builder &middot; Husband &middot; Father &middot; Dog Lover &middot; Corporate Survivor</p>
                 <hr class="founder-rule">
                 <p class="founder-statement">Restarting my journey of building things &mdash; one idea, a&nbsp;couple of weekends, and a&nbsp;million tokens at a time!</p>
+                <a class="founder-link" href="https://www.linkedin.com/in/a1mit/" target="_blank" rel="noopener">LinkedIn <span>linkedin.com/in/a1mit</span> <i class="arrow" aria-hidden="true">&#8599;</i></a>
             </div>
         </div>
     </div>
