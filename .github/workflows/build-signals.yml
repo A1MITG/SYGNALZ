@@ -151,6 +151,15 @@ jobs:
           cp app/static/command_center_source.html public/command_center.html
           python -c "from pathlib import Path; from scripts.archive_snapshot import archived_dates, render_archive_page; Path('public/archive.html').write_text(render_archive_page(Path('app/static/command_center_source.html').read_text(encoding='utf-8'), archived_dates()), encoding='utf-8')"
 
+      # Signal Civils (/civils): today's stories placed by the UPSC syllabus,
+      # plus ~8 public feeds of its own (config/civils.yaml). Keyword rules,
+      # no AI step, no NewsAPI. Reads public/command_center_data.json and
+      # writes only civils.html and civils_data.json, so a failure here
+      # leaves the rest of the build as it is.
+      - name: Build Signal Civils page
+        continue-on-error: true
+        run: python scripts/build_civils.py
+
       # The test site's build is not committed: `staging` keeps only source
       # changes, so promoting it to `final` never clashes with the live builds.
       - name: Commit build to working branch
@@ -198,6 +207,11 @@ jobs:
           # /snapshots/YYYY-MM-DD.json. The snapshots live in the working
           # branch, since this branch is replaced on every build.
           cp public/archive.html /tmp/signals-deploy/archive.html
+          # Signal Civils: /civils (civils.html) and its data. The step above
+          # may have failed; then the page is simply left out of this build.
+          for f in civils.html civils_data.json; do
+            [ -f "public/$f" ] && cp "public/$f" /tmp/signals-deploy/ || true
+          done
           mkdir -p /tmp/signals-deploy/snapshots /tmp/signals-deploy/search
           cp -r public/snapshots/. /tmp/signals-deploy/snapshots/
           cp -r public/search/. /tmp/signals-deploy/search/
@@ -247,6 +261,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html command_center_data.json img signals.html signal.css signals.json brief.html archive.html snapshots search vercel.json api
+          git add civils.html civils_data.json 2>/dev/null || true
           git commit -q -m "Signals rebuild: $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" "$DEPLOY_BRANCH"
 
