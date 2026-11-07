@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGNAL — Today's Brief · Saturday, 7 November 2026</title>
+<!-- Rendered by app/analysis/brief.py for both the static build (public/brief.html)
+     and Flask's /brief. Text only by design: no images, no scripts. -->
+<style>
+:root {
+    --navy: #0b1524; --ink: #0a0a0a; --slate: #5a6472; --slate-light: #8a94a2;
+    --rule: #e3e6ea; --link: #1a4fbf; --paper: #ffffff;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: Consolas, "SF Mono", monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); }
+.brief { max-width: 720px; margin: 0 auto; padding: 44px 24px 56px; }
+header { border-bottom: 2px solid var(--navy); padding-bottom: 14px; margin-bottom: 8px; }
+.mast { font: 700 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--slate); margin-bottom: 10px; }
+h1 { font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.2; color: var(--navy); }
+.dateline { margin-top: 6px; font-size: 13px; color: var(--slate); }
+section { padding: 22px 0 4px; border-bottom: 1px solid var(--rule); }
+section:last-of-type { border-bottom: 0; }
+h2 { font: 700 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--navy); margin-bottom: 12px; }
+ol { list-style: none; }
+li { margin-bottom: 14px; line-height: 1.45; }
+li a { font-family: var(--serif); font-size: 16.5px; color: var(--link); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+.src { font: 10.5px var(--mono); color: var(--slate-light); white-space: nowrap; }
+.sum { font-size: 14px; color: var(--slate); }
+.empty { padding: 28px 0; font-family: var(--serif); font-size: 16px; color: var(--slate); }
+footer { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--slate); }
+footer a { color: var(--link); }
+@media (max-width: 600px) { .brief { padding: 28px 16px 36px; } h1 { font-size: 25px; } }
+.back-home { position: fixed; left: max(24px, env(safe-area-inset-left)); bottom: max(28px, env(safe-area-inset-bottom)); z-index: 10; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 16px 0 14px; border-radius: 999px; background: var(--navy); color: #fff; font: 600 12px/1 var(--sans); letter-spacing: .02em; text-decoration: none; box-shadow: 0 6px 18px rgba(11,21,36,.22); transition: transform .2s, box-shadow .2s; }
+.back-home:hover, .back-home:focus-visible { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(11,21,36,.3); }
+.back-home:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+/* Always on screen, so the way back is there from the first line. A short entrance on load only. */
+@media (prefers-reduced-motion: no-preference) {
+    .back-home { animation: back-home-in .45s cubic-bezier(.2,.8,.2,1) .15s both; }
+    @keyframes back-home-in { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+}
+@media (max-width: 1023px) { .back-home { left: max(20px, env(safe-area-inset-left)); bottom: max(24px, env(safe-area-inset-bottom)); } }
+@media (max-width: 600px) { .back-home { left: max(16px, env(safe-area-inset-left)); bottom: max(18px, env(safe-area-inset-bottom)); } }
+@media print { .back-home { display: none; } footer a { color: inherit; text-decoration: none; } li a { color: var(--ink); } }
+/* Scroll-to-top: shared by the Command Center and Today's Brief. CSS only:
+   #top scrolls to the start of the page, the scroll timeline fades it in. */
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+.to-top { position: fixed; right: max(24px, env(safe-area-inset-right)); bottom: max(24px, env(safe-area-inset-bottom)); z-index: 80; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; background: #0b1524; color: #fff; border: 1.5px solid rgba(255,255,255,.38); box-shadow: 0 8px 22px rgba(0,0,0,.3); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s, background-color .25s; }
+.to-top svg { width: 20px; height: 20px; transition: transform .25s cubic-bezier(.2,.8,.2,1); }
+.to-top:hover { background: #14243a; transform: translateY(-3px); box-shadow: 0 14px 30px rgba(11,21,36,.34); }
+.to-top:hover svg { transform: translateY(-2px); }
+.to-top:active { transform: translateY(0) scale(.94); transition-duration: .08s; }
+.to-top:focus-visible { outline: 2px solid #2f6fed; outline-offset: 3px; }
+@supports (animation-timeline: scroll()) {
+    .to-top { animation: to-top-in linear both; animation-timeline: scroll(); animation-range: 240px 420px; }
+    @keyframes to-top-in { from { opacity: 0; scale: .6; translate: 0 16px; visibility: hidden; } to { opacity: 1; scale: 1; translate: 0 0; visibility: visible; } }
+}
+@media (max-width: 1023px) { .to-top { right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); } }
+@media (max-width: 600px) { .to-top { width: 44px; height: 44px; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); } }
+@media print { .to-top { display: none; } }
+</style>
+<!-- Vercel Web Analytics: anonymous page views (no cookies). -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<article class="brief">
+    <header>
+        <p class="mast">SIGNAL · Today's Brief</p>
+        <h1>Saturday, 7 November 2026</h1>
+        <p class="dateline">Updated 19:58 IST · 66 stories across 14 areas · headlines link to the original reporting</p>
+    </header>
+
+    <section>
+        <h2>Global Affairs</h2>
+        <ol>
+
+            <li><a href="https://www.theguardian.com/world/2026/nov/07/us-carries-out-another-round-of-minor-strikes-on-iran-trump-says" target="_blank" rel="noopener">US carries out another round of ‘minor’ strikes on Iran, Trump says</a> <span class="src">theguardian.com</span><br><span class="sum">The president’s announcement comes days after an earlier attack on Iran was made public, and as diplomatic efforts to end the conflict have accelerated Donald Trump has…</span></li>
+
+            <li><a href="https://www.theguardian.com/world/2026/nov/07/strait-of-hormuz-qatar-plan-iran-nuclear-inspections" target="_blank" rel="noopener">Strait of Hormuz could reopen as part of Qatari plan for Iran nuclear inspections</a> <span class="src">theguardian.com</span><br><span class="sum">Trump still considering new assault on Iran nuclear sites – though threats less credible after Vance remarks Qatar, the lead mediator in the US-Iran conflict, is seeking…</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMiygFBVV95cUxPM2tPSWQzRUJtYUoybmxjbm80d3FXa1RuUllxaVkta040Y0F4UF91Vm13Tl9PekJiai02UEdiTE5KSi1DOUhzUm0xNG5PcW9uYmN3VWpJalU5MlAwRWo2QXRHMTdPYzVMdVF1d2V6ZW1hRjRleUFXMTBlQzhZd1FNWGNONnliQmdudVBaQ1pROHBYYUVWY3B3Mll4aW1qcVZGbVVfRnhueVFGSUNrZGtoOGtXdHZjeW9EOTB1Z3RMd1dkREppMk9Xb1FB?oc=5" target="_blank" rel="noopener">Mideast Stocks: UAE shares fall as geopolitical uncertainty keeps traders cautious</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://www.scmp.com/news/china/military/article/3373649/trumps-war-secretary-hegseth-and-pacific-command-chief-paparo-may-soon-visit-china" target="_blank" rel="noopener">Trump’s war secretary Hegseth and Pacific Command chief Paparo may ‘soon visit China’</a> <span class="src">scmp.com</span><br><span class="sum">Pentagon chief Pete Hegseth and US Pacific Command head Admiral Samuel Paparo may visit China “soon”, according to a veteran China hand.</span></li>
+
+            <li><a href="https://www.scmp.com/news/us/economy-trade-business/article/3373616/us-china-trade-chiefs-hold-call-ahead-trump-xi-summit-shenzhen" target="_blank" rel="noopener">US, China trade chiefs hold call ahead of Trump-Xi summit in Shenzhen</a> <span class="src">scmp.com</span><br><span class="sum">US Treasury Secretary Scott Bessent and Trade Representative Jamieson Greer held a video call with Chinese Vice-Premier He Lifeng on Friday, as both sides moved to…</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Economy, Business &amp; Markets</h2>
+        <ol>
+
+            <li><a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/openai-gets-11-billion-funding-at-1-25-trillion-valuation-report/articleshow/135624687.cms" target="_blank" rel="noopener">OpenAI gets $11 billion funding at $1.25 trillion valuation: Report</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">OpenAI completed a substantial funding round, securing $11 billion to increase its valuation to $1.25 trillion.</span></li>
+
+            <li><a href="https://www.theguardian.com/business/2026/nov/06/global-stocks-plunge-amid-ai-slowdown-fears-after-democrats-midterm-triumph" target="_blank" rel="noopener">Global stocks fall amid ‘big worries over AI’ after Democrats’ midterms triumph</a> <span class="src">theguardian.com</span><br><span class="sum">Asian and European markets follow US tech rout with many analysts predicting more waves of selling to come European and Asian stock markets fell sharply on Friday after…</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/anthropic-ipo-valuation-why-investors-are-lowering-expectations-after-wall-street-selloff-11794013538561.html" target="_blank" rel="noopener">Anthropic IPO valuation: Why investors are lowering expectations after Wall Street sell-off</a> <span class="src">livemint.com</span><br><span class="sum">Anthropic&#39;s IPO valuation expectations have fallen sharply after a Wall Street sell-off, with investors now discussing a range of $1.2 trillion to $1.3 trillion, down…</span></li>
+
+            <li><a href="https://www.business-standard.com/markets/ipo/coca-cola-india-bottling-arm-hcch-files-drhp-ipo-99-75-crore-shares-126110700766_1.html" target="_blank" rel="noopener">Coca-Cola&#39;s India bottling arm HCCH files DRHP for 997.5 million-share IPO</a> <span class="src">business-standard.com</span><br><span class="sum">The proposed IPO will be entirely an offer for sale by promoter Hindustan Coca-Cola Overseas Holdings, with no proceeds going to HCCH; the company reported ₹11,663 crore…</span></li>
+
+            <li><a href="https://timesofindia.indiatimes.com/business/international-business/us-stocks-wall-street-bounces-back-in-green-after-hitting-18-month-low-as-chipmakers-rally/articleshow/135624761.cms" target="_blank" rel="noopener">US stocks: Wall street bounces back after hitting 18-month low as chipmakers rally</a> <span class="src">timesofindia.indiatimes.com</span><br><span class="sum">Wall Street showed signs of recovery on Friday, driven primarily by semiconductor stocks, following earlier losses.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>AI, Technology &amp; Innovation</h2>
+        <ol>
+
+            <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxPcW9ZTGl0V2NPQUFXUlNlSUZPa3BQWHpyTkdGZmtEYnhTRW9sOFV5dUdyWlI2eXE3SlB6aFVoYlVLOVhnWVJLbUZURGRnRjFHeFF5OTVrTG5jQVVQM0Z1QzVSV3JNVzhWYjR4Z1hsMWhraUZpVzROTzNybWNWRTFFVFhJQ0hZQmc?oc=5" target="_blank" rel="noopener">A Reasonably Valued Insurtech Stock + Agentic AI</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://www.freightwaves.com/news/why-aviation-automation-still-hasnt-reached-small-planes" target="_blank" rel="noopener">Why Aviation Automation Still Hasn’t Reached Small Planes</a> <span class="src">freightwaves.com</span><br><span class="sum">Self-flying planes are closer than most aviation and freight pros think.</span></li>
+
+            <li><a href="https://www.claimsjournal.com/news/national/2026/11/06/341172.htm" target="_blank" rel="noopener">Berkshire’s Pivot to AI Bets Gets an Immediate Reality Check</a> <span class="src">claimsjournal.com</span><br><span class="sum">In his first year as Chief Executive Officer of Berkshire Hathaway Inc., Greg Abel has pushed the conglomerate into an entirely new area of investment: artificial…</span></li>
+
+            <li><a href="https://www.claimsjournal.com/news/national/2026/11/06/341154.htm" target="_blank" rel="noopener">Democrats Planning Flood of AI Bills When They Take Control of Congress</a> <span class="src">claimsjournal.com</span><br><span class="sum">Democrats are planning to unleash a flood of new legislation targeting artificial intelligence systems and data-center development when they take control of the U.S.…</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/china-blocks-softbank-s-5-4-billion-abb-robotics-deal-how-beijing-is-tightening-its-grip-on-strategic-technologies-11793977670665.html" target="_blank" rel="noopener">China blocks SoftBank’s $5.4 billion ABB robotics deal: How Beijing is tightening its grip on strategic technologies</a> <span class="src">livemint.com</span><br><span class="sum">China has blocked SoftBank’s $5.4 billion acquisition of ABB’s robotics business, citing concerns over strategic technology and data security.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>India GCCs &amp; Enterprise Technology</h2>
+        <ol>
+
+            <li><a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxNSG9wbnhSaVN6M21rZG5hNDdVVFBJa1NmbGY0V1lDZVBzaGtKM2NQdHVGaDdsNTN1Yk5UdTJPdmRWOVU3czktSWhtdHUwZXdpSTJpU3QwcG5NeHp2RlBuNW92RjRmYlVvMzcxWjVWSHpIT0tVMmxVUF9SeUNLdVZxZ3EtQkEtcW9pVVM2TmJKY2JwcFMydExPLW13TDI4MFJESXhPdmFVUnBwNW9MY2lJYUFGc0pDdw?oc=5" target="_blank" rel="noopener">NPCI sets up technology subsidiary to expand AI, blockchain and GCC services</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMivwFBVV95cUxNejhicGJoNE9jZ2hSOGctVEt0aHl4QkJtLXRXOFM0dTFuMlFGWDRCVklyWjV6Y0RwOGRsNU1OQnUxRlFNbjdEUnozdEFheERqamNrVjlVZm5TN094Y1Y5MXBuaDJYLURTSmh5d3ZmeDE0cmdWUVplTHhwdGRfYWExT3JBYkYtTy0tLXR3dnUzc05QZnd2NktWZWxIbGxIVjduUV8wZTIwNGJodkpDd2xBVnZCeGpueGtsUWU5MXJ5dw?oc=5" target="_blank" rel="noopener">GCCs Hire More AI and Data Experts as Shortage of Skilled Talent Grows</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMiuwFBVV95cUxORS1HTkUzcUFjcTBrQmdacTF5UWF4Z1hnc25vbGxmc0tJU28yMkhhR0lHZkdLektvVnVOSzM1SVNreEJHUElpSl8zSGZFYm95TEZsdnRvbHNpUGZWaDBFZm1UNW5ZR05UdUpZX3psS3U5WUZwTVpIajZZaVpoM0ZXQVhPLW1faS1rQ1N3eWp1TDJzaTljX2dISFZvTWw2d2NjdXg4TGxvUTh4Y2dKVzRoWHMzVkhNSzkxcnpN?oc=5" target="_blank" rel="noopener">AI, Data And Cybersecurity Drive 30.3% Of GCC Tech Hiring Demand</a> <span class="src">news.google.com</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Insurance &amp; Financial Services</h2>
+        <ol>
+
+            <li><a href="https://www.reinsurancene.ws/berkshire-hathaway-underwriting-earnings-fall-43-in-q3-as-tokio-marine-deal-supports-pc-reinsurance-premiums/" target="_blank" rel="noopener">Berkshire Hathaway underwriting earnings fall 43% in Q3 as Tokio Marine deal supports P&amp;C reinsurance premiums</a> <span class="src">reinsurancene.ws</span></li>
+
+            <li><a href="https://www.insurancejournal.com/news/east/2026/11/06/891758.htm" target="_blank" rel="noopener">AM Best Revises Outlook to Positive of Excess Reinsurance Underwriters</a> <span class="src">insurancejournal.com</span></li>
+
+            <li><a href="https://www.segs.com.br/seguros/458828-seguro-de-vida-como-o-corretor-pode-oferecer-acolhimento-e-suporte-a-familia-em-caso-de-sinistro" target="_blank" rel="noopener">Life insurance: How brokers can support families after a claim</a> <span class="src">segs.com.br</span><br><span class="sum">Dagliane dos Santos, vice president of Instituto Minha Vida Protegida, says compassionate service and clear guidance… When a family reports the death of a policyholder…</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMimwJBVV95cUxNS2lBdzhSWDhXOHlKZU96Sk9ITjU1Y2hjV1Y4ejlTMG1MZGUwZHBaNDVQR3lRZ2ZCTkNsdkNYcTl5R0dRakNiWnozS1E0N0FMSkdXSWNLR0prZVh2bFc2bWRxT3FRdV9JOUJleXdBTnh1QWg4UjB1RkdyWlRrdmlsd09BcFpFMVhfUVVNX1VSTktiLXJrNmFRcGNlckVtcjdaYUxDa0lqTEhsQUtHZzAyVEpJbVU3U1lEUzJNRWdWV3R3VWZoclBiR3pRZVUwamlTbTZUbHdodEdzZmRBUHg2VGlodm5ZUmRnaXdMUzk4dmcyMkZDZkVkenVCZ1Q1QTRmNFRoQnJJcmNUdjJTUmtUNHlxd3JvWTJFTW9j?oc=5" target="_blank" rel="noopener">BRK.A: Nine-month earnings rose, but Q3 results faced lower investment gains and weaker insurance underwriting</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://www.reinsurancene.ws/mandarin-re-to-establish-retakaful-window-to-deliver-risk-capacity-to-underserved-markets/" target="_blank" rel="noopener">Mandarin Re to establish retakaful window to deliver risk capacity to underserved markets</a> <span class="src">reinsurancene.ws</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Banking</h2>
+        <ol>
+
+            <li><a href="https://news.google.com/rss/articles/CBMidkFVX3lxTE8xb1c0bjYxTDdnM0JZQnRvOGtIeHpBYl8tb0VnLTdsRXFMSUlKOWJjZnZmMm1TNGRVUl9xZFpHUXljZ05QdXVYa1VDNFhoYW1LaGRyc2VYUHlqUUxFdC16dzEtdlo5eGJ6ZXpBNU9CNFgyMEpkQmc?oc=5" target="_blank" rel="noopener">Standard Chartered, SBI Back Crypto Insurer Soter as Series B Climbs Toward $66 Million</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/idbi-bank-stake-sale-very-very-remote-chance-of-finding-another-buyer-at-52-000-crore-says-dipam-secretary-chawla-11793971089575.html" target="_blank" rel="noopener">IDBI Bank stake sale: ‘Very, very remote’ chance of finding another buyer at  ₹52,000 crore, says DIPAM Secretary Chawla</a> <span class="src">livemint.com</span><br><span class="sum">After weighing cancellation, accepting the existing offer and seeking revised bids, the Core Group of Secretaries on Disinvestment chose to invite improved offers for…</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/nbfc-india-arka-fincap-tpg-rise-funds-kirloskar-11794028463025.html" target="_blank" rel="noopener">Kirloskar-backed NBFC Arka gets  ₹525 cr initial commitment from TPG’s Rise Funds</a> <span class="src">livemint.com</span><br><span class="sum">The investment could increase by another ₹275 crore, subject to Arka meeting specified business milestones and obtaining regulatory approvals.</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMipgJBVV95cUxOcGhEbjFNV3o3ejVEUG03aVhvNWNFZDV4NEhhbVR5Wm9wWllmendia29GS25tOWJRMzc4RjREWnNXaGxQaGFBTFVYSE1oWkpsMlg4OFJ0RnZUSWM5eDgyZFlkVmlYT2daLUExU1ktVy1OVFlIdkVKaGRaako1N1kzWU1PRUxEdko3Q2dXNlRMa1g0U3R5b2NUYkdzUDR3TF9CMXRUQzJWSHg2SjBNQUxZSm13THhvNmdyNTNab0gxR0tneE1fTTgwdzc1UHFyYk11RUhlY3AySEo2V194UXdQUllPSmdFQWtWYW5VUnVtYmdYYjJRZ2I3RU1iNzVnalE3OE9SUnAweDNVbTdER3pmWEdUSWw0Y0RxNFdoTG9KQ3FVSjRsV2c?oc=5" target="_blank" rel="noopener">KCB Bank Tanzania Becomes the First Bank to Integrate PayPal Services into Its Mobile App, Connecting Tanzanians to Global Payments</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/news/india/cbi-books-kishore-biyani-and-frl-in-904-crore-sbi-fraud-case/articleshow/135619292.cms" target="_blank" rel="noopener">Kishore Biyani, FRL booked in ₹904 cr SBI fraud case</a> <span class="src">economictimes.indiatimes.com</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Manufacturing</h2>
+        <ol>
+
+            <li><a href="https://www.thehindubusinessline.com/markets/q2-results-today-live-updates-hindalco-ind-bosch-siemens-aster-dm-coromandel-intl-gland-pharma-voltas-nuvama-wealth-3m-india-airtel-lic-titan-mahindra-ongc-company-results-06-november-2026/article71669522.ece" target="_blank" rel="noopener">Q2 Results Highlights: Hindalco Q2 profit zooms, Voltas up 51%, Aster DM, Gland Pharma surge 58%, Siemens grows 5%; Bosch, Coromandel, Honasa profit down</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">Q2 Results Today, 06th November 2026 Highlights : businessline brings you the latest quarterly earnings, outlook and more.</span></li>
+
+            <li><a href="https://www.livemint.com/companies/company-results/tata-steel-q2-profit-iron-ore-demand-noel-tata-steel-production-11794048612978.html" target="_blank" rel="noopener">Tata Steel beats Q2 profit estimates on strong demand, cost savings</a> <span class="src">livemint.com</span><br><span class="sum">Tata Steel management expects the second half of FY27 to be stronger than the first, supported by higher volumes, improved realisations and seasonally stronger demand.</span></li>
+
+            <li><a href="https://www.business-standard.com/companies/quarterly-results/tata-steel-q2-fy27-results-net-profit-india-operations-uk-netherlands-126110700767_1.html" target="_blank" rel="noopener">Tata Steel Q2 net profit up 18.2 per cent Y-o-Y, led by India operations</a> <span class="src">business-standard.com</span><br><span class="sum">Consolidated revenue increased 11.5 per cent to Rs 65,436 crore, while EBITDA rose 14 per cent sequentially to Rs 10,665 crore, led by stronger India operations</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/from-250-000-unit-ambitions-to-a-production-wind-down-what-went-wrong-with-elon-musks-cybertruck-11794016680043.html" target="_blank" rel="noopener">From 250,000-unit ambitions to a production wind-down: What went wrong with Elon Musk&#39;s Cybertruck?</a> <span class="src">livemint.com</span><br><span class="sum">Tesla will wind down Cybertruck production at its Texas factory by mid-2027 to make room for its Cybercab robotaxi.</span></li>
+
+            <li><a href="https://www.supplychaindive.com/news/lear-to-open-automated-factory-as-blueprint-for-global-network/873888/" target="_blank" rel="noopener">Lear to open automated factory as ‘blueprint’ for global network</a> <span class="src">supplychaindive.com</span><br><span class="sum">The Michigan facility is expected to go live next year and be equipped with a host of automation tools, including two separate automated storage and retrieval systems.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Energy</h2>
+        <ol>
+
+            <li><a href="https://www.livemint.com/companies/news/tata-power-commissions-300-mw-solar-project-in-karnataka-to-cut-1-lakh-tonnes-of-carbon-emissions-yearly-11793982901002.html" target="_blank" rel="noopener">Tata Power commissions 300 MW solar project in Karnataka, to cut 1 lakh tonnes of carbon emissions yearly</a> <span class="src">livemint.com</span><br><span class="sum">Once operational, the solar project is expected to produce 810 million units (MUs) of renewable electricity annually.</span></li>
+
+            <li><a href="https://allafrica.com/stories/202611060639.html" target="_blank" rel="noopener">Nigeria: FG Explains Low Supply As Blackout, Heatwaves Linger</a> <span class="src">allafrica.com</span><br><span class="sum">[Daily Trust] The Nigerian Independent System Operator (NISO) has stated that the current decline in electricity generation on the national grid is primarily attributed…</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/industry/energy/oil-gas/omcs-indian-oil-hpcl-bpcl-reject-karnatakas-high-ethanol-fuel-claim-seek-fresh-tests/articleshow/135625810.cms" target="_blank" rel="noopener">OMCs reject Karnataka’s high-ethanol fuel claim</a> <span class="src">economictimes.indiatimes.com</span></li>
+
+            <li><a href="https://www.theguardian.com/uk-news/2026/nov/07/lanarkshire-ai-datacentre-datavita-chapelhall-national-grid-renewable-energy" target="_blank" rel="noopener">Lanarkshire AI datacentre to fully rely on National Grid despite renewables claim</a> <span class="src">theguardian.com</span><br><span class="sum">DataVita has revised plan for Chapelhall development to be wholly powered by 1GW of renewable energy A datacentre company that said it would power a massive AI…</span></li>
+
+            <li><a href="https://www.livemint.com/companies/qatarenergy-eyes-nextdecade-train-6-supply-in-latest-us-lng-push-sources-say-11793999875466.html" target="_blank" rel="noopener">QatarEnergy eyes NextDecade Train 6 supply in latest US LNG push, sources say</a> <span class="src">livemint.com</span><br><span class="sum">NEXT DECADE-QE/SUPPLY DEAL:QatarEnergy eyes NextDecade Train 6 supply in latest US LNG push, sources say</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Defence</h2>
+        <ol>
+
+            <li><a href="https://economictimes.indiatimes.com/news/international/world-news/an-airstrike-has-killed-22-people-near-yemens-capital-houthi-official-says/articleshow/135637173.cms" target="_blank" rel="noopener">Airstrike kills 22 near Yemen&#39;s capital</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">Airstrikes hit homes in a village near Yemen&#39;s capital, Sanaa, on Saturday, killing at least 22 people and wounding 30 others, mostly women and children, a spokesman for…</span></li>
+
+            <li><a href="https://www.freightwaves.com/news/drone-wars-pilot-skills-is-us-military-training-outdated" target="_blank" rel="noopener">Drone Wars &amp; Pilot Skills: Is US Military Training Outdated?</a> <span class="src">freightwaves.com</span><br><span class="sum">US pilot training is struggling to keep pace with modern warfare.</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/news/defence/two-missiles-strike-irans-qeshm-island-tasnim-news-agency-says/articleshow/135623923.cms" target="_blank" rel="noopener">Iran&#39;s Qeshm Island rocked by new missile strikes</a> <span class="src">economictimes.indiatimes.com</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Cyber Intelligence</h2>
+        <ol>
+
+            <li><a href="https://www.insnews.co.kr/news/articleView.html?idxno=93713" target="_blank" rel="noopener">Special measures to prevent secondary harm from data leaks extended through year-end</a> <span class="src">insnews.co.kr</span><br><span class="sum">Financial authorities are extending a special response period for the financial sector through year-end to prevent secondary harm from personal data leaks.</span></li>
+
+            <li><a href="https://timesofindia.indiatimes.com/business/india-business/social-media-platforms-urged-to-act-on-digital-arrest-scams/articleshow/135624247.cms" target="_blank" rel="noopener">Social media platforms urged to act on digital arrest scams</a> <span class="src">timesofindia.indiatimes.com</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/info-tech/check-point-finds-vulnerability-in-chatgpts-lockdown-mode/article71674875.ece" target="_blank" rel="noopener">Check Point finds vulnerability in ChatGPT’s Lockdown Mode</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">Researchers at Check Point Research found a way around it through HTML previews that enables silent data theft, phishing and malware delivery</span></li>
+
+            <li><a href="https://www.aljazeera.com/news/2026/11/7/pro-russian-hackers-leak-italian-foreign-ministers-data-on-dark-web?traffic_source=rss" target="_blank" rel="noopener">Pro-Russian hackers leak Italian foreign minister’s data on dark web</a> <span class="src">aljazeera.com</span><br><span class="sum">The prime minister blames pro-Russian hackers for the leak, as her top diplomat says the cyberthreat was ongoing.</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/tech/technology/openai-partners-with-hacktron-to-find-vulnerabilities-in-openais-systems/articleshow/135618072.cms" target="_blank" rel="noopener">OpenAI partners with Hacktron to find vulnerabilities in OpenAI&#39;s systems</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">OpenAI is teaming up with Hacktron to identify weaknesses in its systems.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Supply Chain</h2>
+        <ol>
+
+            <li><a href="https://www.segs.com.br/seguros/458836-solist-aposta-em-gestao-de-riscos-para-ampliar-protecao-e-acompanhamento-de-transportadoras" target="_blank" rel="noopener">Solist bets on risk management to strengthen protection and monitoring for trucking companies</a> <span class="src">segs.com.br</span><br><span class="sum">Broker combines insurance, operational assessments, training and preventive monitoring in a sector that handles more… Road freight accounts for approximately 65% of…</span></li>
+
+            <li><a href="https://www.freightwaves.com/news/flying-taxis-cargo-electric-aviations-future-takes-off" target="_blank" rel="noopener">Flying Taxis &amp; Cargo: Electric Aviation’s Future Takes Off</a> <span class="src">freightwaves.com</span><br><span class="sum">BETA Technologies just secured landmark FAA authorization for passenger flights in their electric VTOL aircraft, marking a monumental step for electric aviation.</span></li>
+
+            <li><a href="https://www.freightwaves.com/news/ps-logistics-expands-tennessee-flatbed-presence-with-roane-acquisition" target="_blank" rel="noopener">PS Logistics expands Tennessee flatbed presence with Roane acquisition</a> <span class="src">freightwaves.com</span><br><span class="sum">PS Logistics has expanded its flatbed network by acquiring Roane Transportation Services and its more than 170 drivers.</span></li>
+
+            <li><a href="https://www.freightwaves.com/news/conlio-funding-freight-document-checks" target="_blank" rel="noopener">Conlio raises €6.4M to automate freight document checks</a> <span class="src">freightwaves.com</span><br><span class="sum">Conlio&#39;s €6.4 million round, led by Piton Capital, targets the manual check European forwarders run on every load before carriers get paid and customers get billed</span></li>
+
+            <li><a href="https://www.freightwaves.com/news/north-america-container-imports-rise-9-as-as-freight-pricing-pressures-mount" target="_blank" rel="noopener">North America container imports rise 9% as as freight pricing pressures mount</a> <span class="src">freightwaves.com</span><br><span class="sum">Global container volumes surged in September despite mounting disruptions and rising freight prices.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Healthcare</h2>
+        <ol>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/fda-investigates-tumour-risk-linked-to-novartis-zolgensma-gene-therapy/article71677259.ece" target="_blank" rel="noopener">FDA investigates tumour risk linked to Novartis’ Zolgensma gene therapy</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">The investigation follows disclosures of tumour cases in children, prompting fresh scrutiny of the safety of the one-time gene therapy</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/mf/analysis/samir-arora-backed-helios-mid-cap-fund-adds-aurobindo-pharma-2-others-increase-stake-in-paytm-mcx-and-16-others/articleshow/135631989.cms" target="_blank" rel="noopener">Samir Arora backed Helios Mid Cap Fund adds Aurobindo Pharma, 2 others, increase stake in Paytm, MCX and 16 others</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">Samir Arora backed Helios Mid Cap Fund has added Aurobindo Pharma and two other stocks in its portfolio in October and has increased its exposure in Paytm, Multi…</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/markets/stocks/earnings/divis-labs-q2-results-pat-surges-64-yoy-to-rs-1127-crore-revenue-jumps-35/articleshow/135632058.cms" target="_blank" rel="noopener">Divi&#39;s Labs Q2 Results: PAT surges 64% YoY to Rs 1,127 crore; revenue jumps 35%</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">Divi&#39;s Laboratories reported a 63.6% year-on-year (YoY) increase in consolidated profit after tax (PAT) to Rs 1,127 crore for the September quarter of FY27 (Q2FY27)…</span></li>
+
+            <li><a href="https://www.manufacturingdive.com/news/pfizer-650m-manufacturing-technology-center-connecticut/873918/" target="_blank" rel="noopener">Pfizer to build $650M manufacturing technology center in Connecticut</a> <span class="src">manufacturingdive.com</span><br><span class="sum">In addition, Lonza announced plans to acquire five CDMO manufacturing sites in the U.S., and Hydro broke ground on a new 5,900-metric-ton indirect extrusion press line…</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/industry/healthcare/biotech/pharmaceuticals/cancer-drug-prices-to-fall-by-up-to-96-from-november-9-consumers-set-to-save-rs-3502-crore-annually/articleshow/135636768.cms" target="_blank" rel="noopener">Cancer drug prices to drop up to 96% from Nov 9</a> <span class="src">economictimes.indiatimes.com</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Telecom &amp; Digital Infrastructure</h2>
+        <ol>
+
+            <li><a href="https://www.thehindubusinessline.com/info-tech/bsnl-plans-roaming-pact-with-vodafone-idea-in-12-13-more-telecom-circles/article71677404.ece" target="_blank" rel="noopener">BSNL plans roaming pact with Vodafone Idea in 12-13 more telecom circles</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">The proposed arrangement comes as BSNL expands its 4G footprint and Vodafone Idea seeks funds to support its capital expenditure plans.</span></li>
+
+            <li><a href="https://telecom.economictimes.indiatimes.com/news/industry/bharti-airtel-re-launches-299-plan-analysts-flag-rise-in-subscriber-churn-after-aug-tariff-rejig/135624681" target="_blank" rel="noopener">Bharti Airtel re-launches ₹299 plan; analysts flag rise in subscriber churn after Aug tariff rejig</a> <span class="src">telecom.economictimes.indiatimes.com</span><br><span class="sum">This week, brokerages said the second-largest private telco’s net subscriber additions declined sequentially in Q2FY27; however, the average revenue per user (ARPU) has…</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/tech/technology/equinix-seeking-land-for-india-data-centres-ceo/articleshow/135617802.cms" target="_blank" rel="noopener">Equinix seeking land for India data centres: CEO</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">The world’s largest data centre operator by footprint, valued at nearly $100 billion, has invested $365 million in India and sees significant opportunities in AI…</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/info-tech/jio-launches-industry-first-3-year-plan-at-10000/article71675310.ece" target="_blank" rel="noopener">Jio launches industry-first 3-year plan at ₹10,000</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">The plan ensures unlimited 5G data, unlimited voice calling, 2.5 GB high-speed data per day and 100 SMS per day</span></li>
+
+            <li><a href="https://www.insurancejournal.com/news/southcentral/2026/11/06/891870.htm" target="_blank" rel="noopener">Some 40% of US Planned Data Center Capacity Is in States Wanting to Hit Pause</a> <span class="src">insurancejournal.com</span><br><span class="sum">Data center opposition had been building across the country, one moratorium or blocked project at a time.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Climate &amp; Sustainability</h2>
+        <ol>
+
+            <li><a href="https://www.theguardian.com/environment/ng-interactive/2026/nov/07/whats-the-point-ten-years-after-the-paris-treaty-are-climate-talks-getting-anywhere" target="_blank" rel="noopener">What’s the point? Ten years after the Paris treaty, are climate talks getting anywhere?</a> <span class="src">theguardian.com</span><br><span class="sum">Its key temperature goal has been missed but experts say the agreement is still proving a vital moral compass for progress It was a curious way of conducting…</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMi8wJBVV95cUxQZFdpQ3dHaFE1aHFXaEtmellRTVM4WjF1VzljYWpFbk05TnMtLVlaYmROVzJqcWlxT1ZyaWVPaWRacDJVUkZNUHhEU2xHaEhHMmtVbklzUHJ2Y3E4SFNtT1U1cWRlSW41SEw2WldhZFY0ZlNIbWc1VWFkMFFOdjlaa0RRckowTjFKUlc5WEhSX0o5YUNJNHhNSVBTMjc0QlZlaDlhZWYxSGxSRE1vTlk1MlRSdUxNZWp4aDM0ODdHUG9XTXdIbkhpVThTSlNkaGVkdHBnUkZrZVY0QXY0b1RvRk1jcnNzZ0JqOXhTbmtPdlNMS2lCaVpUYUZHamlUNG1lZmlVWlBfVjhxMkFrRllHOGpzUG0tS09mdVBKZzhZWVBYR3lTbV94RTd1eVpYSU1IR3JsbzVDNmhFQnJVMTdfaTN4ZU85OV82UTRaWl9PcFd2dTd1dDc4ZzFhSGdVYWdhTkFCNUl5SENtdFZfeUluM1haMA?oc=5" target="_blank" rel="noopener">Symposium of Episcopal Conferences of Africa and Madagascar (SECAM) Statement for COP31 - Protecting Africa’s Forests, Waters, Lands, and Biodiversity: Protecting Africa Means Protecting the Planet</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://www.aljazeera.com/features/2026/11/7/sudan-war-and-climate-change-sees-parents-struggle-to-feed-their-children?traffic_source=rss" target="_blank" rel="noopener">Sudan war and climate change see parents struggle to feed their children</a> <span class="src">aljazeera.com</span><br><span class="sum">War, poverty and climate change are all affecting Sudanese, with increasing cases of child malnutrition.</span></li>
+
+            <li><a href="https://www.businessinsurance.com/floods-expected-to-cause-hundreds-of-millions-in-losses/" target="_blank" rel="noopener">Floods expected to cause hundreds of millions in losses</a> <span class="src">businessinsurance.com</span><br><span class="sum">Recent flooding across the United States caused hundreds of millions in losses, Aon said Friday.</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/air-purifier-sales-surge-amid-worsening-aqi-blinkit-zepto-see-demand-spike-amazon-sales-double-in-a-week-details-11794033218216.html" target="_blank" rel="noopener">Air purifier sales surge amid worsening AQI: Blinkit, Zepto see demand spike; Amazon sales double in a week | Details</a> <span class="src">livemint.com</span><br><span class="sum">Air-purifier sales are rising across e-commerce and quick-commerce platforms as pollution worsens and winter sets in.</span></li>
+
+        </ol>
+    </section>
+
+    <footer>Built from the same scored stories as the Command Center. <a href="/">Back to the Command Center</a></footer>
+</article>
+<a class="back-home" href="/" aria-label="Back to the main page">&larr; Main page</a>
+<a class="to-top" href="#top" aria-label="Back to top" title="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
+</body>
+</html>
