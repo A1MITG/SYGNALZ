@@ -167,7 +167,7 @@ class TestFounderSection(unittest.TestCase):
 
     def test_shows_name_roles_and_statement(self):
         self.assertIn('Amit Gupta', self.body)
-        self.assertIn('Corporate Survivor', self.body)
+        self.assertIn('Transformation Leader &middot; AI Builder &middot; Husband', self.body)
         self.assertIn('a&nbsp;million tokens at a time!', self.body)
 
     def test_portrait_is_served_by_flask(self):
