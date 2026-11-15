@@ -1,0 +1,406 @@
+{
+ "built_at": "2026-11-15T15:48:15.242711+00:00",
+ "freshness_hours": 48,
+ "tiles": [
+  {
+   "id": "polity",
+   "name": "Polity & Governance",
+   "paper": "GS II",
+   "stories": [
+    {
+     "title": "Judge inspects K.R. Nagar hospital after woman’s death",
+     "url": "https://www.thehindu.com/news/national/karnataka/judge-inspects-kr-nagar-hospital-after-womans-death/article71705339.ece",
+     "source": "The Hindu",
+     "date": "2026-11-15T20:46:59+05:30",
+     "why": [
+      "judge"
+     ],
+     "score": 1,
+     "origin": "feed"
+    }
+   ]
+  },
+  {
+   "id": "schemes",
+   "name": "Schemes & Policy",
+   "paper": "GS II",
+   "stories": [
+    {
+     "title": "NITI Aayog to hold five workshops on Modi’s 25 years in office",
+     "url": "https://www.thehindu.com/news/national/niti-aayog-to-hold-five-workshops-on-modis-25-years-in-office/article71705223.ece",
+     "source": "The Hindu",
+     "date": "2026-11-15T20:52:54+05:30",
+     "why": [
+      "niti aayog"
+     ],
+     "score": 2,
+     "origin": "feed"
+    },
+    {
+     "title": "LPG cylinder price in Delhi: Why Ujjwala beneficiaries pay  ₹642 for a cylinder that costs  ₹1,267.24 to supply",
+     "url": "https://www.livemint.com/companies/lpg-cylinder-price-in-delhi-why-ujjwala-beneficiaries-pay-642-for-a-cylinder-that-costs-1-267-24-to-supply-11794736665823.html",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "beneficiaries"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "From 50 cars to 5: How the new Rent-A-Cab scheme could change your cab options",
+     "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOdWNuVFdrcy05SVRpSkFCQlRUdkFqWDRCVnhXLTZKQXVDTUlCdXlybkZ6VWl2eGFhZ25YXy1LaDJVUXppTElpbnpLNFRVZmlTV1hNTnRGQThPNEVKLXNJeFB2VVk0c2hPSDJFdDc3NGNJSEFCYld5Wm5RbWtFaVZPUzJ1RS12eFV1LVlBRHlFb9IBlgFBVV95cUxQLUdEcGt6dHFuZjkwcV9wNll0RXNJYnA4SEZIM2NGbG5CeWJRdzN1UDJ6ZV9WRU8xYV8tNERJcWpSMkJNaU1ZVFhsVFdYU0oydl9MbXFHSVdaVFd3YXdoWnE0QVNxZWlBNk1SZW16dzFYV2JtN2ptcGFiY0NERkNYa0QzbXFmSHF5VUxHRmpiVVhrTGFwWEE?oc=5",
+     "source": "The Indian Express",
+     "date": "2026-11-15T01:43:37+00:00",
+     "why": [
+      "scheme"
+     ],
+     "score": 1,
+     "origin": "feed"
+    }
+   ]
+  },
+  {
+   "id": "ir",
+   "name": "International Relations",
+   "paper": "GS II",
+   "stories": [
+    {
+     "title": "China This Week | Spotlight on Chinese spying in Jensen Huang saga, and a Xi-Trump-Putin meeting",
+     "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxONldKTldFemFUVnl2WTJ2ZjVwN21SdVFMQ294VU5xRzFDbERBaDBiNWt4UjBDb2tzeWxSeGRfUkJXVWZmZVp4cUFmX013R0syQmtpaUtla3RXSlg5SE5FU1kzWmp4TG5NVm9xUDNwYmJTemh5dXNmZ3pPc2NzT0RyVmc4UmE5dHJJSEVPa014dkM0Q21TT3ZGNnZDTFpLVEVqcjRtNWc4Y2l3MDJaSU9UbW9ZNEFsUdIBvAFBVV95cUxPUHpzajJNNGItd1NFTWhoQVBCdG9IVzRrbFkzQ0E3aWZiSGpUMEJDRkRTekpxSm9yaEMtQUo1ZUpCXzNTcHdaOFpONGNOZ0JzdWZmWXBiY0pZdDhxN1NuYUhfSzZiNWJ3T25JZ0UxN1E5RF95RWFPeU1KRUxCbFdjTFNuMi02cE5oTjdxTU5VaXRNbmJvZk1DTHlVSFZPOUFnekRibmNMZTFtVGpnZjM4cHYwdzA4MllmUVJUVw?oc=5",
+     "source": "The Indian Express",
+     "date": "2026-11-15T14:04:51+00:00",
+     "why": [
+      "putin",
+      "china",
+      "chinese",
+      "trump"
+     ],
+     "score": 4,
+     "origin": "feed"
+    },
+    {
+     "title": "US has floated Ukraine ceding Donbas for Nato membership, Zelensky says",
+     "url": "https://www.bbc.co.uk/news/articles/cwvg2l312ylqo?at_medium=RSS&at_campaign=rss",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "nato",
+      "ukraine",
+      "US"
+     ],
+     "score": 3,
+     "origin": "signal"
+    },
+    {
+     "title": "Anthony Albanese welcomes Trump-Xi-Putin summit – even as European leaders express reservations",
+     "url": "https://www.theguardian.com/australia-news/2026/nov/15/anthony-albanese-welcomes-trump-xi-putin-summit-even-as-european-leaders-express-reservations",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "summit",
+      "putin",
+      "trump"
+     ],
+     "score": 3,
+     "origin": "signal"
+    },
+    {
+     "title": "Trump, Putin and Xi plan historic joint meeting in China next week, White House says",
+     "url": "https://www.bbc.co.uk/news/articles/ckz74jzpy18do?at_medium=RSS&at_campaign=rss",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "putin",
+      "china",
+      "trump"
+     ],
+     "score": 3,
+     "origin": "signal"
+    },
+    {
+     "title": "Mexico’s week in review: Trump renews tariff threats as Sheinbaum prepares for China",
+     "url": "https://mexiconewsdaily.com/news/trump-tariff-sheinbaum-china-trip-mexico-week-in-review/",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "china",
+      "trump"
+     ],
+     "score": 2,
+     "origin": "signal"
+    },
+    {
+     "title": "Dubai, Abu Dhabi property markets could gain if Trump’s midterm losses help end Iran war",
+     "url": "https://www.scmp.com/business/article/3374377/dubai-abu-dhabi-property-markets-could-gain-if-trumps-midterm-losses-help-end-iran-war",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "iran",
+      "trump"
+     ],
+     "score": 2,
+     "origin": "signal"
+    },
+    {
+     "title": "US, China seek common ground on military crisis pact as Washington weighs terms: sources",
+     "url": "https://www.scmp.com/news/china/military/article/3374503/us-china-seek-common-ground-military-crisis-pact-washington-weighs-terms-sources",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "china",
+      "US"
+     ],
+     "score": 2,
+     "origin": "signal"
+    },
+    {
+     "title": "Iran targets US military radar in Bahrain in ‘retaliatory’ drone strikes",
+     "url": "https://www.aljazeera.com/video/newsfeed/2026/11/15/iran-targets-us-military-radar-in-bahrain-in-retaliatory-drone-strikes?traffic_source=rss",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "iran",
+      "US"
+     ],
+     "score": 2,
+     "origin": "signal"
+    }
+   ]
+  },
+  {
+   "id": "economy",
+   "name": "Economy",
+   "paper": "GS III",
+   "stories": [
+    {
+     "title": "Sebi plans AI guardrails for capital markets, stresses human oversight in critical decisions",
+     "url": "https://timesofindia.indiatimes.com/business/india-business/sebi-plans-ai-guardrails-for-capital-markets-stresses-human-oversight-in-critical-decisions/articleshow/135852140.cms",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "sebi"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "RBI may review microfinance borrowers' income threshold, if needed: Murmu",
+     "url": "https://www.business-standard.com/finance/news/rbi-may-review-microfinance-borrowers-income-threshold-if-needed-murmu-126111500501_1.html",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "rbi"
+     ],
+     "score": 1,
+     "origin": "signal"
+    }
+   ]
+  },
+  {
+   "id": "environment",
+   "name": "Environment & Ecology",
+   "paper": "GS III",
+   "stories": [
+    {
+     "title": "Forest officials sound alert after tiger spotted in Jeelugumilli",
+     "url": "https://www.thehindu.com/news/national/andhra-pradesh/forest-officials-sound-alert-after-tiger-sighted-in-jeelugumilli/article71705173.ece",
+     "source": "The Hindu",
+     "date": "2026-11-15T20:43:21+05:30",
+     "why": [
+      "tiger",
+      "forest"
+     ],
+     "score": 2,
+     "origin": "feed"
+    },
+    {
+     "title": "COP31: Canada, UK reaffirm $1.3 trillion climate finance goal, announce new commitments",
+     "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQaVlVeUpIeF9FcGxPaDJxb3phVnVMaGtzbkM5Ujc3ZzNlcFl2dlgwTEVWcjlMRGwtTHI0Y256Q3E5cENqQmFWdkh1OVgzcFFER3ZyeFRJSUxRRUo2UFJPclhJLUVzbUFjaXBrTGUwaVZhVlg0UXFQa2dUeDl5TExQaG5ZSzBTdDVsWFoxaEloUTd1SXZKdkFMSHIwcjZOcHlwUmxSaUZUc3lrSElDMUhIQnBZRjBOZEJGQjdCemxWYnpRSW1IT2dj0gHUAUFVX3lxTE02UkFlU1VoYnpTMWRWd2l4bGNwMlJBYVFpT2t2ajlDejBsTjBicU56blMwclJZaUlZcUFEblZkVC02Z1hSN09uTldHdlF5Ml9qYThfQzAxQTV3TFBwX3JyNks1WVFVNFJaeEVHZ0R5N0d4M25NcWkxTC1QUDhLSDQwbUhEYzlrMHRKSXVsSmJ6a0thWEpkTU9CYjlDU0c5ZHNYLVFOb3ZHRGt5eXJpRUp1OFZ4SkFMcnBZYTJQZUVaZlkzQ1dkd2dZRFpKQnZnQlc4ZmZR?oc=5",
+     "source": "Down To Earth",
+     "date": "2026-11-15T08:25:33+00:00",
+     "why": [
+      "climate",
+      "cop31"
+     ],
+     "score": 2,
+     "origin": "feed"
+    },
+    {
+     "title": "COP31: Over 100 major polluter groups represented at climate summit, outnumber delegates from vulnerable nations",
+     "url": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxOVjdRMEFoMXA0aG1xZDFTcFU5Y3JpVFUxQmdOcHpDWUhyRWdDdVJlTFlPcEYweGtHbm9vZFctdkRJNGRZNlozMHJPU25fLUxvc1NRYnIxWWxNZ0s4eEdIZnF1T0tYbVd2SUc4ZUpDak1XOEtMMG9PdEF2RkZRN2hRYTVxX1NnbmFIazZLUHp0OEtRVkRnalB2bWFqX1RqX3BULUszanB4NGZndzZOMWlLN3FYcVN6enhva3BNVjFiSVVQbHc3VExTSTc5b3BlVFZtamJaWDlkWFhsTXlSbHktbm9nX2x5UWJKOHBJbtIB-gFBVV95cUxPN2JMNzdYeHNHb1B2U1FoWUZtRHVpeVhYMXJsbUVuV1pCMDBBT1NDU1J4RzFUNTktWEI0V0E3blZ0Mnc1TTl4blNXdkpiZllzeVBHWmhiXzdha19rMUxYWkhRX2lvdU12d3R0ZGJQaWt3d3dQVUFPWHB6Z1lONVYzRmVnekxxM2M5MkxRWGxNSmkxd0VkY0E0RHRlallTUGZnQ3FBamlsWldPTVRuaDNLalhkaWw0MkZaeUVxaVV2YmhoOGljeE4wYnQ1VzBZbE1iRXV6d1hQZmpreDdzdUd6VktIRWxjODVkMTM2cTZEYXlZY2pZYXNGaVlR?oc=5",
+     "source": "Down To Earth",
+     "date": "2026-11-15T07:04:40+00:00",
+     "why": [
+      "climate",
+      "cop31"
+     ],
+     "score": 2,
+     "origin": "feed"
+    },
+    {
+     "title": "COP31 climate finance",
+     "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBZaUhOeUE0eDVvajRkWnFGUl9qSVE1bE9GNFdoWlEzUGI4Vm5CYUFCVW1uR2dDVjRSMnFjSkRRRHlPaVN1d01pSjVvNWJTWHctSVlZR08zejNnd1JBeXpvSHl4eFVCai1QekE?oc=5",
+     "source": "Down To Earth",
+     "date": "2026-11-14T13:14:42+00:00",
+     "why": [
+      "climate",
+      "cop31"
+     ],
+     "score": 2,
+     "origin": "feed"
+    },
+    {
+     "title": "COP31: Developing countries push to turn climate finance commitments into action as talks hit familiar divisions",
+     "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxPNTBZZWlBLTVQcWpta1VRRHZiSU1aOUI3Uzg1dlI5TjgyMk12dVc1a2ZnY2R0dnFDT1hoSGtpNVgzTTR4TlNTNFV2Zk85QmNjNjhRX0YwRkc3Mk1IUzhaVlA4TXJHbHZkblhEc0czRUdYLWZyUWVpNExYQjdyaGk0M0YtMlVEazdNWmRKakE4a2FpeWpQZm5GQ3JMdWswM09zZzZHSVVzWU9jZjRfdUYtbDh0UTk5SDdoVmFicGpaZGZWWS1sUV91cDFXSWU3bTFhdFlBZ2NwdkRhRHg1dHlobzRTRzBfRzRia2Q0UWRR0gH7AUFVX3lxTFBWVjRETUs2TkltTUtYM19nOWxlSHREOXlEeGUzNzEyQTBXaFhEcDYtUlR6N00yamZsLTlhVDR3SlpzU1BKM05CTzNwbEdaTW83Z3ZxeDJ3ZHdLWjdfUUJvQXU3aFZZdGItMEhLbFpxWnJ6YWp0RDVmUDFaZE00Y2dSeVNyYkJ2aC1MbXVLandtZlk4X3Z1UUhCQnVSQXI5Sk43Mlk5N2ZzcGRYSWg3SEJYNF85bGFubjJydHlqT3dPeGNnT0dPUHotNXp5TXFUVTc2cGlkTFItZ2tJZDlNVXlBUmNLT2NCREFOczRpMEJTRDhUTHN6UGtPSUNZ?oc=5",
+     "source": "Down To Earth",
+     "date": "2026-11-14T08:12:58+00:00",
+     "why": [
+      "climate",
+      "cop31"
+     ],
+     "score": 2,
+     "origin": "feed"
+    },
+    {
+     "title": "Evacuation zone lifted after bomb found at Illinois ethanol plant",
+     "url": "https://www.theguardian.com/us-news/2026/nov/14/peoria-illinois-evacuation-bomb",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "evacuation"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "Delhi AQI dips to 290, but relief may be brief",
+     "url": "https://economictimes.indiatimes.com/news/india/delhi-gets-brief-pollution-relief-as-aqi-improves-to-290-air-likely-to-turn-very-poor-again-from-nov-17/articleshow/135856842.cms",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "aqi"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "Bad air, bigger bills: Air pollution drives health insurance claims up fourfold in 3 years",
+     "url": "https://timesofindia.indiatimes.com/business/india-business/bad-air-bigger-bills-air-pollution-drives-health-insurance-claims-up-fourfold-in-3-years/articleshow/135848168.cms",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "pollution"
+     ],
+     "score": 1,
+     "origin": "signal"
+    }
+   ]
+  },
+  {
+   "id": "scitech",
+   "name": "Science & Tech",
+   "paper": "GS III",
+   "stories": [
+    {
+     "title": "US lawmakers push for tighter AI chip export rules after Nvidia controversy: Report",
+     "url": "https://economictimes.indiatimes.com/tech/technology/us-lawmakers-push-for-tighter-ai-chip-export-rules-after-nvidia-controversy-report/articleshow/135857081.cms",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "chip"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "Trump administration planning to reimburse doctors treating vaccine ‘injury’",
+     "url": "https://www.theguardian.com/us-news/2026/nov/15/vaccine-policy-rfk-jr-trump-administration",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "vaccine"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "ISRO’s Participation in the Thirtieth Session of the Intergovernmental Consultative Committee (ICC-30) on 26",
+     "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNVEFGbHhyb1FnNlZybTFyV1JCRVNBX3pIcVVQczRCTy1udTM4V2tadV96alFjdTJhQS15b3lOeVZFakQ4S3U4Q3c3aWgxUTJFT1ZpaHVORzZ4UVdmSEp2eEYyeVpyZEZYd3d1MWpCS05hSFVjS3hHUlRVRUxmVEJySHl0WFphbDl2dERQRHNJSnFDeW1Jb1J6VWhn?oc=5",
+     "source": "ISRO",
+     "date": "2026-11-14T03:59:44+00:00",
+     "why": [
+      "isro"
+     ],
+     "score": 1,
+     "origin": "feed"
+    }
+   ]
+  },
+  {
+   "id": "security",
+   "name": "Security",
+   "paper": "GS III",
+   "stories": [
+    {
+     "title": "Could Beijing’s HQ-17 air-defence system defend PLA amphibious forces from Taiwan strikes?",
+     "url": "https://www.scmp.com/news/china/military/article/3374448/could-beijings-hq-17-air-defence-system-defend-pla-amphibious-forces-taiwan-strikes",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "defence"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "Chinese J-10C fighter spotted carrying modified Russian-origin heavy-strike missile",
+     "url": "https://www.scmp.com/news/china/military/article/3374496/chinese-j-10c-fighter-spotted-carrying-modified-russian-origin-heavy-strike-missile",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "missile"
+     ],
+     "score": 1,
+     "origin": "signal"
+    },
+    {
+     "title": "Fifth Canadian soldier dies from injuries caused by large fire at military base",
+     "url": "https://www.bbc.co.uk/news/articles/cmrlgn4x2xw8o?at_medium=RSS&at_campaign=rss",
+     "source": "",
+     "date": "2026-11-15T15:38:33+00:00",
+     "why": [
+      "military"
+     ],
+     "score": 1,
+     "origin": "signal"
+    }
+   ]
+  },
+  {
+   "id": "social",
+   "name": "Social Issues",
+   "paper": "GS I & II",
+   "stories": [
+    {
+     "title": "School of change",
+     "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE92VXhxbkFWZ1NGaWdwbFJhbW5lRWhNSDU1NTJQUTJzMExqblhiRlM3Wl9aWXRRTjhGZ0xhbTVDdC1WWElzcXJ1Y01qMmRBNTlFV08wSjc4cU5zdGFOaGFMRHhwLVLSAXJBVV95cUxPSEN5Q0FvZ0s4azJTOHd2dVVOSzJ5NW9rUGg5bHl6TTZpczV6R1ZUZHJuY0FPYm9KMGtwLW5weWJUbnoyRE5QN01vQ0ZFc0JiQVFfWFU4VHRFSlA1RnhyS1pnZmIzN2Z5VzdmQU5UbThDM0E?oc=5",
+     "source": "Down To Earth",
+     "date": "2026-11-14T08:10:57+00:00",
+     "why": [
+      "school"
+     ],
+     "score": 1,
+     "origin": "feed"
+    }
+   ]
+  }
+ ],
+ "stats": {
+  "read": 137,
+  "placed": 29,
+  "excluded_or_unmatched": 98,
+  "stale": 2,
+  "duplicate": 0
+ }
+}

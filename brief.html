@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGNAL — Today's Brief · Sunday, 15 November 2026</title>
+<!-- Rendered by app/analysis/brief.py for both the static build (public/brief.html)
+     and Flask's /brief. Text only by design: no images, no scripts. -->
+<style>
+:root {
+    --navy: #0b1524; --ink: #0a0a0a; --slate: #5a6472; --slate-light: #8a94a2;
+    --rule: #e3e6ea; --link: #1a4fbf; --paper: #ffffff;
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: Consolas, "SF Mono", monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); }
+.brief { max-width: 720px; margin: 0 auto; padding: 44px 24px 56px; }
+header { border-bottom: 2px solid var(--navy); padding-bottom: 14px; margin-bottom: 8px; }
+.mast { font: 700 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--slate); margin-bottom: 10px; }
+h1 { font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.2; color: var(--navy); }
+.dateline { margin-top: 6px; font-size: 13px; color: var(--slate); }
+section { padding: 22px 0 4px; border-bottom: 1px solid var(--rule); }
+section:last-of-type { border-bottom: 0; }
+h2 { font: 700 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--navy); margin-bottom: 12px; }
+ol { list-style: none; }
+li { margin-bottom: 14px; line-height: 1.45; }
+li a { font-family: var(--serif); font-size: 16.5px; color: var(--link); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+.src { font: 10.5px var(--mono); color: var(--slate-light); white-space: nowrap; }
+.sum { font-size: 14px; color: var(--slate); }
+.empty { padding: 28px 0; font-family: var(--serif); font-size: 16px; color: var(--slate); }
+footer { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--slate); }
+footer a { color: var(--link); }
+@media (max-width: 600px) { .brief { padding: 28px 16px 36px; } h1 { font-size: 25px; } }
+.back-home { position: fixed; left: max(24px, env(safe-area-inset-left)); bottom: max(28px, env(safe-area-inset-bottom)); z-index: 10; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 16px 0 14px; border-radius: 999px; background: var(--navy); color: #fff; font: 600 12px/1 var(--sans); letter-spacing: .02em; text-decoration: none; box-shadow: 0 6px 18px rgba(11,21,36,.22); transition: transform .2s, box-shadow .2s; }
+.back-home:hover, .back-home:focus-visible { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(11,21,36,.3); }
+.back-home:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+/* Always on screen, so the way back is there from the first line. A short entrance on load only. */
+@media (prefers-reduced-motion: no-preference) {
+    .back-home { animation: back-home-in .45s cubic-bezier(.2,.8,.2,1) .15s both; }
+    @keyframes back-home-in { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+}
+@media (max-width: 1023px) { .back-home { left: max(20px, env(safe-area-inset-left)); bottom: max(24px, env(safe-area-inset-bottom)); } }
+@media (max-width: 600px) { .back-home { left: max(16px, env(safe-area-inset-left)); bottom: max(18px, env(safe-area-inset-bottom)); } }
+@media print { .back-home { display: none; } footer a { color: inherit; text-decoration: none; } li a { color: var(--ink); } }
+/* Scroll-to-top: shared by the Command Center and Today's Brief. CSS only:
+   #top scrolls to the start of the page, the scroll timeline fades it in. */
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+.to-top { position: fixed; right: max(24px, env(safe-area-inset-right)); bottom: max(24px, env(safe-area-inset-bottom)); z-index: 80; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; background: #0b1524; color: #fff; border: 1.5px solid rgba(255,255,255,.38); box-shadow: 0 8px 22px rgba(0,0,0,.3); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s, background-color .25s; }
+.to-top svg { width: 20px; height: 20px; transition: transform .25s cubic-bezier(.2,.8,.2,1); }
+.to-top:hover { background: #14243a; transform: translateY(-3px); box-shadow: 0 14px 30px rgba(11,21,36,.34); }
+.to-top:hover svg { transform: translateY(-2px); }
+.to-top:active { transform: translateY(0) scale(.94); transition-duration: .08s; }
+.to-top:focus-visible { outline: 2px solid #2f6fed; outline-offset: 3px; }
+@supports (animation-timeline: scroll()) {
+    .to-top { animation: to-top-in linear both; animation-timeline: scroll(); animation-range: 240px 420px; }
+    @keyframes to-top-in { from { opacity: 0; scale: .6; translate: 0 16px; visibility: hidden; } to { opacity: 1; scale: 1; translate: 0 0; visibility: visible; } }
+}
+@media (max-width: 1023px) { .to-top { right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); } }
+@media (max-width: 600px) { .to-top { width: 44px; height: 44px; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); } }
+@media print { .to-top { display: none; } }
+</style>
+<!-- Vercel Web Analytics: anonymous page views (no cookies). -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<article class="brief">
+    <header>
+        <p class="mast">SIGNAL · Today's Brief</p>
+        <h1>Sunday, 15 November 2026</h1>
+        <p class="dateline">Updated 21:08 IST · 52 stories across 13 areas · headlines link to the original reporting</p>
+    </header>
+
+    <section>
+        <h2>Global Affairs</h2>
+        <ol>
+
+            <li><a href="https://www.insnews.co.kr/news/articleView.html?idxno=93794" target="_blank" rel="noopener">Aon hosts marine insurance symposium to discuss geopolitical and sanctions risks</a> <span class="src">insnews.co.kr</span><br><span class="sum">Global insurance broker Aon plc held Marine Symposium 2026 in Tokyo on October 14.</span></li>
+
+            <li><a href="https://mexiconewsdaily.com/news/trump-tariff-sheinbaum-china-trip-mexico-week-in-review/" target="_blank" rel="noopener">Mexico’s week in review: Trump renews tariff threats as Sheinbaum prepares for China</a> <span class="src">mexiconewsdaily.com</span><br><span class="sum">The second week of November, Trump threatened to double tariffs over a migrant caravan, a government official accused of aiding the CIA fled to the U.S., and Sheinbaum…</span></li>
+
+            <li><a href="https://www.bbc.co.uk/news/articles/cwvg2l312ylqo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">US has floated Ukraine ceding Donbas for Nato membership, Zelensky says</a> <span class="src">bbc.co.uk</span><br><span class="sum">The US has not confirmed the Ukrainian president&#39;s comments - a US official told the BBC &#34;many ideas continue to be discussed&#34;.</span></li>
+
+            <li><a href="https://www.theguardian.com/world/2026/nov/15/asia-diplomatic-summits-trump-xi-putin-apec-asean" target="_blank" rel="noopener">World leaders head to Asia for back-to-back diplomatic summits</a> <span class="src">theguardian.com</span><br><span class="sum">Tussle for influence as trade, tech and regional security to take centre stage in China, Philippines and Cambodia meetings World leaders will fly in to Asia for…</span></li>
+
+            <li><a href="https://www.theguardian.com/australia-news/2026/nov/15/anthony-albanese-welcomes-trump-xi-putin-summit-even-as-european-leaders-express-reservations" target="_blank" rel="noopener">Anthony Albanese welcomes Trump-Xi-Putin summit – even as European leaders express reservations</a> <span class="src">theguardian.com</span><br><span class="sum">‘We think dialogue is a good thing,’ Australian PM says after German chancellor urges the US to work with Europe for peace in Ukraine Australia has endorsed this week’s…</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Economy, Business &amp; Markets</h2>
+        <ol>
+
+            <li><a href="https://news.google.com/rss/articles/CBMiiwJBVV95cUxQU3RWaGZLVmJTYkxBWEhsVmV2b2tOMTFRdl9ZWERhVl9UN2Y3VHpWN2dHUmpSazAyY0pGUWtZaEFOUG55OXd4NGFRWWlSSkx2aTMzeXZZT2NraC05MFlTMUlpYXlFa3V3S05mRU5ZUHpPSXh2ZkRrYk9jcGJPSWlLbjVkUzNqTjVHRk9JcjQyQWVjc3p6YlpDQ3ZCbGVyQzUyTG16allKWTc3aS04VDlSVERiVDJlc1Vxc1lkZ2syd18xbmhqYk10NkNvTHd4VFF1a2QwMnNlbnJDaHpVVFpJOE1OT2diY3ZfZjYyVXo0ZnRkcVAtTm94ZFhNUHUwU000QmI1R0YxMXdGUFnSAYsCQVVfeXFMUFN0VmhmS1ZiU2JMQVhIbFZldm9rTjExUXZfWVhEYVZfVDdmN1R6VjdnR1JqUmswMmNKRlFrWWhBTlBueTl3eDRhUVlpUkpMdmkzM3l2WU9ja2gtOTBZUzFJaWF5RWt1d0tOZkVOWVB6T0l4dmZEa2JPY3BiT0lpS241ZFMzak41R0ZPSXI0MkFlY3N6emJaQ0N2QmxlckM1MkxtempZSlk3N2ktOFQ5UlREYlQyZXNVcXNZZGdrMndfMW5oamJNdDZDb0x3eFRRdWtkMDJzZW5yQ2h6VVRaSThNTk9nYmN2X2Y2MlV6NGZ0ZHFQLU5veGRYTVB1MFNNNEJiNUdGMTF3RlBZ?oc=5" target="_blank" rel="noopener">What Munich Re Stock&#39;s Raised Profit Target Means For Shareholders</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/ashok-leyland-q2-results-profit-climbs-87-to-891-crore-revenue-jumps-on-mhcv-growth/article71702499.ece" target="_blank" rel="noopener">Ashok Leyland Q2 results: Profit climbs 8.7% to ₹891 crore, revenue jumps on MHCV growth</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">Consolidated revenue from operations rises 35% to ₹17,030 crore in Q2 FY27</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/spacexs-s-p-500-bid-gets-new-life-as-elon-musk-pitches-tesla-merger-11794670926716.html" target="_blank" rel="noopener">SpaceX’s S&amp;P 500 bid gets new life as Elon Musk pitches Tesla merger</a> <span class="src">livemint.com</span><br><span class="sum">Both Tesla and SpaceX have been burning through billions of dollars in cash, and plan to bleed through more to finance new ventures, even as worries about the…</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/thomas-cook-india-targets-october-2027-for-resorts-business-demerger-eyes-acquisitions/article71704173.ece" target="_blank" rel="noopener">Thomas Cook India targets October 2027 for resorts business demerger; eyes acquisitions</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">The company&#39;s growth plans come against the backdrop of a recovery in travel demand following geopolitical disruptions.</span></li>
+
+            <li><a href="https://www.business-standard.com/companies/quarterly-results/zappfresh-operator-dsm-fresh-foods-reports-7-3-crore-profit-in-h1-fy27-126111500195_1.html" target="_blank" rel="noopener">Zappfresh operator DSM Fresh Foods reports ₹7.3 crore profit in H1 FY27</a> <span class="src">business-standard.com</span><br><span class="sum">The company, which entered the capital markets in October 2025, had posted a net profit (after minority interest) of ₹7.31 crore in the preceding six-month period ended…</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>AI, Technology &amp; Innovation</h2>
+        <ol>
+
+            <li><a href="https://www.livemint.com/companies/people/meet-hussain-sajwani-the-dubai-investor-who-made-more-money-from-anthropic-in-2-years-than-his-30-years-of-investments-11794726343697.html" target="_blank" rel="noopener">Meet Hussain Sajwani, the Dubai investor who made more money from Anthropic in 2 years than his 30 years of investments</a> <span class="src">livemint.com</span><br><span class="sum">Hussain Sajwani, founder of Damac Properties, says his Anthropic investment has delivered extraordinary returns and expects billions in profit from stakes in Anthropic…</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/tech/technology/us-lawmakers-push-for-tighter-ai-chip-export-rules-after-nvidia-controversy-report/articleshow/135857081.cms" target="_blank" rel="noopener">US lawmakers push for tighter AI chip export rules after Nvidia controversy: Report</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">Leaders across party lines are reportedly backing a series of bills aimed at tightening controls on advanced AI chip sales to other countries.</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/why-elon-musk-wants-affair-marred-jensen-huang-back-at-nvidia-is-ai-industry-not-ready-for-a-post-huang-era-11794671970534.html" target="_blank" rel="noopener">Why Elon Musk wants affair marred Jensen Huang back at Nvidia? Is AI industry not ready for a post-Huang era</a> <span class="src">livemint.com</span><br><span class="sum">Elon Musk backs a campaign to reinstate Jensen Huang as Nvidia CEO following his abrupt exit.</span></li>
+
+            <li><a href="https://timesofindia.indiatimes.com/business/india-business/sebi-plans-ai-guardrails-for-capital-markets-stresses-human-oversight-in-critical-decisions/articleshow/135852140.cms" target="_blank" rel="noopener">Sebi plans AI guardrails for capital markets, stresses human oversight in critical decisions</a> <span class="src">timesofindia.indiatimes.com</span><br><span class="sum">Sebi plans to issue guidelines focusing on the responsible use of artificial intelligence in capital markets.</span></li>
+
+            <li><a href="https://www.scmp.com/economy/china-economy/article/3374358/no-actors-no-crew-no-ticket-sales-so-obviously-ai-film-flops-chinas-box-office" target="_blank" rel="noopener">No actors, no crew, no ticket sales: ‘So obviously AI’ film flops at China’s box office</a> <span class="src">scmp.com</span><br><span class="sum">China has ushered artificial intelligence into its cinemas, but the country’s first fully AI-generated feature film has flopped at the box office.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>India GCCs &amp; Enterprise Technology</h2>
+        <ol>
+
+            <li><a href="https://news.google.com/rss/articles/CBMi5AFBVV95cUxPdmxMQlY4UVFMWVpNZG5ia2I1YzNKaTBRY1V3Ym4tZ0xMMjdrYnhrWi1tQ1lQNkxvTGtjd3lvLTFZUmpLb05MYlhxVWlkNnBFYm8wYUpIM2UtbGNNTnlvcUNabHNic1dQem94UTlDa0JJRVpicEVPVk4wRV9nV3JrU2I2RktUTWJZckFBMGNyMDhMOHhmSmpHbnZKU05zc1hfMVE4SHlLOF9kZGhFWk9kU1ZTV05MNEJJRnBrSHI0Q1Rfa2JxSlNOYUtuem5vendGdkxPS3FnMzF5MlROSWRXYWdBVTjSAeQBQVVfeXFMT3ZsTEJWOFFRTFlaTWRuYmtiNWMzSmkwUWNVd2JuLWdMTDI3a2J4a1otbUNZUDZMb0xrY3d5by0xWVJqS29OTGJYcVVpZDZwRWJvMGFKSDNlLWxjTU55b3FDWmxzYnNXUHpveFE5Q2tCSUVaYnBFT1ZOMEVfZ1dya1NiNkZLVE1iWXJBQTBjcjA4TDh4ZkpqR252SlNOc3NYXzFROEh5SzhfZGRoRVpPZFNWU1dOTDRCSUZwa0hyNENUX2ticUpTTmFLbnpub3p3RnZMT0txZzMxeTJUTklkV2FnQVU4?oc=5" target="_blank" rel="noopener">Mars opens Hyderabad GCC with Genpact for AI, digital work</a> <span class="src">news.google.com</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Insurance &amp; Financial Services</h2>
+        <ol>
+
+            <li><a href="https://timesofindia.indiatimes.com/business/india-business/indias-life-insurance-sector-set-for-13-18-annual-growth-in-premiums-through-fy29-report/articleshow/135847054.cms" target="_blank" rel="noopener">India&#39;s life insurance sector set for 13-18% annual growth in premiums through FY29</a> <span class="src">timesofindia.indiatimes.com</span><br><span class="sum">India&#39;s life insurance sector is expected to maintain healthy growth supported by increasing demand for protection products.</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMikAFBVV95cUxObzZjU3E0WXFtUXhUVTNFU0s4WjE3VXczNmxYdXBfUi1SR3JZNjNzX2VyZVVkV2NpNnB1MmRJUkRmN0FHbTNaOGR5bDRzY2pRSDhIV1Q3U0VXRHFPNHgzTW5UR3lGMm5IbzFOLTFsY1dQQVZfcnFVNWU2bVpiYmlwQVRJdnNBMlVqT2NfMzRuZHg?oc=5" target="_blank" rel="noopener">Insurtech StitchStudio raises $8 mn to expand AI automation in insurance</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://www.insnews.co.kr/news/articleView.html?idxno=93797" target="_blank" rel="noopener">Australians increasingly oppose home insurance premium hikes</a> <span class="src">insnews.co.kr</span><br><span class="sum">A majority of Australian consumers oppose raising home insurance premiums to share the cost of coverage in flood-prone areas.</span></li>
+
+            <li><a href="https://www.insnews.co.kr/news/articleView.html?idxno=93813" target="_blank" rel="noopener">Samsung Fire &amp; Marine makes bid for UK’s Canopius, targets global B2B growth beyond domestic retail</a> <span class="src">insnews.co.kr</span><br><span class="sum">Samsung Fire &amp; Marine is seeking control of Canopius, a global insurer operating in the Lloyd’s market and specializing in specialty, property and casualty, and…</span></li>
+
+            <li><a href="https://www.livemint.com/companies/delhi-tops-pollution-linked-health-insurance-claims-90-from-working-professionals-senior-citizens-report-11794737773964.html" target="_blank" rel="noopener">Delhi tops pollution-linked health insurance claims, 90% from working professionals, senior citizens: Report</a> <span class="src">livemint.com</span><br><span class="sum">Pollution-linked health insurance claims have seen a rise of 4.3 times in the last three years, revealed Policybazaar.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Banking</h2>
+        <ol>
+
+            <li><a href="https://www.business-standard.com/finance/news/rbi-may-review-microfinance-borrowers-income-threshold-if-needed-murmu-126111500501_1.html" target="_blank" rel="noopener">RBI may review microfinance borrowers&#39; income threshold, if needed: Murmu</a> <span class="src">business-standard.com</span><br><span class="sum">Such a review of the ₹3 lakh income limit will hinge on the regulator&#39;s assessment of the need for a revision and developments in the industry</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMiYkFVX3lxTE55SkRiVUpVRjZLVnpUZHZKSkVaOExPQ3VkMkJXMlRkV1NhWW1CWk10eHRqd3dzV3FNeDk2WnJNeXVMcW9hLXYwMEo2TmJiaG4yYWxpOVJMbnJOOEtIdWxreWVB?oc=5" target="_blank" rel="noopener">Financial watchdog seeks to expand flexible bank branches; restricts loans from unlicensed lenders to active-duty soldiers</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://www.livemint.com/companies/jpmorgan-loses-card-chief-allison-beer-to-external-opportunity-11794685827439.html" target="_blank" rel="noopener">JPMorgan Loses Card Chief Allison Beer to ‘External Opportunity’</a> <span class="src">livemint.com</span><br><span class="sum">JPMorgan Chase &amp; Co.’s Allison Beer, who runs a credit card business ranking among the world’s largest, is departing to work somewhere else.</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/idbi-employees-forum-urges-rbi-to-freeze-fairfax-deal-pending-review-of-disinvestment-process/article71705192.ece" target="_blank" rel="noopener">IDBI Employee’s Forum urges RBI to freeze Fairfax deal pending review of disinvestment process</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">The UFIOE requested the central bank to verify and disclose the source and structure of acquisition funds and all related-party arrangements</span></li>
+
+            <li><a href="https://www.scmp.com/business/companies/article/3374426/ubs-unveils-new-west-kowloon-hub-tap-greater-bay-area-wealth" target="_blank" rel="noopener">UBS unveils new West Kowloon hub to tap Greater Bay Area wealth</a> <span class="src">scmp.com</span><br><span class="sum">UBS has drawn back the curtains on its new Hong Kong headquarters in West Kowloon, a 20-storey tower with a client floor built for meetings, dinners and events, as the…</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Manufacturing</h2>
+        <ol>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/tata-steel-targets-ninl-amalgamation-completion-by-fiscal-end-cfo/article71704133.ece" target="_blank" rel="noopener">Tata Steel targets NINL amalgamation completion by fiscal-end: CFO</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">NINL assets were acquired by the steel giant through its erstwhile subsidiary Tata Steel Long Products (TSLP).</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/hindalcos-novelis-to-sell-two-china-units-for-265-million/article71704408.ece" target="_blank" rel="noopener">Hindalco&#39;s Novelis to sell two China units for $265 million</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">The transaction is expected to close within ‌12 months</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/maruti-suzuki-surpasses-2025-export-numbers-by-october-with-over-4-lakh-units/article71704827.ece" target="_blank" rel="noopener">Maruti Suzuki surpasses 2025 export numbers by October with over 4 lakh units</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">During April-October period, as per the SIAM data, MSIL’s shipments reached 2,80,141 units, which account for 52.3 per cent of the overall exports of the PV industry</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Energy</h2>
+        <ol>
+
+            <li><a href="https://www.theguardian.com/us-news/2026/nov/14/peoria-illinois-evacuation-bomb" target="_blank" rel="noopener">Evacuation zone lifted after bomb found at Illinois ethanol plant</a> <span class="src">theguardian.com</span><br><span class="sum">Peoria officials said a bomb was found at BioUrja Renewables and later defused; FBI said it is investigating Residents were ordered to evacuate parts of an Illinois…</span></li>
+
+            <li><a href="https://timesofindia.indiatimes.com/business/international-business/us-diesel-prices-retreat-fall-below-6-per-gallon-for-first-time-in-two-months/articleshow/135845393.cms" target="_blank" rel="noopener">US diesel prices retreat, fall below $6 per gallon for first time in two months</a> <span class="src">timesofindia.indiatimes.com</span><br><span class="sum">US diesel prices have dropped below $6 per gallon for the first time in two months.</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/industry/energy/oil-gas/cng-gets-costlier-by-rs-1-50/kg-in-mumbai-auto-unions-seek-another-fare-hike/articleshow/135847529.cms" target="_blank" rel="noopener">CNG gets costlier by Rs 1.50/kg in Mumbai</a> <span class="src">economictimes.indiatimes.com</span></li>
+
+            <li><a href="https://www.livemint.com/companies/lpg-cylinder-price-in-delhi-why-ujjwala-beneficiaries-pay-642-for-a-cylinder-that-costs-1-267-24-to-supply-11794736665823.html" target="_blank" rel="noopener">LPG cylinder price in Delhi: Why Ujjwala beneficiaries pay  ₹642 for a cylinder that costs  ₹1,267.24 to supply</a> <span class="src">livemint.com</span><br><span class="sum">Eligible Ujjwala beneficiaries pay ₹642 for a 14.2 kg LPG cylinder in Delhi, against the regular retail price of ₹942.</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/news/new-updates/no-petrol-diesel-or-cng-plus-rs-10000-fine-for-missing-puc-certificate-gurugram-rolls-out-strict-new-fuel-rules-300-cameras-to-monitor-vehicles/articleshow/135850199.cms" target="_blank" rel="noopener">Gurugram&#39;s fuel rule: What drivers must know</a> <span class="src">economictimes.indiatimes.com</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Defence</h2>
+        <ol>
+
+            <li><a href="https://www.scmp.com/news/china/military/article/3374448/could-beijings-hq-17-air-defence-system-defend-pla-amphibious-forces-taiwan-strikes" target="_blank" rel="noopener">Could Beijing’s HQ-17 air-defence system defend PLA amphibious forces from Taiwan strikes?</a> <span class="src">scmp.com</span><br><span class="sum">Before mainland Chinese troops could attempt a landing on Taiwan, they would first have to assemble vehicles, weapons and supplies along the coast – potentially exposing…</span></li>
+
+            <li><a href="https://www.theguardian.com/australia-news/2026/nov/16/gender-diverse-australian-sailors-barred-from-us-submarines-despite-aukus-deal-documents-reveal-ntwnfb" target="_blank" rel="noopener">Gender-diverse Australian sailors barred from US submarines despite Aukus deal, documents reveal</a> <span class="src">theguardian.com</span><br><span class="sum">Defence briefing released under freedom of information laws shows ADF beholden to US directives when in training Get our breaking news email , free app or daily news…</span></li>
+
+            <li><a href="https://www.aljazeera.com/video/newsfeed/2026/11/15/iran-targets-us-military-radar-in-bahrain-in-retaliatory-drone-strikes?traffic_source=rss" target="_blank" rel="noopener">Iran targets US military radar in Bahrain in ‘retaliatory’ drone strikes</a> <span class="src">aljazeera.com</span><br><span class="sum">Iran’s IRGC says six drones were launched at a US radar installation at an air base in Bahrain.</span></li>
+
+            <li><a href="https://www.scmp.com/news/china/military/article/3374496/chinese-j-10c-fighter-spotted-carrying-modified-russian-origin-heavy-strike-missile" target="_blank" rel="noopener">Chinese J-10C fighter spotted carrying modified Russian-origin heavy-strike missile</a> <span class="src">scmp.com</span><br><span class="sum">New state media footage has surfaced showing for the first time what appears to be a Chinese-modified variant of the Russian-origin Kh-29T air-to-surface missile mounted…</span></li>
+
+            <li><a href="https://www.bbc.co.uk/news/articles/cmrlgn4x2xw8o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">Fifth Canadian soldier dies from injuries caused by large fire at military base</a> <span class="src">bbc.co.uk</span><br><span class="sum">Pte William Douglas Dal Bianco died from his injuries on Friday, a month after a fire that tore through CFB Wainwright.</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Supply Chain</h2>
+        <ol>
+
+            <li><a href="https://timesofindia.indiatimes.com/business/india-business/indian-railways-has-built-freight-corridors-but-can-it-win-back-cargo-from-road-transport-highways/articleshow/135857675.cms" target="_blank" rel="noopener">Indian Railways now has freight corridors, but will cargo from road come back?</a> <span class="src">timesofindia.indiatimes.com</span><br><span class="sum">At first glance, rail freight appears to be thriving.</span></li>
+
+            <li><a href="https://www.scmp.com/tech/article/3374493/megaspeed-rejects-claims-over-supply-chain-distances-itself-alice-huang" target="_blank" rel="noopener">Megaspeed rejects claims over supply chain as Nvidia-linked scrutiny intensifies</a> <span class="src">scmp.com</span><br><span class="sum">Megaspeed, the Singaporean company caught in the Nvidia controversy, has pushed back against reported claims about its supply chain practices and distanced itself from…</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Healthcare</h2>
+        <ol>
+
+            <li><a href="https://www.theguardian.com/us-news/2026/nov/15/vaccine-policy-rfk-jr-trump-administration" target="_blank" rel="noopener">Trump administration planning to reimburse doctors treating vaccine ‘injury’</a> <span class="src">theguardian.com</span><br><span class="sum">Experts warn that sweeping changes elevate health secretary RFK Jr’s anti-vaccine agenda and personal profit The Trump administration is finalizing a rule to reimburse…</span></li>
+
+            <li><a href="https://www.business-standard.com/companies/news/alembic-pharma-receives-usfda-approval-for-lung-cancer-drug-binimetinib-126111500385_1.html" target="_blank" rel="noopener">Alembic Pharma receives USFDA approval for lung cancer drug Binimetinib</a> <span class="src">business-standard.com</span><br><span class="sum">The approved Abbreviated New Drug Application (ANDA) is therapeutically equivalent to the reference listed drug product, Mektovi Tablets (15 mg), of Array BioPharma Inc</span></li>
+
+            <li><a href="https://economictimes.indiatimes.com/industry/healthcare/biotech/healthcare/aiims-delhi-performs-first-of-its-kind-foetal-surgery-to-prevent-spinal-nerve-damage-report/articleshow/135851381.cms" target="_blank" rel="noopener">AIIMS performs India&#39;s first surgery on unborn baby</a> <span class="src">economictimes.indiatimes.com</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMi0wFBVV95cUxNNWhlSTRwX3FsWUR1VnJMSC1QRjF5VVAtT1Z6S2o4Vm5PLW13c0VtQVNtUW1razF2d2lQUkJJcTNfUXprUUx4Mjlza0QtMUZtZHNwMTAtUzJNVHVURHJFNkthNDl4QWpnY2NfeE5QeHNKNHB1UkxOTFNpeW9Lb3htY0lXWGppeTQwTHdDYnhYYkNvZEdGcS1Ub3pkbURNNE5MRG9tT1RabE4wWFplMnJTM1A5NTBuOU1ES3ROZFpETXl3SjF5dVIwckhVNmdBWWJCSWtn?oc=5" target="_blank" rel="noopener">PureHealth and Nafis partner to empower Emirati talent in healthcare sector</a> <span class="src">news.google.com</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/companies/aster-dm-quality-care-to-open-new-multispeciality-hospital-in-hyderabads-kondapur/article71704953.ece" target="_blank" rel="noopener">Aster DM Quality Care to open new multispeciality hospital in Hyderabad’s Kondapur</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">Aster Group’s total bed capacity in Hyderabad to exceed 1,700 with new hospital</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Telecom &amp; Digital Infrastructure</h2>
+        <ol>
+
+            <li><a href="https://www.bbc.co.uk/news/articles/cqx2wyvyr3zzo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener">How telecoms upgrade work sparked US flight chaos</a> <span class="src">bbc.co.uk</span><br><span class="sum">US officials say the disruption was caused by old equipment overloading and not a cyber-attack.</span></li>
+
+            <li><a href="https://www.livemint.com/companies/news/nvidia-disruption-likely-democratic-shift-data-centres-policy-impact-ai-investments-experts-who-gain-chipmakers-big-tech-11794725599362.html" target="_blank" rel="noopener">Nvidia disruption, likely Democratic shift on data centres could impact AI investments, say experts. Who is set to gain?</a> <span class="src">livemint.com</span><br><span class="sum">Experts feel that the Nvidia turmoil and potential Democratic-led limits on data-center construction could redirect AI investment towards other chipmakers and Big Tech…</span></li>
+
+            <li><a href="https://news.google.com/rss/articles/CBMi-gFBVV95cUxPckQxUVljMEVENHI3dGZQWVA5U0dIQllFQUNHRVl2SDA0ODlQRkt1RmtuU2x4VVdVLVFGWG5ZUHYtMENrWnVFMzN2VFVHdzhXeUFfVjVGalhkcWRsUi1rRjk2VVlURXhxUjhCSXdEY29ZWFNad0dvdFFWYnN1NnY0cXMxb3lVYjloeEVjdlBWNDhyVHpCX0xvcWFwNnp3d2JJSnVNQmtoY004M1UwckZqS2pWd0p0SWIwSkFIeWxRazdhTDJOUndNa2dWZUlvX3Ryb0lqTWFvX3F1ZzNjRXNYcEZ2ZEc4bEU5UzR1dF9CcHRpdi1KbC1oZFN3?oc=5" target="_blank" rel="noopener">Ooredoo Group to convene industry and policy leaders at Digital Ecosystem Conference &amp; Exhibition 2026</a> <span class="src">news.google.com</span></li>
+
+        </ol>
+    </section>
+
+    <section>
+        <h2>Climate &amp; Sustainability</h2>
+        <ol>
+
+            <li><a href="https://economictimes.indiatimes.com/news/india/delhi-gets-brief-pollution-relief-as-aqi-improves-to-290-air-likely-to-turn-very-poor-again-from-nov-17/articleshow/135856842.cms" target="_blank" rel="noopener">Delhi AQI dips to 290, but relief may be brief</a> <span class="src">economictimes.indiatimes.com</span><br><span class="sum">Following days of toxic, post-Diwali smog blanketing the national capital, Delhi&#39;s air quality improved slightly to the &#39;poor&#39; category on Sunday, with the Air Quality…</span></li>
+
+            <li><a href="https://timesofindia.indiatimes.com/business/india-business/bad-air-bigger-bills-air-pollution-drives-health-insurance-claims-up-fourfold-in-3-years/articleshow/135848168.cms" target="_blank" rel="noopener">Bad air, bigger bills: Air pollution drives health insurance claims up fourfold in 3 years</a> <span class="src">timesofindia.indiatimes.com</span><br><span class="sum">In India, the demand for health insurance claims related to pollution has skyrocketed, witnessing a remarkable fourfold increase in just three years.</span></li>
+
+            <li><a href="https://www.thehindubusinessline.com/news/national/air-purifier-sales-surge-as-delhi-ncr-aqi-deteriorates-demand-spreads-beyond-traditional-markets/article71704335.ece" target="_blank" rel="noopener">Air purifier sales surge as Delhi-NCR AQI deteriorates; demand spreads beyond traditional markets</a> <span class="src">thehindubusinessline.com</span><br><span class="sum">Delhi&#39;s 24-hour average AQI stood at 367 on Saturday, placing it in the &#39;very poor&#39; category.</span></li>
+
+        </ol>
+    </section>
+
+    <footer>Built from the same scored stories as the Command Center. <a href="/">Back to the Command Center</a></footer>
+</article>
+<a class="back-home" href="/" aria-label="Back to the main page">&larr; Main page</a>
+<a class="to-top" href="#top" aria-label="Back to top" title="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
+</body>
+</html>
