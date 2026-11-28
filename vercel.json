@@ -1,0 +1,8 @@
+{
+  "git": { "deploymentEnabled": { "signals-deploy": true } },
+  "cleanUrls": true,
+  "crons": [
+    { "path": "/api/trigger-build", "schedule": "30 3 * * *" },
+    { "path": "/api/trigger-build", "schedule": "30 15 * * *" }
+  ]
+}
